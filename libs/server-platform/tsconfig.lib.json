@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "src",
     "outDir": "../../dist/libs/server-platform",
     "tsBuildInfoFile": "../../dist/libs/server-platform/tsconfig.lib.tsbuildinfo",

@@ -30,6 +30,12 @@
           "command": "node ../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.lib.json"
         }
       },
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node node_modules/oxlint/bin/oxlint libs/plugins/pages/ui --config .oxlintrc.json"
+        }
+      },
       "build": {
         "executor": "nx:run-commands",
         "outputs": [

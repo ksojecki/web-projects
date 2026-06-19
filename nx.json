@@ -12,12 +12,6 @@
   },
   "plugins": [
     {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    },
-    {
       "plugin": "@nx/js/typescript",
       "options": {
         "typecheck": {
@@ -70,7 +64,7 @@
       "application": {
         "babel": true,
         "style": "css",
-        "linter": "eslint",
+        "linter": "none",
         "bundler": "vite"
       },
       "component": {
@@ -78,12 +72,16 @@
       },
       "library": {
         "style": "css",
-        "linter": "eslint",
+        "linter": "none",
         "unitTestRunner": "vitest"
       }
     }
   },
   "targetDefaults": {
+    "lint": {
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/.oxlintrc.json"]
+    },
     "@nx/esbuild:esbuild": {
       "cache": true,
       "dependsOn": ["^build"],

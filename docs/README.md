@@ -18,7 +18,7 @@ This directory is the operational knowledge base for contributors and AI agents.
 - `AGENTS.md` - quick onboarding for coding agents.
 - `nx.json` - Nx orchestration and inferred targets.
 - `tsconfig.base.json` - global TypeScript baseline.
-- `eslint.config.mjs` - linting rules for TS/React/Node/JSON.
+- `.oxlintrc.json` - linting rules for TS/React/Node/JSX.
 - `.prettierrc` - formatting rules (2 spaces, single quotes).
 
 ## How to use

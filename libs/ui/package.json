@@ -20,6 +20,12 @@
   ],
   "nx": {
     "targets": {
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node node_modules/oxlint/bin/oxlint libs/ui --config .oxlintrc.json"
+        }
+      },
       "format": {
         "executor": "nx:run-commands",
         "options": {

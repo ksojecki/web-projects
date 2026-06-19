@@ -105,6 +105,12 @@
           "command": "node ../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json && node ../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.spec.json"
         }
       },
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node node_modules/oxlint/bin/oxlint apps/api --config .oxlintrc.json"
+        }
+      },
       "test": {
         "executor": "nx:run-commands",
         "options": {
