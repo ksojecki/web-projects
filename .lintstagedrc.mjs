@@ -1,10 +1,18 @@
+import path from 'node:path';
+
+const typecheckAffectedFiles = (files) => {
+  const relativeFiles = files
+    .map((file) => path.relative(process.cwd(), file))
+    .join(',');
+
+  return `npx nx affected -t typecheck --files=${JSON.stringify(relativeFiles)} --no-tui`;
+};
+
 export default {
+  '*': typecheckAffectedFiles,
   '*.{ts,tsx,js,jsx,mjs,cjs,mts,cts}': [
-    'npx eslint --fix --max-warnings=0 --no-warn-ignored --ignore-pattern eslint.config.mjs',
+    'npx oxlint --fix --config .oxlintrc.json',
     'npx prettier --write',
   ],
   '*.{json,jsonc,md,yml,yaml,css,scss,html}': ['npx prettier --write'],
-  // Run once per commit; using a function prevents passing staged filenames.
-  // Uses nx affected to typecheck only projects impacted by changes.
-  '*': () => 'npx nx affected -t typecheck --base=HEAD~1 --head=HEAD --no-tui',
 };

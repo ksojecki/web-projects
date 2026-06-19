@@ -113,7 +113,7 @@ const pl = {
   },
 };
 
-// eslint-disable-next-line no-restricted-syntax -- `typeof pl` needs the value declaration in place.
+// Depends on the concrete `pl` value, so this type must stay after it.
 export type TranslationResources = typeof pl;
 
 export default pl;

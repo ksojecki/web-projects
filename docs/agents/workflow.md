@@ -10,7 +10,7 @@
 
 - Define implementation steps and validation points.
 - If a durable architecture decision is made, create or update an ADR.
-- Follow root-level defaults (TS, ESLint, Prettier).
+- Follow root-level defaults (TS, Oxlint, Prettier).
 
 ## 3) Implementation
 

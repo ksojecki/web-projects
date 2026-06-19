@@ -10,10 +10,10 @@ Use this list before closing a task.
 
 ## Quality
 
-- [ ] Does the code respect ESLint rules (including no `any` and no floating promises)?
-- [ ] Are top-level declarations ordered as: exported types, local types, constants, exported functions, local functions?
-- [ ] If that order was impossible due to compilation constraints, is there a scoped ESLint disable with a short reason?
-- [ ] Do public methods include JSDoc descriptions (where applicable)?
+- [ ] Does the code respect Oxlint-enforced rules (including no `any` and no floating promises)?
+- [ ] For review-enforced conventions, are top-level declarations ordered as: exported types, local types, constants, exported functions, local functions?
+- [ ] If that order was impossible due to compilation constraints, is there a short local comment explaining why?
+- [ ] Do public methods include JSDoc descriptions where project conventions require them?
 - [ ] Is formatting aligned with Prettier (2-space indentation)?
 - [ ] Are documentation updates written in English?
 - [ ] Is generated code written in English (identifiers, comments, user-facing text)?

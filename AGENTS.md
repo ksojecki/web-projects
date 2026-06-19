@@ -32,9 +32,10 @@
 
 - When running Nx commands as an AI agent, always pass `--no-tui`.
 - Install deps: `npm ci` (used in CI).
-- Run lint via npm script: `npm run lint` (delegates to Nx `lint` target inference).
+- Run lint via npm script: `npm run lint` (delegates to Nx `lint` targets).
 - Run formatting checks: `npm run format:check`; auto-fix formatting: `npm run format`.
 - Run CI-equivalent checks locally: `npx nx run-many -t lint test build typecheck --no-tui`.
+- Keep Husky hooks in sync with CI check categories using staged-file equivalents where possible; `.husky/pre-commit` should run `lint-staged`, and the `lint-staged` config should track CI lint/format expectations for staged files.
 - Apply Nx Cloud CI remediation hints: `npx nx fix-ci --no-tui`.
 - Explore project/task graph: `npx nx graph --json --no-tui` (use `--json` to avoid browser).
 - Keep TS project refs consistent after adding projects: `npx nx sync --no-tui` (or `npx nx sync:check --no-tui` in CI).
@@ -44,11 +45,11 @@
 - Formatting: Prettier with single quotes (`.prettierrc`).
 - Formatting indentation is 2 spaces globally (`tabWidth: 2`, `useTabs: false`); JSON/JSONC have explicit Prettier override.
 - Ignore generated artifacts in formatting and VCS (`.prettierignore`, `.gitignore` include `dist`, `coverage`, `.nx/*`).
-- ESLint uses flat config in `eslint.config.mjs` with Nx lint inference from `@nx/eslint/plugin` in `nx.json`.
-- TypeScript lint enforces `@typescript-eslint/no-explicit-any` and `@typescript-eslint/no-floating-promises`.
+- Oxlint uses `.oxlintrc.json` with explicit per-project Nx `lint` targets.
+- Oxlint enforces the configured TypeScript rules, including `typescript/no-explicit-any` and `typescript/no-floating-promises`.
+- Some project conventions are review-enforced rather than lint-enforced after the Oxlint migration; keep checklist guidance in sync with lint coverage.
 - Keep top-level declaration order as: exported types, local types, constants, exported functions, local functions.
-- Allow exceptions only when this order breaks compilation; in such cases add a local ESLint disable with a short reason.
-- Public class methods require JSDoc description (`jsdoc/require-jsdoc` + `jsdoc/require-description`).
+- Allow exceptions only when this order breaks compilation; in such cases add a local comment with a short reason.
 - TS output intent is declaration-focused (`emitDeclarationOnly: true` in `tsconfig.base.json`), so library packaging should expect `.d.ts` generation.
 - `customConditions` includes `@rod-manager/source`; keep this in mind when introducing conditional exports/resolution.
 - In `libs/ui`, prefer component names without a `Ui` prefix (for example `Button`, `Card`, `TextInput`).

@@ -7,6 +7,5 @@
     "moduleResolution": "bundler",
     "tsBuildInfoFile": "../../../../dist/libs/plugins/pages/server/tsconfig.spec.tsbuildinfo"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["eslint.config.js", "eslint.config.cjs", "eslint.config.mjs"]
+  "include": ["src/**/*.ts"]
 }

@@ -16,6 +16,7 @@ export default defineConfig({
         '../../../../libs/shared/src/index.ts',
       ),
     },
+    conditions: ['@rod-manager/source'],
   },
   test: {
     globals: true,

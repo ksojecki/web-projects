@@ -39,7 +39,9 @@ function createAuthStoreAdapter(authStore: AuthStore): ServerPlatformAuthStore {
   return {
     findUserById(id: string) {
       const user = authStore.findUserById(id);
-      if (user === undefined) return undefined;
+      if (user === undefined) {
+        return undefined;
+      }
       return {
         id: user.id,
         email: user.email,
