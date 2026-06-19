@@ -56,7 +56,7 @@
 
 ## Integration Points
 
-- CI runs on GitHub Actions (`.github/workflows/ci.yml`) with Node 20 and npm cache.
+- CI runs on GitHub Actions (`.github/workflows/ci.yml`) with Node 26 and npm cache.
 - Nx Cloud is configured (`nxCloudId` in `nx.json`); distributed agents are prepared but currently commented in CI.
 - Release flow is expected via `npx nx release --no-tui` (documented in `README.md`).
 
@@ -64,7 +64,7 @@
 
 ### Architecture Overview
 
-- **Backend (Fastify)**: OAuth plugin entrypoint (`apps/api/src/app/plugins/oauth/index.ts`) delegates implementation to modular files in `apps/api/src/app/plugins/oauth/`.
+- **Backend (Fastify)**: OAuth plugin entrypoint (`libs/server-platform/src/lib/plugins/oauth/index.ts`) delegates implementation to modular files in `libs/server-platform/src/lib/plugins/oauth/`.
 - **Database**: SQLite `oauth_providers` table stores provider credentials per user; supports Google, Apple, and Facebook.
 - **Frontend (React)**: OAuth flow initiated on login page with state/code verifier stored in session storage; callback handler manages token exchange.
 - **Session Management**: After OAuth callback, standard session cookie is created (no OAuth tokens returned to frontend).
@@ -82,17 +82,17 @@ Provider credentials must be configured via environment variables:
 
 1. **Extend `OAuthProviderType`** in `libs/shared/src/lib/auth.dto.ts` to include new provider string literal.
 2. **Update OAuth plugin modules**:
-   - Provider config and env wiring: `apps/api/src/app/plugins/oauth/oauthConfigs.ts`.
-   - OAuth service methods: `apps/api/src/app/plugins/oauth/service.ts`.
-   - User profile mapping helpers: `apps/api/src/app/plugins/oauth/userInfo.ts`.
-   - PKCE helpers: `apps/api/src/app/plugins/oauth/pkce.ts`.
-3. **Update OAuth routes** (`apps/api/src/app/routes/oauth.ts`) if new authorization/callback flow differs from standard OAuth 2.0.
-4. **Update login page** (`apps/web/src/app/auth/loginPage.tsx`) to add provider button and call `initiateOAuth()`.
+   - Provider config and env wiring: `libs/server-platform/src/lib/plugins/oauth/oauthConfigs.ts`.
+   - OAuth service methods: `libs/server-platform/src/lib/plugins/oauth/service.ts`.
+   - User profile mapping helpers: `libs/server-platform/src/lib/plugins/oauth/userInfo.ts`.
+   - PKCE helpers: `libs/server-platform/src/lib/plugins/oauth/pkce.ts`.
+3. **Update OAuth routes** (`libs/server-platform/src/lib/routes/oauth.ts`) if new authorization/callback flow differs from standard OAuth 2.0.
+4. **Update frontend OAuth controls** (`apps/web/src/app/auth/components/OAuthLoginButtons.tsx`, `apps/web/src/app/auth/components/OAuthRegisterButtons.tsx`, and shared `OAuthButtons.tsx`) to add provider buttons and call `initiateOAuth()`.
 
 ### Code Structure
 
 - **Backend Routes**: `POST /api/auth/oauth/authorize/:provider` (initiate), `GET /api/auth/oauth/callback/:provider` (callback), `DELETE /api/auth/oauth/link/:provider` (unlink).
-- **Frontend Pages**: `LoginPage` (OAuth button trigger), `OAuthCallbackPage` (callback handler).
+- **Frontend Auth UI**: `OAuthLoginButtons`, `OAuthRegisterButtons`, shared `OAuthButtons`, and `OAuthCallbackPage`.
 - **Shared Types**: `OAuthProviderType`, `OAuthInitiateRequestBody`, `OAuthUserInfo` in `libs/shared/src/lib/auth.dto.ts`.
 
 ### Security Considerations
@@ -104,14 +104,14 @@ Provider credentials must be configured via environment variables:
 
 ## Plugin and Module Structure Policy
 
-- For Fastify plugins, use a folder-based structure like `apps/api/src/app/plugins/database/`:
+- For Fastify plugins, use a folder-based structure like `libs/server-platform/src/lib/plugins/database/`:
   - `index.ts` entrypoint for composition/registration (preferred over `<plugin>.ts`).
   - `types.ts` for exported contracts and module augmentation.
   - Feature-focused files (`oauthConfigs.ts`, `store.ts`, `service.ts`, `providers.ts`, etc.) for implementation details.
 - Keep plugin `index.ts` files limited to orchestration: register plugin dependencies and attach decorators/hooks; move business logic to domain files.
 - In Fastify plugins, keep decorator registration explicit in `index.ts` (use `decorate*`/`decorate` there) so the available decorators are visible in one place.
 - If decorator logic needs plugin dependencies, create small domain-specific factory functions that accept `fastify` and return decorator implementations.
-- For the `apps/api/src/app/plugins/session/` plugin specifically, keep `index.ts` as decorator/registration wiring only.
+- For the `libs/server-platform/src/lib/plugins/session/` plugin specifically, keep `index.ts` as decorator/registration wiring only.
 - Avoid generic file names like `helpers.ts` or `utils.ts`; use domain-specific names that reflect the responsibility.
 - Keep plugin entrypoints thin; avoid placing provider logic, parsing helpers, and HTTP calls in a single file.
 - Split any module when it exceeds one responsibility or grows beyond ~200 lines.

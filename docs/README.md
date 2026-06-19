@@ -9,7 +9,7 @@ This directory is the operational knowledge base for contributors and AI agents.
 
 ## Structure
 
-- `docs/agents/` - agent workflow, guardrails, and checklists.
+- `docs/agents/` - agent setup, workflow, guardrails, and checklists.
 - `docs/architecture/` - MVP architecture plan and ADRs.
 - `docs/operations/` - maintenance and execution notes.
 
@@ -25,4 +25,5 @@ This directory is the operational knowledge base for contributors and AI agents.
 
 1. Start with `AGENTS.md`.
 2. For architecture decisions, continue in `docs/architecture/`.
-3. Before larger changes, run a quick check with `docs/agents/checklist.md`.
+3. Prepare local agent sessions with `docs/agents/setup.md`.
+4. Before larger changes, run a quick check with `docs/agents/checklist.md`.

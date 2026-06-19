@@ -24,4 +24,5 @@ This directory extends `AGENTS.md`.
 
 - Workflow: `docs/agents/workflow.md`
 - Checklist: `docs/agents/checklist.md`
+- Setup: `docs/agents/setup.md`
 - Plan MVP: `docs/architecture/mvp-plan-react-fastify-sqlite.md`

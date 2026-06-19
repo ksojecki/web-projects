@@ -17,7 +17,7 @@ Use this list before closing a task.
 - [ ] Is formatting aligned with Prettier (2-space indentation)?
 - [ ] Are documentation updates written in English?
 - [ ] Is generated code written in English (identifiers, comments, user-facing text)?
-- [ ] For new plugins, is the entrypoint `index.ts` (thin composition only) and implementation split into focused files (types + services/helpers), similar to `apps/api/src/app/plugins/database/`?
+- [ ] For new plugins, is the entrypoint `index.ts` (thin composition only) and implementation split into focused files (types + services/helpers), similar to `libs/server-platform/src/lib/plugins/database/`?
 - [ ] For larger non-plugin modules, was code split by responsibility instead of growing a single file?
 
 ## Operations

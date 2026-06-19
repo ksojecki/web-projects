@@ -1,5 +1,9 @@
 # ServerPlatform Externalization Plan and Plugin Data Contract
 
+## Status
+
+This plan is historical implementation context. The current server platform lives in `libs/server-platform`, while `apps/api` is the thin bootstrap host.
+
 ## Objective
 
 Extract the current server-side platform from `apps/api` into an external reusable library while keeping `apps/api` as a thin bootstrap host.
@@ -20,7 +24,7 @@ Out of scope:
 - Full frontend plugin extraction (covered only where required by API contracts).
 - Business logic changes unrelated to pluginization.
 
-## Current State (Observed)
+## Original State (Before Extraction)
 
 - `apps/api/src/app/app.ts` autoloads `plugins` and `routes` from app-local directories.
 - Core concerns and feature concerns are mixed in one runtime.
@@ -231,6 +235,8 @@ Acceptance:
 - Existing auth/session endpoints still work when core routes are enabled.
 
 ## Phase 2 - Extract Pages Into Plugin
+
+Historical implementation tasks:
 
 Deliverables:
 
