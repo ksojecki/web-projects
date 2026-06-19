@@ -130,7 +130,7 @@
   "dependencies": {
     "@rod-manager/plugin-pages-server": "0.0.1",
     "@rod-manager/server-platform": "0.0.1",
-    "dotenv": "^16.4.7",
-    "fastify": "^5.8.3"
+    "dotenv": "^16.6.1",
+    "fastify": "^5.8.5"
   }
 }
