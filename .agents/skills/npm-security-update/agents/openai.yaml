@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Npm Security Update'
+  short_description: 'Safely reduce npm audit findings'
+  default_prompt: 'Use $npm-security-update to reduce npm audit findings without force or overrides unless approved.'
