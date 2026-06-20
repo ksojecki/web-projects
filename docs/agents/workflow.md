@@ -14,12 +14,14 @@
 
 ## 3) Delivery Loop
 
-- Use a plan -> implementer -> tester -> review loop for scoped changes.
+- Use a plan -> per-step implementer/tester -> final review loop for scoped changes.
 - The reusable skill for this loop lives at `.agents/skills/agent-delivery-loop/SKILL.md`.
-- Model split for that skill:
-  - Plan and Review use `GPT-5.4`.
-  - Implementer and Tester use `GPT-5 mini`.
-- If review finds a gap, spawn the implementer again with the review evidence and continue through tester and review.
+- Recommended model split for that skill:
+  - Implementer and Tester use `gpt-5.4-mini`.
+  - Choose the planning/review model based on task risk and scope.
+- Split the work into small implementation steps during planning, then spawn implementer and tester for each step.
+- Treat review as the final gate after the planned steps are complete.
+- If review finds a gap, add a new corrective step and run implementer/tester for that step before reviewing again.
 - Keep the reviewer agent in the background when possible so review context is not lost between sessions.
 - Keep each pass narrow and evidence-driven.
 - Revisit the plan after any failed validation before widening the change.

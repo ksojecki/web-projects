@@ -7,6 +7,7 @@ Use this page to prepare a coding-agent session for this repository.
 - Read `README.md`, `AGENTS.md`, and `docs/README.md`.
 - Check current worktree state with `git --no-pager status --short`.
 - Inspect `package.json`, `nx.json`, and the touched project package/config files before changing code.
+- Inspect `.husky/pre-commit` and `.lintstagedrc.mjs` before changing staged-file validation behavior.
 - Use `rg`/`rg --files` for searches; avoid opening generated output in `dist`, `coverage`, `.nx`, and `node_modules`.
 
 ## 2) Install
@@ -61,6 +62,8 @@ npx nx run-many -t lint test build typecheck --no-tui
 ```
 
 Always pass `--no-tui` to Nx commands. Use `npx nx graph --json --no-tui` for graph inspection.
+
+Pre-commit behavior is defined by `.husky/pre-commit` and `.lintstagedrc.mjs`. Keep them aligned with the staged-file checks you expect contributors and agents to run locally.
 
 ## 5) Handoff
 
