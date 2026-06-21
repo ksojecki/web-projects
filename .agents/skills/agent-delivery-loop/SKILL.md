@@ -9,7 +9,8 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
 
 ## Recommended Model Split
 
-- Use `gpt-5.4-mini` for the implementer and tester passes.
+- Use `gpt-5.4-mini` for the implementer pass.
+- Use `gpt-5.4-mini` for the tester pass.
 - Use a stronger review-oriented model for planning and review when the task is ambiguous, risky, or cross-cutting.
 
 ## Loop
@@ -18,15 +19,20 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
    - Restate the goal, constraints, and exact files likely to change.
    - Split the work into the smallest safe implementation steps.
    - Define the validation that proves each step is complete before moving on.
+   - Do not start the delivery loop until the plan is accepted.
 2. Implementer.
-   - Spawn an implementer for the current plan step only.
+   - After plan acceptance, spawn an implementer subagent for the current plan step only.
+   - Default that implementer to `gpt-5.4-mini`.
    - Keep edits scoped to that step's accepted objective.
 3. Tester.
+   - Spawn a tester subagent for that same current step.
+   - Default that tester to `gpt-5.4-mini`.
    - Run the narrowest relevant validation commands first.
    - Validate the current step before moving to the next one.
    - Capture failures as concrete evidence, not guesses.
 4. Repeat per step.
-   - Continue implementer -> tester passes until every planned step is complete.
+   - Continue spawning one step-scoped implementer, then one step-scoped tester, until every planned step is complete.
+   - Do not spawn implementers for multiple planned steps in parallel by default.
    - If a step fails validation, revise that step before broadening the change set.
 5. Review.
    - Compare the result against the original acceptance criteria and repo conventions.
@@ -40,6 +46,7 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
 
 - Do not skip validation before handoff on non-trivial work.
 - Prefer one behavioral change per planned step.
+- Prefer sequential step execution over parallel delegation unless parallelism is clearly necessary.
 - If validation fails, address the root cause before starting the next step.
 - Avoid touching unrelated files unless they are strictly necessary for correctness.
 - Record the commands run and the files changed so the handoff is auditable.
@@ -53,3 +60,5 @@ Summarize:
 - Assumptions made.
 - Validation commands and results.
 - Any remaining risk or follow-up work.
+
+If the user asks to publish the finished work, follow handoff by committing the accepted changes and pushing the working branch to `origin`.

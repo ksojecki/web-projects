@@ -6,7 +6,7 @@ import type {
   OAuthProviderType,
   RegisterRequestBody,
   SessionResponse,
-} from '@rod-manager/shared';
+} from '@sojecki/platform-shared';
 
 const OAUTH_PROVIDERS: OAuthProviderType[] = ['google', 'apple', 'facebook'];
 

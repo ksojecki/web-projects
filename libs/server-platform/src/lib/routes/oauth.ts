@@ -6,7 +6,7 @@ import type {
   OAuthIntent,
   OAuthProviderType,
   OAuthProvidersResponseBody,
-} from '@rod-manager/shared';
+} from '@sojecki/platform-shared';
 import type { AuthStoreSession } from '../plugins/database';
 import { generatePKCE } from '../plugins/oauth';
 

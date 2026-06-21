@@ -1,6 +1,10 @@
 export { createServerPlatform } from './lib/createServerPlatform';
 export type { ServerPlatformOptions } from './lib/createServerPlatform';
 export type {
+  ServerPlatformSsrOptions,
+  ServerPlatformSsrProductionPaths,
+} from './lib/routes/ssr';
+export type {
   ServerPlatformPlugin,
   ServerPlatformPluginMeta,
   ServerPlatformPluginContext,

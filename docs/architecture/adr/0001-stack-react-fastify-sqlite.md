@@ -19,7 +19,7 @@ We choose:
 - Frontend: React + Vite
 - Backend: Fastify
 - Database: SQLite
-- Monorepo layout: `apps/web`, `apps/api`, `libs/shared`, `libs/ui`
+- Monorepo layout: `projects/rod-manager/apps/web`, `projects/rod-manager/apps/api`, `libs/shared`, `libs/ui`
 
 ## Consequences
 

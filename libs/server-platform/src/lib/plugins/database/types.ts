@@ -2,7 +2,7 @@ import type {
   OAuthProviderType,
   UserLanguage,
   UserRole,
-} from '@rod-manager/shared';
+} from '@sojecki/platform-shared';
 import type { ServerPlatformDbClient } from '../../contracts/plugin.contract';
 
 export type { OAuthProviderType };

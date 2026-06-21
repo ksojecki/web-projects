@@ -4,10 +4,10 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/web"
+      "path": "./projects/rod-manager/apps/web"
     },
     {
-      "path": "./apps/api"
+      "path": "./projects/rod-manager/apps/api"
     },
     {
       "path": "./libs/shared"
@@ -16,10 +16,10 @@
       "path": "./libs/ui"
     },
     {
-      "path": "./libs/plugins/pages/server"
+      "path": "./projects/rod-manager/plugins/pages/server"
     },
     {
-      "path": "./libs/plugins/pages/ui"
+      "path": "./projects/rod-manager/plugins/pages/ui"
     },
     {
       "path": "./libs/server-platform"

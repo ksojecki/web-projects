@@ -1,0 +1,19 @@
+{
+  "extends": "../../../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../../../../dist/projects/rod-manager/apps/api",
+    "types": ["node"],
+    "rootDir": "src",
+    "tsBuildInfoFile": "../../../../dist/projects/rod-manager/apps/api/tsconfig.app.tsbuildinfo"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
+  "references": [
+    {
+      "path": "../../plugins/pages/server/tsconfig.lib.json"
+    },
+    {
+      "path": "../../../../libs/server-platform/tsconfig.lib.json"
+    }
+  ]
+}

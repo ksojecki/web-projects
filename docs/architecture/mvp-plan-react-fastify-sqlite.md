@@ -9,8 +9,8 @@ Build a community app with:
 
 ## Target monorepo layout (Nx)
 
-- `apps/web` - React frontend (Vite), routing, and views.
-- `apps/api` - Fastify backend (REST API, auth, validation).
+- `projects/rod-manager/apps/web` - React frontend (Vite), routing, and views.
+- `projects/rod-manager/apps/api` - Fastify backend (REST API, auth, validation).
 - `libs/shared` - shared DTO types and helpers.
 - `libs/ui` - shared React UI components reused across applications.
 

@@ -1,0 +1,51 @@
+{
+  "name": "@sojecki/rod-manager-pages-ui",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.js",
+  "module": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.js",
+  "types": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@sojecki/platform-source": "./src/index.ts",
+      "types": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.d.ts",
+      "import": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.js",
+      "default": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.js"
+    }
+  },
+  "files": [
+    "../../../../../dist/projects/rod-manager/plugins/pages/ui",
+    "!**/*.tsbuildinfo"
+  ],
+  "dependencies": {
+    "@sojecki/platform-shared": "0.0.1"
+  },
+  "nx": {
+    "targets": {
+      "typecheck": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "projects/rod-manager/plugins/pages/ui",
+          "command": "node ../../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.lib.json"
+        }
+      },
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node node_modules/oxlint/bin/oxlint projects/rod-manager/plugins/pages/ui --config .oxlintrc.json"
+        }
+      },
+      "build": {
+        "executor": "nx:run-commands",
+        "outputs": [
+          "{workspaceRoot}/dist/projects/rod-manager/plugins/pages/ui"
+        ],
+        "options": {
+          "cwd": "projects/rod-manager/plugins/pages/ui",
+          "command": "node ../../../../../node_modules/typescript/bin/tsc --build tsconfig.lib.json"
+        }
+      }
+    }
+  }
+}

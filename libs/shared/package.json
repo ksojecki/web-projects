@@ -1,5 +1,5 @@
 {
-  "name": "@rod-manager/shared",
+  "name": "@sojecki/platform-shared",
   "version": "0.0.1",
   "type": "module",
   "main": "../../dist/libs/shared/index.js",
@@ -8,7 +8,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "@rod-manager/source": "./src/index.ts",
+      "@sojecki/platform-source": "./src/index.ts",
       "types": "../../dist/libs/shared/index.d.ts",
       "import": "../../dist/libs/shared/index.js",
       "default": "../../dist/libs/shared/index.js"

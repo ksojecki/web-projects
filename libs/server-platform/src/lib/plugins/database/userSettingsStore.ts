@@ -1,4 +1,4 @@
-import type { UserLanguage } from '@rod-manager/shared';
+import type { UserLanguage } from '@sojecki/platform-shared';
 import type Database from 'better-sqlite3';
 import type { UserSettingsStore } from './types';
 

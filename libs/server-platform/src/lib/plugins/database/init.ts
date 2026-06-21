@@ -1,6 +1,6 @@
 import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import type { UserRole } from '@rod-manager/shared';
+import type { UserRole } from '@sojecki/platform-shared';
 import type Database from 'better-sqlite3';
 import type { CountRow } from './types';
 import { hashPassword } from './store';

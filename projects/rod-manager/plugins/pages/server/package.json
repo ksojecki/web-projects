@@ -1,0 +1,57 @@
+{
+  "name": "@sojecki/rod-manager-pages-server",
+  "version": "0.0.1",
+  "main": "../../../../../dist/projects/rod-manager/plugins/pages/server/index.js",
+  "types": "../../../../../dist/projects/rod-manager/plugins/pages/server/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@sojecki/platform-source": "./src/index.ts",
+      "types": "../../../../../dist/projects/rod-manager/plugins/pages/server/index.d.ts",
+      "require": "../../../../../dist/projects/rod-manager/plugins/pages/server/index.js",
+      "default": "../../../../../dist/projects/rod-manager/plugins/pages/server/index.js"
+    }
+  },
+  "files": [
+    "../../../../../dist/projects/rod-manager/plugins/pages/server",
+    "!**/*.tsbuildinfo"
+  ],
+  "dependencies": {
+    "@sojecki/platform-server-platform": "0.0.1",
+    "@sojecki/platform-shared": "0.0.1"
+  },
+  "nx": {
+    "targets": {
+      "typecheck": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "projects/rod-manager/plugins/pages/server",
+          "command": "node ../../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.lib.json && node ../../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.spec.json"
+        }
+      },
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node node_modules/oxlint/bin/oxlint projects/rod-manager/plugins/pages/server --config .oxlintrc.json"
+        }
+      },
+      "build": {
+        "executor": "nx:run-commands",
+        "outputs": [
+          "{workspaceRoot}/dist/projects/rod-manager/plugins/pages/server"
+        ],
+        "options": {
+          "cwd": "projects/rod-manager/plugins/pages/server",
+          "command": "node ../../../../../node_modules/typescript/bin/tsc --build tsconfig.lib.json"
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "projects/rod-manager/plugins/pages/server",
+          "command": "node ../../../../../node_modules/vitest/vitest.mjs run --config vitest.config.mts"
+        }
+      }
+    }
+  }
+}

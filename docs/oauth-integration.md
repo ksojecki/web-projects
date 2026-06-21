@@ -8,7 +8,7 @@ The system implements a complete OAuth 2.0 flow with PKCE (Proof Key for Code Ex
 
 ### Architecture
 
-- **Backend (Fastify)**: OAuth plugin entrypoint (`apps/api/src/app/plugins/oauth/index.ts`) with modular implementation in `apps/api/src/app/plugins/oauth/`
+- **Backend (Fastify)**: OAuth plugin entrypoint (`projects/rod-manager/apps/api/src/app/plugins/oauth/index.ts`) with modular implementation in `projects/rod-manager/apps/api/src/app/plugins/oauth/`
 - **Database**: SQLite `oauth_providers` table stores provider credentials per user
 - **Frontend (React)**: OAuth initiation on login page with callback handler
 - **Session Management**: Standard session cookie created after OAuth callback
@@ -206,7 +206,7 @@ export type OAuthProviderType =
 
 ### 2. Update OAuth Plugin Modules
 
-Add provider configuration in `apps/api/src/app/plugins/oauth/oauthConfigs.ts` and update OAuth service logic in `apps/api/src/app/plugins/oauth/service.ts`:
+Add provider configuration in `projects/rod-manager/apps/api/src/app/plugins/oauth/oauthConfigs.ts` and update OAuth service logic in `projects/rod-manager/apps/api/src/app/plugins/oauth/service.ts`:
 
 ```typescript
 const newProviderClientId = process.env.OAUTH_NEW_PROVIDER_CLIENT_ID;
@@ -225,11 +225,11 @@ if (newProviderClientId && newProviderClientSecret) {
 }
 ```
 
-Implement provider-specific user info parsing in `apps/api/src/app/plugins/oauth/userInfo.ts` and service wiring in `apps/api/src/app/plugins/oauth/service.ts`.
+Implement provider-specific user info parsing in `projects/rod-manager/apps/api/src/app/plugins/oauth/userInfo.ts` and service wiring in `projects/rod-manager/apps/api/src/app/plugins/oauth/service.ts`.
 
 ### 3. Update Login Page
 
-Add button in `apps/web/src/app/auth/loginPage.tsx`:
+Add button in `projects/rod-manager/apps/web/src/app/auth/loginPage.tsx`:
 
 ```typescript
 <button

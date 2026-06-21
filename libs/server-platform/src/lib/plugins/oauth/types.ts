@@ -1,4 +1,7 @@
-import type { OAuthProviderType, OAuthUserInfo } from '@rod-manager/shared';
+import type {
+  OAuthProviderType,
+  OAuthUserInfo,
+} from '@sojecki/platform-shared';
 
 /**
  * OAuth provider configuration

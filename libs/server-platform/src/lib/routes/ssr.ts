@@ -5,22 +5,32 @@ import fastifyMiddie from '@fastify/middie';
 import fastifyStatic from '@fastify/static';
 import type { FastifyInstance } from 'fastify';
 
+export interface ServerPlatformSsrProductionPaths {
+  clientRoot: string;
+  serverEntryPath: string;
+}
+
+export interface ServerPlatformSsrOptions {
+  webRoot: string;
+  production: ServerPlatformSsrProductionPaths;
+}
+
 type RenderFunction = (url: string) => Promise<string> | string;
 
 interface RenderModule {
   render: RenderFunction;
 }
 
-export default async function (fastify: FastifyInstance) {
-  const webRoot = path.resolve(process.cwd(), 'apps/web');
+export default async function (
+  fastify: FastifyInstance,
+  options: ServerPlatformSsrOptions,
+) {
+  const webRoot = path.resolve(options.webRoot);
   const isProduction = process.env.NODE_ENV === 'production';
 
   if (isProduction) {
-    const clientRoot = path.resolve(process.cwd(), 'dist/apps/web/client');
-    const serverEntryPath = path.resolve(
-      process.cwd(),
-      'dist/apps/web/server/entry-server.mjs',
-    );
+    const clientRoot = path.resolve(options.production.clientRoot);
+    const serverEntryPath = path.resolve(options.production.serverEntryPath);
     const templatePath = path.join(clientRoot, 'index.html');
     const template = await readFile(templatePath, 'utf-8');
 

@@ -1,0 +1,21 @@
+{
+  "extends": "../../../../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node", "vitest/globals"],
+    "rootDir": "../../../../../",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "tsBuildInfoFile": "../../../../../dist/projects/rod-manager/plugins/pages/server/tsconfig.spec.tsbuildinfo",
+    "paths": {
+      "@sojecki/platform-server-platform": [
+        "../../../../../libs/server-platform/src/index.ts"
+      ],
+      "@sojecki/platform-shared": ["../../../../../libs/shared/src/index.ts"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "../../../../../libs/server-platform/src/**/*.ts",
+    "../../../../../libs/shared/src/**/*.ts"
+  ]
+}

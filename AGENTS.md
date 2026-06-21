@@ -2,8 +2,8 @@
 
 ## Repo Snapshot
 
-- This is an Nx 22 workspace (`nx`, `@nx/js` in `package.json`) organized around `apps/` and `libs/`.
-- Application projects live in `apps/` (`apps/api`, `apps/web`), and reusable code lives in `libs/` (`libs/shared`, `libs/ui`).
+- This is an Nx 22 workspace (`nx`, `@nx/js` in `package.json`) organized around product directories under `projects/` and shared libraries under `libs/`.
+- Product applications live in `projects/<product>/apps/` (`projects/rod-manager/apps/api`, `projects/rod-manager/apps/web`), and reusable code lives in `libs/` (`libs/shared`, `libs/ui`).
 - Treat root config as source of truth unless a project-level config overrides it intentionally.
 - Extended docs for agents and architecture are in `docs/` (`docs/agents/`, `docs/architecture/`, `docs/operations/`).
 
@@ -17,6 +17,7 @@
 - Monorepo orchestration is defined in `nx.json`; project tasks are expected to be inferred by Nx.
 - `@nx/js/typescript` plugin wires common targets: `build` and `typecheck` (see `nx.json` plugin options).
 - Shared cache inputs include `.github/workflows/ci.yml` via `namedInputs.sharedGlobals`; CI changes can invalidate task cache.
+- Product-specific feature plugins can live under `projects/<product>/plugins/`, while shared platform libraries remain under `libs/`.
 - TypeScript baseline lives in `tsconfig.base.json` with strict + composite settings and NodeNext module system.
 
 ## Terminal Command Handling
@@ -32,10 +33,13 @@
 
 - Default delivery mechanism for non-trivial work: use the Agent Workflow in `docs/agents/workflow.md`.
 - For features, bug fixes, and error remediation, first agree on a plan when the task calls for planning, then execute that accepted plan through the delivery loop in `.agents/skills/agent-delivery-loop/SKILL.md`.
+- In that delivery loop, default to sequential step execution: one accepted step, one `gpt-5.4-mini` implementer subagent, then one `gpt-5.4-mini` tester subagent for the same step.
+- Do not spawn implementers for multiple planned steps in parallel by default; prefer the smallest active step to reduce token usage.
+- When the user asks to publish completed work, commit the accepted changes and push the working branch to `origin`.
 - Before implementation work starts, check the current branch. If you are on `main`, create a new working branch first.
 - When running Nx commands as an AI agent, always pass `--no-tui`.
 - Install deps: `npm ci` (used in CI).
-- Start local SSR development as an AI agent with `npm run dev -- --no-tui`, then smoke test `https://localhost:3000/` and `https://localhost:3000/api`.
+- Start local SSR development as an AI agent with `npm run dev`, then smoke test `https://localhost:3000/` and `https://localhost:3000/api`.
 - If port `3000` is already in use, inspect the listener with `lsof -nP -iTCP:3000 -sTCP:LISTEN`. Reuse an existing `rod-manager` dev server when possible. Only stop the process automatically if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
 - Run lint via npm script: `npm run lint` (delegates to Nx `lint` targets).
 - Run formatting checks: `npm run format:check`; auto-fix formatting: `npm run format`.
@@ -58,7 +62,7 @@
 - Keep top-level declaration order as: exported types, local types, constants, exported functions, local functions.
 - Allow exceptions only when this order breaks compilation; in such cases add a local comment with a short reason.
 - TS output intent is declaration-focused (`emitDeclarationOnly: true` in `tsconfig.base.json`), so library packaging should expect `.d.ts` generation.
-- `customConditions` includes `@rod-manager/source`; keep this in mind when introducing conditional exports/resolution.
+- `customConditions` includes `@sojecki/platform-source`; keep this in mind when introducing conditional exports/resolution.
 - In `libs/ui`, prefer component names without a `Ui` prefix (for example `Button`, `Card`, `TextInput`).
 
 ## Integration Points
@@ -94,7 +98,7 @@ Provider credentials must be configured via environment variables:
    - User profile mapping helpers: `libs/server-platform/src/lib/plugins/oauth/userInfo.ts`.
    - PKCE helpers: `libs/server-platform/src/lib/plugins/oauth/pkce.ts`.
 3. **Update OAuth routes** (`libs/server-platform/src/lib/routes/oauth.ts`) if new authorization/callback flow differs from standard OAuth 2.0.
-4. **Update frontend OAuth controls** (`apps/web/src/app/auth/components/OAuthLoginButtons.tsx`, `apps/web/src/app/auth/components/OAuthRegisterButtons.tsx`, and shared `OAuthButtons.tsx`) to add provider buttons and call `initiateOAuth()`.
+4. **Update frontend OAuth controls** (`projects/rod-manager/apps/web/src/app/auth/components/OAuthLoginButtons.tsx`, `projects/rod-manager/apps/web/src/app/auth/components/OAuthRegisterButtons.tsx`, and shared `OAuthButtons.tsx`) to add provider buttons and call `initiateOAuth()`.
 
 ### Code Structure
 
@@ -129,6 +133,6 @@ Provider credentials must be configured via environment variables:
 
 - Prefer Nx generators (example from `README.md`):
   - `npx nx g @nx/js:lib libs/<name> --publishable --importPath=@my-org/<name> --no-tui`
-  - `npx nx g @nx/react:app apps/<name> --bundler=vite --no-tui`
+  - `npx nx g @nx/react:app <name> --bundler=vite --no-tui`, then place product apps under `projects/<product>/apps/` if they are product-specific.
 - After generation, validate inferred targets with `npx nx show project <project-name> --no-tui` and run `build` + `typecheck`.
 - Keep new package configs aligned with root TS/Nx conventions instead of overriding defaults unless necessary.

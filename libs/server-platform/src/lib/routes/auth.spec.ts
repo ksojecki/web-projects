@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import type { SessionResponse } from '@rod-manager/shared';
+import type { SessionResponse } from '@sojecki/platform-shared';
 import databasePlugin from '../plugins/database';
 import sessionPlugin from '../plugins/session';
 import authRoutes from './auth';

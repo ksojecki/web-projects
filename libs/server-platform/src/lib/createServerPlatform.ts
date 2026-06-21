@@ -9,11 +9,13 @@ import authRoutes from './routes/auth';
 import oauthRoutes from './routes/oauth';
 import rootRoute from './routes/root';
 import ssrRoute from './routes/ssr';
+import type { ServerPlatformSsrOptions } from './routes/ssr';
 import userSettingsRoutes from './routes/user-settings';
 
 export interface ServerPlatformOptions {
   logLevel?: string;
   plugins?: ServerPlatformPlugin[];
+  ssr?: ServerPlatformSsrOptions;
 }
 
 /** Registers all core plugins and routes on the given Fastify instance. */
@@ -32,7 +34,9 @@ export async function createServerPlatform(
   fastify.register(oauthRoutes);
   fastify.register(rootRoute);
   fastify.register(userSettingsRoutes);
-  fastify.register(ssrRoute);
+  if (opts.ssr) {
+    fastify.register(ssrRoute, opts.ssr);
+  }
 
   // Feature plugins
   if (opts.plugins && opts.plugins.length > 0) {

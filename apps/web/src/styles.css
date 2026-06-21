@@ -1,8 +1,0 @@
-@import 'tailwindcss';
-
-@plugin "daisyui" {
-  themes: emerald --default;
-}
-
-/* Scan shared UI library classes (e.g. modal, modal-box) in monorepo source files. */
-@source '../../../libs/ui/src/**/*.{ts,tsx}';

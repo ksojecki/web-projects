@@ -1,4 +1,4 @@
-# @rod-manager/ui
+# @sojecki/platform-ui
 
 Shared React UI components for reuse across applications in this workspace.
 
@@ -12,7 +12,7 @@ Component names should stay free of the `Ui` prefix. Prefer names like `Button`,
 ## Example
 
 ```tsx
-import { Button, Card } from '@rod-manager/ui';
+import { Button, Card } from '@sojecki/platform-ui';
 
 export function ExamplePanel() {
   return (
@@ -26,7 +26,7 @@ export function ExamplePanel() {
 ## Verification
 
 ```sh
-npx nx test @rod-manager/ui --no-tui
-npx nx build @rod-manager/ui --no-tui
-npx nx typecheck @rod-manager/ui --no-tui
+npx nx test @sojecki/platform-ui --no-tui
+npx nx build @sojecki/platform-ui --no-tui
+npx nx typecheck @sojecki/platform-ui --no-tui
 ```

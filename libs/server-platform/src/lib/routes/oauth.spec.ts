@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import type { OAuthProviderType } from '@rod-manager/shared';
+import type { OAuthProviderType } from '@sojecki/platform-shared';
 import sessionPlugin, { SESSION_COOKIE_NAME } from '../plugins/session';
 import databasePlugin from '../plugins/database';
 import type { OAuthService } from '../plugins/oauth';

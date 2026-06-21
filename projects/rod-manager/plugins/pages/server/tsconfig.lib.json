@@ -1,0 +1,29 @@
+{
+  "extends": "../../../../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "../../../../../dist/projects/rod-manager/plugins/pages/server",
+    "tsBuildInfoFile": "../../../../../dist/projects/rod-manager/plugins/pages/server/tsconfig.lib.tsbuildinfo",
+    "emitDeclarationOnly": false,
+    "forceConsistentCasingInFileNames": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"],
+    "paths": {
+      "@sojecki/platform-server-platform": [
+        "../../../../../libs/server-platform/src/index.ts"
+      ],
+      "@sojecki/platform-shared": ["../../../../../libs/shared/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
+  "references": [
+    {
+      "path": "../../../../../libs/shared/tsconfig.lib.json"
+    },
+    {
+      "path": "../../../../../libs/server-platform/tsconfig.lib.json"
+    }
+  ]
+}

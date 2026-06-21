@@ -1,0 +1,51 @@
+{
+  "name": "@sojecki/rod-manager-web",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "targets": {
+      "typecheck": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "projects/rod-manager/apps/web",
+          "command": "node ../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json && node ../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.spec.json && node ../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.node.json"
+        }
+      },
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node node_modules/oxlint/bin/oxlint projects/rod-manager/apps/web --config .oxlintrc.json"
+        }
+      },
+      "build-server": {
+        "executor": "nx:run-commands",
+        "outputs": [
+          "{workspaceRoot}/dist/projects/rod-manager/apps/web/server"
+        ],
+        "options": {
+          "cwd": "projects/rod-manager/apps/web",
+          "command": "node ../../../../node_modules/vite/bin/vite.js build --ssr src/entry-server.tsx --outDir ../../../../dist/projects/rod-manager/apps/web/server"
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "projects/rod-manager/apps/web",
+          "command": "node ../../../../node_modules/vitest/vitest.mjs run --config vite.config.mts"
+        }
+      },
+      "format": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "projects/rod-manager/apps/web",
+          "command": "node ../../../../node_modules/prettier/bin/prettier.cjs --write ."
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "react-hook-form": "^7.79.0",
+    "zod": "^4.4.3"
+  }
+}

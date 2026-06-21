@@ -1,4 +1,7 @@
-import type { OAuthProviderType, OAuthUserInfo } from '@rod-manager/shared';
+import type {
+  OAuthProviderType,
+  OAuthUserInfo,
+} from '@sojecki/platform-shared';
 import type { OAuthConfig, OAuthService, ProviderTokenResponse } from './types';
 import {
   buildOAuthUserInfo,

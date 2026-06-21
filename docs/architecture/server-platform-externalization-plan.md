@@ -2,11 +2,11 @@
 
 ## Status
 
-This plan is historical implementation context. The current server platform lives in `libs/server-platform`, while `apps/api` is the thin bootstrap host.
+This plan is historical implementation context. The current server platform lives in `libs/server-platform`, while `projects/rod-manager/apps/api` is the thin bootstrap host.
 
 ## Objective
 
-Extract the current server-side platform from `apps/api` into an external reusable library while keeping `apps/api` as a thin bootstrap host.
+Extract the current server-side platform from `projects/rod-manager/apps/api` into an external reusable library while keeping `projects/rod-manager/apps/api` as a thin bootstrap host.
 
 At the same time, define a stable plugin data contract so feature modules (for example: `pages`) can be attached without changing core internals.
 
@@ -26,11 +26,11 @@ Out of scope:
 
 ## Original State (Before Extraction)
 
-- `apps/api/src/app/app.ts` autoloads `plugins` and `routes` from app-local directories.
+- `projects/rod-manager/apps/api/src/app/app.ts` autoloads `plugins` and `routes` from app-local directories.
 - Core concerns and feature concerns are mixed in one runtime.
-- `pages` routes live in `apps/api/src/app/routes/pages.ts`.
-- `pageStore` is currently created in `apps/api/src/app/plugins/database/pageStore.ts` and decorated in `apps/api/src/app/plugins/database/index.ts`.
-- Auth/session store logic (for example `apps/api/src/app/plugins/database/store.ts`) is core-level and should remain in core.
+- `pages` routes live in `projects/rod-manager/apps/api/src/app/routes/pages.ts`.
+- `pageStore` is currently created in `projects/rod-manager/apps/api/src/app/plugins/database/pageStore.ts` and decorated in `projects/rod-manager/apps/api/src/app/plugins/database/index.ts`.
+- Auth/session store logic (for example `projects/rod-manager/apps/api/src/app/plugins/database/store.ts`) is core-level and should remain in core.
 
 ## Target Architecture
 
@@ -227,7 +227,7 @@ Tasks:
 
 1. Create `createServerPlatform` that configures server platform plugins/routes only.
 2. Add `registerPlugins(plugins: ServerPlatformPlugin[])` flow.
-3. Keep app-local bootstrap minimal in `apps/api/src/main.ts`.
+3. Keep app-local bootstrap minimal in `projects/rod-manager/apps/api/src/main.ts`.
 
 Acceptance:
 
@@ -240,13 +240,13 @@ Historical implementation tasks:
 
 Deliverables:
 
-- `libs/plugins/pages/server` package.
-- `libs/plugins/pages/ui` package for `WebPlatform` integration.
+- `projects/rod-manager/plugins/pages/server` package.
+- `projects/rod-manager/plugins/pages/ui` package for `WebPlatform` integration.
 - Pages-specific store and migrations relocated from core db plugin.
 
 Tasks:
 
-1. Move `pages` routes from `apps/api/src/app/routes/pages.ts` to plugin routes.
+1. Move `pages` routes from `projects/rod-manager/apps/api/src/app/routes/pages.ts` to plugin routes.
 2. Move `pageStore` implementation from core db area into plugin package.
 3. Register server plugin in bootstrap list.
 
@@ -277,9 +277,9 @@ Acceptance:
 
 Current plan scope ends at monorepo readiness. Packaging/publication outside this monorepo is intentionally out of scope for now.
 
-## Bootstrap Design (apps/api)
+## Bootstrap Design (projects/rod-manager/apps/api)
 
-`apps/api` should only:
+`projects/rod-manager/apps/api` should only:
 
 1. Read env and TLS config.
 2. Create Fastify instance.
@@ -294,7 +294,7 @@ const plugins: ServerPlatformPlugin[] = [pagesServerPlugin()];
 await createServerPlatform(server, { plugins });
 ```
 
-No feature route/store logic should remain in `apps/api`.
+No feature route/store logic should remain in `projects/rod-manager/apps/api`.
 
 ## Data Ownership Boundaries
 
@@ -341,11 +341,11 @@ Mitigation: Keep DTOs in one shared package + contract tests.
 
 ## Execution Checklist
 
-- [ ] Create `libs/server-platform` and move server composition from `apps/api/src/app/app.ts`.
+- [ ] Create `libs/server-platform` and move server composition from `projects/rod-manager/apps/api/src/app/app.ts`.
 - [ ] Introduce `ServerPlatformPlugin` contract and plugin registry.
-- [ ] Refactor `apps/api/src/main.ts` to bootstrap-only host.
-- [ ] Extract `pages` routes and store into `libs/plugins/pages/server`.
-- [ ] Add paired `WebPlatform` extension in `libs/plugins/pages/ui`.
+- [ ] Refactor `projects/rod-manager/apps/api/src/main.ts` to bootstrap-only host.
+- [ ] Extract `pages` routes and store into `projects/rod-manager/plugins/pages/server`.
+- [ ] Add paired `WebPlatform` extension in `projects/rod-manager/plugins/pages/ui`.
 - [ ] Move pages migrations to plugin package.
 - [ ] Keep auth/session store (including `store.ts`) in core package.
 - [ ] Add contract tests for pages DTOs and error responses.
@@ -354,7 +354,7 @@ Mitigation: Keep DTOs in one shared package + contract tests.
 
 Done when:
 
-- `apps/api` contains bootstrap code only.
+- `projects/rod-manager/apps/api` contains bootstrap code only.
 - ServerPlatform works as a reusable library consumed by apps inside this monorepo.
 - Pages feature is installable/removable as plugin.
 - Plugin data contract is versioned, tested, and documented.

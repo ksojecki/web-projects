@@ -1,0 +1,11 @@
+{
+  "extends": "../../../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "composite": true,
+    "outDir": "../../../../dist/projects/rod-manager/apps/web",
+    "tsBuildInfoFile": "../../../../dist/projects/rod-manager/apps/web/tsconfig.node.tsbuildinfo"
+  },
+  "include": ["vite.config.mts"]
+}

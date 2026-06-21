@@ -1,4 +1,4 @@
-import type { OAuthUserInfo } from '@rod-manager/shared';
+import type { OAuthUserInfo } from '@sojecki/platform-shared';
 
 interface OAuthUserInfoInput {
   id: string;
