@@ -16,6 +16,7 @@ This directory extends `AGENTS.md`.
 ## Working Standard
 
 - Treat `AGENTS.md` as the entrypoint and this directory as the detailed guide.
+- Use the Agent Workflow as the default delivery mechanism for non-trivial features, bug fixes, and error remediation.
 - Document architecture decisions as ADRs in `docs/architecture/adr/`.
 - For cross-cutting changes, also update operations documentation.
 - Prefer small, reversible steps and validate after each meaningful change.

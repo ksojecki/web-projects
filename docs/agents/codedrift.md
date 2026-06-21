@@ -9,7 +9,7 @@ Run these commands from the repository root:
 ```sh
 python3 -m venv .venv-codrift
 .venv-codrift/bin/python -m pip install --upgrade pip
-.venv-codrift/bin/python -m pip install "codedrift[all] @ git+https://github.com/darshil3011/codedrift@b5346a06fc9b3a880bfc05390ac024f4601f5252"
+.venv-codrift/bin/python -m pip install "codedrift[all,dashboard] @ git+https://github.com/darshil3011/codedrift@b5346a06fc9b3a880bfc05390ac024f4601f5252"
 .venv-codrift/bin/python -m pip install "tree-sitter-language-pack==0.2.0" "tree-sitter>=0.24,<0.25"
 .venv-codrift/bin/python ./scripts/codedrift-local.py init
 .venv-codrift/bin/python ./scripts/codedrift-local.py redact enable
@@ -20,7 +20,7 @@ If the install fails on a Python version newer than CodeDrift's dependencies sup
 
 Generated CodeDrift state lives in `.codecodedrift/`; keep it local and uncommitted.
 
-Use `.venv-codrift/bin/python ./scripts/codedrift-local.py` instead of calling `.venv-codrift/bin/codedrift` directly. The wrapper configures newer tree-sitter parser caches under `.codecodedrift/cache/` when supported. The explicit `tree-sitter-language-pack==0.2.0` pin keeps CodeDrift on the parser API it currently expects. The hook installer uses the same wrapper so post-commit updates do not depend on a globally installed `codedrift` executable.
+Use `.venv-codrift/bin/python ./scripts/codedrift-local.py` instead of calling `.venv-codrift/bin/codedrift` directly. The wrapper configures newer tree-sitter parser caches under `.codecodedrift/cache/` when supported. The explicit `tree-sitter-language-pack==0.2.0` pin keeps CodeDrift on the parser API it currently expects. Installing `codedrift[all,dashboard]` keeps the local dashboard available for repository work. The hook installer uses the same wrapper so post-commit updates do not depend on a globally installed `codedrift` executable.
 
 ## Codex MCP
 
@@ -44,17 +44,25 @@ codex mcp get rod-manager-codedrift
 - Run `.venv-codrift/bin/python ./scripts/codedrift-local.py update` after significant local edits or when search results look stale.
 - Use `.venv-codrift/bin/python ./scripts/codedrift-local.py status` to inspect index health.
 - Use `.venv-codrift/bin/python ./scripts/codedrift-local.py memory recall "<task>"` before similar follow-up work, and `.venv-codrift/bin/python ./scripts/codedrift-local.py memory record` after a session when the context should be reusable.
+- Prefer the root npm wrappers for common local usage: `npm run codedrift:status`, `npm run codedrift:update`, `npm run codedrift:recall -- "<task>"`, `npm run codedrift:record`, `npm run codedrift:dashboard`, and `npm run codedrift:api`.
+
+## Cross-Session Context
+
+- Treat CodeDrift memory as the first step for follow-up work and the last step for reusable handoff.
+- Start a task with `npm run codedrift:recall -- "<task>"` to reuse prior implementation notes, validation hints, and file targets.
+- End a task with `npm run codedrift:record` after capturing concise notes about what changed, what remains open, and how to verify the result.
+- If the dashboard still shows no savings, confirm agent sessions are using the MCP tools first and that memory is being recorded intentionally at handoff.
 
 ## Dashboard
 
 Start local analytics when needed:
 
 ```sh
-.venv-codrift/bin/python ./scripts/codedrift-local.py dashboard
+npm run codedrift:dashboard
 ```
 
 For headless/API-only use:
 
 ```sh
-.venv-codrift/bin/python ./scripts/codedrift-local.py api
+npm run codedrift:api
 ```

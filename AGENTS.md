@@ -30,6 +30,9 @@
 
 ## Critical Workflows
 
+- Default delivery mechanism for non-trivial work: use the Agent Workflow in `docs/agents/workflow.md`.
+- For features, bug fixes, and error remediation, first agree on a plan when the task calls for planning, then execute that accepted plan through the delivery loop in `.agents/skills/agent-delivery-loop/SKILL.md`.
+- Before implementation work starts, check the current branch. If you are on `main`, create a new working branch first.
 - When running Nx commands as an AI agent, always pass `--no-tui`.
 - Install deps: `npm ci` (used in CI).
 - Start local SSR development as an AI agent with `npm run dev -- --no-tui`, then smoke test `https://localhost:3000/` and `https://localhost:3000/api`.
@@ -41,7 +44,8 @@
 - Apply Nx Cloud CI remediation hints: `npx nx fix-ci --no-tui`.
 - Explore project/task graph: `npx nx graph --json --no-tui` (use `--json` to avoid browser).
 - Keep TS project refs consistent after adding projects: `npx nx sync --no-tui` (or `npx nx sync:check --no-tui` in CI).
-- CodeDrift is optional local agent tooling. If configured, prefer its MCP tools for repository overview, symbol search, symbol resolution, and session-aware reads; fall back to `rg`/direct reads when the index is unavailable or stale. Setup lives in `docs/agents/codedrift.md`.
+- CodeDrift is optional local agent tooling. If configured, prefer its MCP tools for repository overview, symbol search, symbol resolution, and session-aware reads; fall back to `rg`/direct reads when the index is unavailable or stale.
+- For cross-session context, start follow-up work with CodeDrift memory recall and record reusable context at handoff. Setup and commands live in `docs/agents/codedrift.md`.
 
 ## Project-Specific Conventions
 

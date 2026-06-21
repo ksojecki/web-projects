@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => ({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: isExternalImport,
       output: {
         entryFileNames: 'main.js',
