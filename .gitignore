@@ -7,6 +7,7 @@ out-tsc
 
 # dependencies
 node_modules
+.venv-codrift
 
 # IDEs and editors
 /.idea
@@ -45,6 +46,7 @@ Thumbs.db
 
 .nx/cache
 .nx/workspace-data
+.codecodedrift
 
 vite.config.*.timestamp*
 

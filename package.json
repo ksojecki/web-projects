@@ -3,15 +3,13 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "lint": "node ./node_modules/nx/bin/nx.js run-many -t lint --no-tui",
-    "typecheck": "node ./node_modules/nx/bin/nx.js run-many -t typecheck --no-tui",
+    "lint": "node ./node_modules/nx/dist/bin/nx.js run-many -t lint --no-tui",
+    "typecheck": "node ./node_modules/nx/dist/bin/nx.js run-many -t typecheck --no-tui",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "postinstall": "node ./scripts/postinstall.mjs",
     "setup:certs": "node ./scripts/setup-dev-certs.mjs",
-    "dev:ssr": "node ./node_modules/nx/bin/nx.js run @rod-manager/source:dev:ssr --no-tui",
-    "dev:web": "npx nx dev web --no-tui",
-    "dev:api": "npx nx serve api --no-tui",
+    "dev": "node ./node_modules/nx/dist/bin/nx.js serve api",
     "build:ssr": "npm run build:web && npm run build:api",
     "build:web": "npx nx run web:build --no-tui && npx nx run web:build-server --no-tui",
     "build:api": "npx nx build api --no-tui",
@@ -26,7 +24,6 @@
   "devDependencies": {
     "@babel/core": "7.29.7",
     "@babel/preset-react": "7.28.5",
-    "@nx/esbuild": "22.7.5",
     "@nx/js": "22.7.5",
     "@nx/node": "22.7.5",
     "@nx/react": "22.7.5",
@@ -52,7 +49,6 @@
     "ajv": "8.20.0",
     "autoprefixer": "10.5.0",
     "daisyui": "5.5.23",
-    "esbuild": "0.28.1",
     "husky": "9.1.7",
     "i18next": "26.3.1",
     "jiti": "2.4.2",
@@ -98,16 +94,6 @@
           "port": 4873,
           "config": ".verdaccio/config.yml",
           "storage": "tmp/local-registry/storage"
-        }
-      },
-      "dev:ssr": {
-        "executor": "nx:run-commands",
-        "options": {
-          "parallel": true,
-          "commands": [
-            "node ./node_modules/nx/bin/nx.js dev web --no-tui",
-            "node ./node_modules/nx/bin/nx.js serve api --no-tui"
-          ]
         }
       }
     }

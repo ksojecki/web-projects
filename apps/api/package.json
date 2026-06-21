@@ -5,39 +5,21 @@
   "nx": {
     "targets": {
       "build": {
-        "executor": "@nx/esbuild:esbuild",
+        "executor": "nx:run-commands",
         "outputs": [
-          "{options.outputPath}"
+          "{workspaceRoot}/dist/apps/api"
         ],
         "defaultConfiguration": "production",
         "options": {
-          "platform": "node",
-          "outputPath": "dist/apps/api",
-          "format": [
-            "cjs"
-          ],
-          "bundle": false,
-          "main": "apps/api/src/main.ts",
-          "tsConfig": "apps/api/tsconfig.app.json",
-          "assets": [
-            "apps/api/src/assets"
-          ],
-          "esbuildOptions": {
-            "sourcemap": true,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
+          "cwd": "apps/api",
+          "command": "node ../../node_modules/vite/bin/vite.js build --config vite.config.mts --mode production"
         },
         "configurations": {
-          "development": {},
+          "development": {
+            "command": "node ../../node_modules/vite/bin/vite.js build --config vite.config.mts --mode development"
+          },
           "production": {
-            "esbuildOptions": {
-              "sourcemap": false,
-              "outExtension": {
-                ".js": ".js"
-              }
-            }
+            "command": "node ../../node_modules/vite/bin/vite.js build --config vite.config.mts --mode production"
           }
         }
       },

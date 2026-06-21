@@ -45,6 +45,74 @@ function runMkcertCli(args) {
   }
 }
 
+function runOpenSsl() {
+  const result = spawnSync(
+    'openssl',
+    [
+      'req',
+      '-x509',
+      '-newkey',
+      'rsa:2048',
+      '-nodes',
+      '-sha256',
+      '-days',
+      '365',
+      '-subj',
+      '/CN=localhost',
+      '-addext',
+      'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1',
+      '-keyout',
+      keyPath,
+      '-out',
+      certPath,
+    ],
+    {
+      encoding: 'utf8',
+    },
+  );
+
+  if (result.status !== 0) {
+    if (result.stdout) {
+      console.error(result.stdout);
+    }
+
+    if (result.stderr) {
+      console.error(result.stderr);
+    }
+
+    throw new Error('openssl command failed while generating certificates.');
+  }
+}
+
+function generateWithMkcert() {
+  runMkcertCli([
+    '-o',
+    dirname(certPath),
+    '-k',
+    basename(keyPath),
+    '-c',
+    basename(certPath),
+    '--host',
+    'localhost',
+    '--host',
+    '127.0.0.1',
+    '--host',
+    '::1',
+  ]);
+}
+
+function generateCertificates() {
+  try {
+    generateWithMkcert();
+  } catch (error) {
+    console.warn(
+      '[cert] mkcert-cli failed; falling back to an OpenSSL self-signed certificate.',
+    );
+    console.warn(error instanceof Error ? error.message : String(error));
+    runOpenSsl();
+  }
+}
+
 function setupDevCerts() {
   if (isProductionInstall()) {
     return;
@@ -60,23 +128,10 @@ function setupDevCerts() {
   mkdirSync(dirname(keyPath), { recursive: true });
   mkdirSync(dirname(certPath), { recursive: true });
 
-  runMkcertCli([
-    '-o',
-    dirname(certPath),
-    '-k',
-    basename(keyPath),
-    '-c',
-    basename(certPath),
-    '--host',
-    'localhost',
-    '--host',
-    '127.0.0.1',
-    '--host',
-    '::1',
-  ]);
+  generateCertificates();
 
   if (!existsSync(keyPath) || !existsSync(certPath)) {
-    throw new Error('mkcert did not generate expected certificate files.');
+    throw new Error('Certificate generation did not create expected files.');
   }
 }
 

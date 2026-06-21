@@ -36,42 +36,15 @@ npm run setup:certs
 Run the SSR development stack:
 
 ```sh
-npm run dev:ssr
+npm run dev
 ```
 
-Run the web or API project separately:
-
-```sh
-npm run dev:web
-npm run dev:api
-```
+This starts the SSR app through the Fastify API server.
 
 Local smoke checks:
 
 - `https://localhost:3000/` should return SSR HTML.
 - `https://localhost:3000/api` should return Fastify API JSON.
-
-## Build, Test, and Quality
-
-```sh
-npm run lint
-npm run typecheck
-npm run format:check
-npx nx run-many -t test --no-tui
-npx nx run-many -t lint test build typecheck --no-tui
-```
-
-- `npm run lint` runs Oxlint through Nx project targets.
-- `npm run typecheck` runs TypeScript project checks.
-- `npm run format:check` verifies Prettier formatting.
-- `npx nx run-many -t lint test build typecheck --no-tui` mirrors CI locally.
-
-Build and start the production SSR bundle:
-
-```sh
-npm run build:ssr
-npm run start:ssr
-```
 
 ## Architecture Notes
 
@@ -79,19 +52,10 @@ Use `docs/architecture/` for the MVP plan and ADRs. OAuth/session/database logic
 
 Shared TypeScript settings live in `tsconfig.base.json` with strict, composite, NodeNext, declaration-focused output. Nx target inference is configured in `nx.json`; prefer changing root configuration over duplicating project-level settings.
 
-## Contributor and Agent Guidance
+## Contributing
 
-- `AGENTS.md` is the root operating guide for AI coding agents.
-- `docs/agents/` contains workflow and review checklists.
-- Documentation, generated identifiers, comments, and user-facing messages must be written in English.
-- Use `--no-tui` for Nx commands and `git --no-pager` for Git output in automated sessions.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development, validation, and release workflow.
 
-## Release
+## Agent Guidance
 
-Use Nx release tooling:
-
-```sh
-npx nx release --no-tui
-```
-
-Run with `--dry-run` before publishing from local machines.
+AI agent instructions live in [AGENTS.md](./AGENTS.md) and `docs/agents/`.

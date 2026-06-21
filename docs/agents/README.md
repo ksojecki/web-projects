@@ -23,6 +23,8 @@ This directory extends `AGENTS.md`.
 ## Quick links
 
 - Workflow: `docs/agents/workflow.md`
+- Delivery loop skill: `.agents/skills/agent-delivery-loop/SKILL.md`
+- Pre-commit staged-file checks: `.husky/pre-commit` and `.lintstagedrc.mjs`
 - Checklist: `docs/agents/checklist.md`
 - Setup: `docs/agents/setup.md`
 - Plan MVP: `docs/architecture/mvp-plan-react-fastify-sqlite.md`
