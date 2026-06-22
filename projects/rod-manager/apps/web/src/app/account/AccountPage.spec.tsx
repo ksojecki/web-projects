@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -48,13 +48,20 @@ vi.mock('@sojecki/platform-web-platform', async (importOriginal) => {
   return {
     ...actual,
     useAuth: mockUseAuth,
-    linkOAuthProvider: mockLinkOAuthProvider,
-    loadAuthenticationMethods: mockLoadAuthenticationMethods,
-    storeOAuthState: mockStoreOAuthState,
-    unlinkOAuthProvider: mockUnlinkOAuthProvider,
     updatePassword: mockUpdatePassword,
   };
 });
+
+vi.mock('../../../../../../../libs/web-platform/src/lib/auth/authApi', () => ({
+  linkOAuthProvider: mockLinkOAuthProvider,
+  loadAuthenticationMethods: mockLoadAuthenticationMethods,
+  unlinkOAuthProvider: mockUnlinkOAuthProvider,
+  updatePassword: mockUpdatePassword,
+}));
+
+vi.mock('../../../../../../../libs/web-platform/src/lib/auth/storage', () => ({
+  storeOAuthState: mockStoreOAuthState,
+}));
 
 describe('AccountPage', () => {
   beforeEach(async () => {
@@ -157,5 +164,83 @@ describe('AccountPage', () => {
     expect(
       screen.getByPlaceholderText('Confirm new password'),
     ).toBeInTheDocument();
+  });
+
+  it('refreshes authentication methods after setting a password', async () => {
+    const user = userEvent.setup();
+    mockUpdatePassword.mockResolvedValue(undefined);
+    mockLoadAuthenticationMethods
+      .mockResolvedValueOnce({
+        methods: [
+          { type: 'password', connected: false, canDisconnect: false },
+          {
+            type: 'oauth',
+            provider: 'google',
+            connected: true,
+            canDisconnect: true,
+          },
+          {
+            type: 'oauth',
+            provider: 'apple',
+            connected: false,
+            canDisconnect: false,
+          },
+          {
+            type: 'oauth',
+            provider: 'facebook',
+            connected: false,
+            canDisconnect: false,
+          },
+        ],
+      })
+      .mockResolvedValueOnce({
+        methods: [
+          { type: 'password', connected: true, canDisconnect: false },
+          {
+            type: 'oauth',
+            provider: 'google',
+            connected: true,
+            canDisconnect: true,
+          },
+          {
+            type: 'oauth',
+            provider: 'apple',
+            connected: false,
+            canDisconnect: false,
+          },
+          {
+            type: 'oauth',
+            provider: 'facebook',
+            connected: false,
+            canDisconnect: false,
+          },
+        ],
+      });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <AccountPage />
+      </I18nextProvider>,
+    );
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Set password' }),
+    );
+    await user.type(screen.getByPlaceholderText('New password'), 'password123');
+    await user.type(
+      screen.getByPlaceholderText('Confirm new password'),
+      'password123',
+    );
+    await user.click(
+      screen.getAllByRole('button', { name: 'Set password' })[1],
+    );
+
+    await waitFor(() => {
+      expect(mockLoadAuthenticationMethods).toHaveBeenCalledTimes(2);
+    });
+    expect(mockUpdatePassword).toHaveBeenCalledWith({
+      currentPassword: undefined,
+      newPassword: 'password123',
+    });
   });
 });

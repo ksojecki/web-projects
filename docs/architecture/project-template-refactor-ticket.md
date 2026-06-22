@@ -2,8 +2,28 @@
 
 ## Status
 
-- Proposed
+- In progress
 - Type: architecture refactor
+
+## Progress Update
+
+Implemented so far:
+
+- ADR `0002-project-template-strategy.md` locks the reference-product architecture.
+- `libs/web-platform` now owns reusable auth mechanics used by `projects/rod-manager`.
+- Reusable account mechanics now live in `libs/web-platform/src/lib/account/`:
+  - `AuthenticationMethodsPanel.tsx`
+  - `PasswordMethodForm.tsx`
+  - `passwordSchema.ts`
+  - `types.ts`
+  - `useAuthenticationMethods.ts`
+- `projects/rod-manager/apps/web/src/app/account/AccountPage.tsx` is now a product composition layer that keeps `LanguageSelector.tsx` product-local.
+
+Still pending:
+
+- a more generic account shell with product extension points
+- backend boundary audit and cleanup of product assumptions
+- project scaffolding/generator work for new isolated products
 
 ## Summary
 
