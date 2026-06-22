@@ -21,6 +21,20 @@ The refactor is complete when:
 - a new project can be scaffolded with isolated auth data
 - product-specific CMS logic remains under `projects/rod-manager`
 
+## Current Progress
+
+Completed:
+
+- Step 1 is done via `docs/architecture/adr/0002-project-template-strategy.md`.
+- Step 3 auth extraction is done: `AuthProvider`, `RequireAuth`, `OAuthCallbackPage`, auth API helpers, auth form helper, and auth schemas are in `libs/web-platform`.
+- Step 4 has started: reusable account authentication-method mechanics now live in `libs/web-platform/src/lib/account/`, and `projects/rod-manager/apps/web/src/app/account/AccountPage.tsx` has been reduced to product composition around shared account primitives.
+
+Remaining from the current frontend slice:
+
+- introduce a more generic account shell with explicit product extension points
+- decide whether language/settings persistence should stay product-local or move behind a generic interface
+- update generator/scaffolding work after the shared frontend surface stabilizes
+
 ## Delivery Sequence
 
 ## Step 1: Lock the Architecture in an ADR
