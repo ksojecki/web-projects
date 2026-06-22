@@ -17,6 +17,7 @@
     "!**/*.tsbuildinfo"
   ],
   "dependencies": {
+    "@sojecki/rod-manager-pages-shared": "0.0.1",
     "@sojecki/platform-server-platform": "0.0.1",
     "@sojecki/platform-shared": "0.0.1"
   },

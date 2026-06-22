@@ -5,6 +5,11 @@
     "lib": ["dom", "es2022"],
     "module": "esnext",
     "moduleResolution": "bundler",
+    "paths": {
+      "@sojecki/rod-manager-pages-shared": [
+        "../../../../dist/projects/rod-manager/plugins/pages/shared/index.d.ts"
+      ]
+    },
     "tsBuildInfoFile": "../../../../dist/projects/rod-manager/apps/web/tsconfig.spec.tsbuildinfo",
     "types": [
       "node",

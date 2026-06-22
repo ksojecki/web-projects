@@ -2,7 +2,9 @@
 
 ## Purpose
 
-This roadmap turns the high-level refactoring ticket into an execution plan with concrete file targets.
+This roadmap turns the high-level refactoring context into an execution plan with concrete file targets.
+
+Active progress for this refactor belongs in GitHub issues. This document is a durable implementation guide, not the live status tracker.
 
 The target remains:
 
@@ -21,20 +23,10 @@ The refactor is complete when:
 - a new project can be scaffolded with isolated auth data
 - product-specific CMS logic remains under `projects/rod-manager`
 
-## Current Progress
+## Tracking
 
-Completed:
-
-- Step 1 is done via `docs/architecture/adr/0002-project-template-strategy.md`.
-- Step 3 auth extraction is done: `AuthProvider`, `RequireAuth`, `OAuthCallbackPage`, auth API helpers, auth form helper, and auth schemas are in `libs/web-platform`.
-- Step 4 has started: reusable account authentication-method mechanics now live in `libs/web-platform/src/lib/account/`, and `projects/rod-manager/apps/web/src/app/account/AccountPage.tsx` has been reduced to product composition around shared account primitives.
-- Step 4 account-shell extraction is now in place: `libs/web-platform/src/lib/account/AccountShell.tsx` owns shared account framing, and Rod Manager provides product-local sections via `rodManagerAccountSections.tsx`.
-
-Remaining from the current frontend slice:
-
-- decide whether language/settings persistence should stay product-local or move behind a generic interface
-- decide whether the section API needs richer metadata than ordered content blocks before generator work starts
-- update generator/scaffolding work after the shared frontend surface stabilizes
+- Track current status, sequencing, and progress updates in GitHub issues.
+- Update this document when the implementation plan or acceptance criteria change.
 
 ## Delivery Sequence
 

@@ -26,6 +26,9 @@
     },
     {
       "path": "./libs/web-platform"
+    },
+    {
+      "path": "./projects/rod-manager/plugins/pages/shared"
     }
   ]
 }

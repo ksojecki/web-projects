@@ -33,6 +33,7 @@
 
 - During Codex initialization for this repository, always load `.agents/skills/agent-delivery-loop/SKILL.md` before starting substantial work.
 - Default delivery mechanism for non-trivial work: use the Agent Workflow in `docs/agents/workflow.md`.
+- Track task progress in GitHub issues. Use repository docs for durable guidance, ADRs, and implementation plans, not as the live status tracker for active work.
 - For features, bug fixes, and error remediation, first agree on a plan when the task calls for planning, then execute that accepted plan through the delivery loop in `.agents/skills/agent-delivery-loop/SKILL.md`.
 - In that delivery loop, divide the plan into small, easy-to-implement steps before execution.
 - In that delivery loop, always use one `gpt-5.4-mini` implementer subagent, then one `gpt-5.4-mini` tester subagent for the same accepted current step.
@@ -53,6 +54,7 @@
 - Keep TS project refs consistent after adding projects: `npx nx sync --no-tui` (or `npx nx sync:check --no-tui` in CI).
 - CodeDrift MCP is mandatory during discovery, planning, implementation, validation, and review in this repository.
 - Use CodeDrift MCP tools for repository overview, symbol search, symbol resolution, and session-aware reads throughout the delivery loop.
+- After editing a file, prefer re-reading it through CodeDrift MCP instead of shell reads so follow-up inspection returns a session-aware diff when available.
 - For cross-session context, start follow-up work with CodeDrift memory recall and record reusable context at handoff. Setup and commands live in `docs/agents/codedrift.md`.
 
 ## Project-Specific Conventions

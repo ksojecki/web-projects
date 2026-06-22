@@ -7,6 +7,10 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 export default defineConfig({
   resolve: {
     alias: {
+      '@sojecki/rod-manager-pages-shared': resolve(
+        __dirname,
+        '../../../../../projects/rod-manager/plugins/pages/shared/src/index.ts',
+      ),
       '@sojecki/platform-server-platform': resolve(
         __dirname,
         '../../../../../libs/server-platform/src/index.ts',

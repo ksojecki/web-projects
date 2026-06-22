@@ -13,7 +13,12 @@
     ],
     "rootDir": "src",
     "module": "esnext",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "paths": {
+      "@sojecki/rod-manager-pages-shared": [
+        "../../../../dist/projects/rod-manager/plugins/pages/shared/index.d.ts"
+      ]
+    }
   },
   "exclude": [
     "src/**/*.spec.ts",
@@ -35,6 +40,9 @@
     },
     {
       "path": "../../../../libs/web-platform/tsconfig.lib.json"
+    },
+    {
+      "path": "../../plugins/pages/shared/tsconfig.lib.json"
     }
   ]
 }

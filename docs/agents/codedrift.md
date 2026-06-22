@@ -41,6 +41,7 @@ codex mcp get rod-manager-codedrift
 
 - Use CodeDrift MCP tools for repository overview, symbol search, symbol resolution, and file reads during discovery, planning, implementation, validation, and review.
 - Treat CodeDrift MCP as mandatory for Codex work in this repository.
+- After editing a file, prefer `codedrift_read` for follow-up reads so repeated inspection returns the diff since the last session read instead of rereading the full file through shell commands.
 - Local Husky hooks keep CodeDrift current after common git events: `.husky/post-commit` runs after commits, `.husky/post-merge` runs after `git pull` merges remote changes, and `.husky/post-checkout` runs after branch checkouts.
 - Run `npm run codedrift:status` or `npm run codedrift:update` when CodeDrift context looks stale before continuing substantial work.
 - Run `.venv-codrift/bin/python ./scripts/codedrift-local.py update` after significant local edits or when search results look stale.

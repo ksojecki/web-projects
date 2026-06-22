@@ -69,8 +69,9 @@ Rejected because it would duplicate auth, OAuth, account, and session logic, inc
 
 ## Follow-up
 
-- Use [project-template-refactor-ticket.md](/Users/kamilsojecki/Projekty/rod-manager/docs/architecture/project-template-refactor-ticket.md) as the refactoring ticket.
-- Use [project-template-implementation-roadmap.md](/Users/kamilsojecki/Projekty/rod-manager/docs/architecture/project-template-implementation-roadmap.md) as the execution plan.
+- Use GitHub issues as the execution and progress tracker for the refactor stream.
+- Use [project-template-refactor-ticket.md](/Users/kamilsojecki/Projekty/rod-manager/docs/architecture/project-template-refactor-ticket.md) as architecture context only.
+- Use [project-template-implementation-roadmap.md](/Users/kamilsojecki/Projekty/rod-manager/docs/architecture/project-template-implementation-roadmap.md) as the implementation plan.
 - First implementation steps:
   - extract reusable frontend auth/account code into a shared library
   - introduce explicit per-product backend bootstrap configuration

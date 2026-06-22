@@ -7,6 +7,9 @@
     "moduleResolution": "bundler",
     "tsBuildInfoFile": "../../../../../dist/projects/rod-manager/plugins/pages/server/tsconfig.spec.tsbuildinfo",
     "paths": {
+      "@sojecki/rod-manager-pages-shared": [
+        "../../../../../projects/rod-manager/plugins/pages/shared/src/index.ts"
+      ],
       "@sojecki/platform-server-platform": [
         "../../../../../libs/server-platform/src/index.ts"
       ],
@@ -15,6 +18,7 @@
   },
   "include": [
     "src/**/*.ts",
+    "../../../../../projects/rod-manager/plugins/pages/shared/src/**/*.ts",
     "../../../../../libs/server-platform/src/**/*.ts",
     "../../../../../libs/shared/src/**/*.ts"
   ]

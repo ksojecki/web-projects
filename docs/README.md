@@ -20,10 +20,12 @@ This directory is the operational knowledge base for contributors and AI agents.
 - `tsconfig.base.json` - global TypeScript baseline.
 - `.oxlintrc.json` - linting rules for TS/React/Node/JSX.
 - `.prettierrc` - formatting rules (2 spaces, single quotes).
+- GitHub issues - active task tracking and progress updates.
 
 ## How to use
 
 1. Start with `AGENTS.md`.
-2. For architecture decisions, continue in `docs/architecture/`.
+2. For architecture decisions and ADRs, continue in `docs/architecture/`.
 3. Prepare local agent sessions with `docs/agents/setup.md`.
 4. Before larger changes, run a quick check with `docs/agents/checklist.md`.
+5. Record active task progress in GitHub instead of duplicating status updates in local docs.

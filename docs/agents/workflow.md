@@ -18,6 +18,7 @@ When the task requires planning, do not start implementation until the plan is a
 - Define implementation steps and validation points.
 - Divide the plan into small, easy-to-implement, implementation-ready steps.
 - If a durable architecture decision is made, create or update an ADR.
+- Track active task progress in GitHub issues. Keep local docs focused on architecture, workflow, and implementation guidance.
 - Follow root-level defaults (TS, Oxlint, Prettier).
 - Treat plan acceptance as the gate to start delivery work.
 - When using this repository workflow, treat plan acceptance as the point where the delivery loop begins spawning step-scoped subagents.
@@ -55,11 +56,13 @@ When the task requires planning, do not start implementation until the plan is a
 ## 5) Validation
 
 - Run lint/format and a quick smoke-check after major changes.
+- When inspecting an edited file, prefer CodeDrift session-aware reads over shell file reads so the review pass can use diffs from prior reads.
 - Before a PR, verify whether documentation updates are required.
 
 ## 6) Handover
 
 - In the change description, include what changed, where, why, and how to verify.
 - Add links to updated docs and ADRs when relevant.
+- When task status changes materially, update the corresponding GitHub issue instead of adding live progress notes to repository docs.
 - When the user asks to publish completed work, commit the accepted changes and push the working branch to `origin`.
 - If the session produced reusable context, record it in CodeDrift memory before ending the task.

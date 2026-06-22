@@ -1,30 +1,11 @@
 # Refactoring Ticket: Convert `rod-manager` into a Reusable Project Template
 
-## Status
+## Tracking Note
 
-- In progress
-- Type: architecture refactor
+This document is architecture context for the project-template refactor.
 
-## Progress Update
-
-Implemented so far:
-
-- ADR `0002-project-template-strategy.md` locks the reference-product architecture.
-- `libs/web-platform` now owns reusable auth mechanics used by `projects/rod-manager`.
-- Reusable account mechanics now live in `libs/web-platform/src/lib/account/`:
-  - `AuthenticationMethodsPanel.tsx`
-  - `PasswordMethodForm.tsx`
-  - `passwordSchema.ts`
-  - `types.ts`
-  - `useAuthenticationMethods.ts`
-- `projects/rod-manager/apps/web/src/app/account/AccountPage.tsx` is now a product composition layer that keeps `LanguageSelector.tsx` product-local.
-- `libs/web-platform/src/lib/account/AccountShell.tsx` now owns shared account page framing, while product apps provide ordered account sections.
-
-Still pending:
-
-- broader account extension primitives if more products need richer section metadata than ordered content blocks
-- backend boundary audit and cleanup of product assumptions
-- project scaffolding/generator work for new isolated products
+- Track active work, progress updates, and step ordering in GitHub issues.
+- Keep ADRs and roadmap updates in the repository when the durable architecture or implementation plan changes.
 
 ## Summary
 

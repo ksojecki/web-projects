@@ -7,6 +7,12 @@ import tailwindcss from '@tailwindcss/vite';
 const webPlatformSourcePath = fileURLToPath(
   new URL('../../../../libs/web-platform/src/index.ts', import.meta.url),
 );
+const pagesSharedSourcePath = fileURLToPath(
+  new URL(
+    '../../../../projects/rod-manager/plugins/pages/shared/src/index.ts',
+    import.meta.url,
+  ),
+);
 
 export default defineConfig(({ command }) => {
   const nodeEnv =
@@ -40,6 +46,7 @@ export default defineConfig(({ command }) => {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
+        '@sojecki/rod-manager-pages-shared': pagesSharedSourcePath,
         '@sojecki/platform-web-platform': webPlatformSourcePath,
       },
       conditions: ['@sojecki/platform-source'],
