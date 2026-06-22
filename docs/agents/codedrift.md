@@ -1,6 +1,6 @@
 # CodeDrift
 
-CodeDrift is an optional local agent tool for indexed repository search, symbol resolution, session-aware reads, memory, redaction, and dashboard analytics. It is installed outside the Node/Nx dependency graph so application builds and CI do not depend on it.
+CodeDrift is the required repository MCP and local indexing tool for indexed repository search, symbol resolution, session-aware reads, memory, redaction, and dashboard analytics during Codex work in this repository. It is installed outside the Node/Nx dependency graph so application builds and CI do not depend on it.
 
 ## Install
 
@@ -39,8 +39,9 @@ codex mcp get rod-manager-codedrift
 
 ## Usage
 
-- Prefer CodeDrift MCP tools for repository overview, symbol search, symbol resolution, and file reads when the MCP server is available.
-- Fall back to `rg`, `rg --files`, and direct file reads when CodeDrift is unavailable, stale, or returns insufficient context.
+- Use CodeDrift MCP tools for repository overview, symbol search, symbol resolution, and file reads during discovery, planning, implementation, validation, and review.
+- Treat CodeDrift MCP as mandatory for Codex work in this repository.
+- Run `npm run codedrift:status` or `npm run codedrift:update` when CodeDrift context looks stale before continuing substantial work.
 - Run `.venv-codrift/bin/python ./scripts/codedrift-local.py update` after significant local edits or when search results look stale.
 - Use `.venv-codrift/bin/python ./scripts/codedrift-local.py status` to inspect index health.
 - Use `.venv-codrift/bin/python ./scripts/codedrift-local.py memory recall "<task>"` before similar follow-up work, and `.venv-codrift/bin/python ./scripts/codedrift-local.py memory record` after a session when the context should be reusable.

@@ -5,11 +5,13 @@ Use this page to prepare a coding-agent session for this repository.
 ## 1) Orient
 
 - Read `README.md`, `AGENTS.md`, and `docs/README.md`.
+- During Codex initialization for this repository, always load `.agents/skills/agent-delivery-loop/SKILL.md`.
+- Ensure the `rod-manager-codedrift` MCP is registered and available before substantial work.
 - Check current worktree state with `git --no-pager status --short`.
 - Inspect `package.json`, `nx.json`, and the touched project package/config files before changing code.
 - Inspect `.husky/pre-commit` and `.lintstagedrc.mjs` before changing staged-file validation behavior.
 - Use `rg`/`rg --files` for searches; avoid opening generated output in `dist`, `coverage`, `.nx`, and `node_modules`.
-- If CodeDrift is installed, prefer its MCP tools for overview/search/resolve/read operations, then fall back to `rg` and direct file reads when the index is unavailable or stale.
+- Use CodeDrift MCP tools for overview, search, symbol resolution, file reads, and memory recall throughout planning and implementation.
 
 ## 2) Install
 

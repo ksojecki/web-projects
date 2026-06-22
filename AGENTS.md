@@ -31,10 +31,13 @@
 
 ## Critical Workflows
 
+- During Codex initialization for this repository, always load `.agents/skills/agent-delivery-loop/SKILL.md` before starting substantial work.
 - Default delivery mechanism for non-trivial work: use the Agent Workflow in `docs/agents/workflow.md`.
 - For features, bug fixes, and error remediation, first agree on a plan when the task calls for planning, then execute that accepted plan through the delivery loop in `.agents/skills/agent-delivery-loop/SKILL.md`.
-- In that delivery loop, default to sequential step execution: one accepted step, one `gpt-5.4-mini` implementer subagent, then one `gpt-5.4-mini` tester subagent for the same step.
+- In that delivery loop, divide the plan into small, easy-to-implement steps before execution.
+- In that delivery loop, always use one `gpt-5.4-mini` implementer subagent, then one `gpt-5.4-mini` tester subagent for the same accepted current step.
 - Do not spawn implementers for multiple planned steps in parallel by default; prefer the smallest active step to reduce token usage.
+- The implementer should execute the accepted current step rather than re-reviewing or re-planning it.
 - When the user asks to publish completed work, commit the accepted changes and push the working branch to `origin`.
 - Before implementation work starts, check the current branch. If you are on `main`, create a new working branch first.
 - When running Nx commands as an AI agent, always pass `--no-tui`.
@@ -48,7 +51,8 @@
 - Apply Nx Cloud CI remediation hints: `npx nx fix-ci --no-tui`.
 - Explore project/task graph: `npx nx graph --json --no-tui` (use `--json` to avoid browser).
 - Keep TS project refs consistent after adding projects: `npx nx sync --no-tui` (or `npx nx sync:check --no-tui` in CI).
-- CodeDrift is optional local agent tooling. If configured, prefer its MCP tools for repository overview, symbol search, symbol resolution, and session-aware reads; fall back to `rg`/direct reads when the index is unavailable or stale.
+- CodeDrift MCP is mandatory during discovery, planning, implementation, validation, and review in this repository.
+- Use CodeDrift MCP tools for repository overview, symbol search, symbol resolution, and session-aware reads throughout the delivery loop.
 - For cross-session context, start follow-up work with CodeDrift memory recall and record reusable context at handoff. Setup and commands live in `docs/agents/codedrift.md`.
 
 ## Project-Specific Conventions
