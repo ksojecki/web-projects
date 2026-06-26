@@ -9,7 +9,7 @@ export type ModalWindowApi = {
 };
 
 export type ModalWindowProps = {
-  children: [TitleType, ContentType, ActionType];
+  children: [TitleType, ContentType, ActionType?];
   api: RefObject<ModalWindowApi | null>;
 };
 
@@ -37,7 +37,7 @@ export const ModalWindow = ({ api, children }: ModalWindowProps) => {
           <button className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4">
             <FaCircleXmark className="h-4 w-4" />
           </button>
-          {actions}
+          {actions ?? null}
         </form>
       </div>
     </dialog>

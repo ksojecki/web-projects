@@ -61,4 +61,5 @@ When the task requires planning, do not start implementation until the plan is a
 - In the change description, include what changed, where, why, and how to verify.
 - Add links to updated docs and ADRs when relevant.
 - When task status changes materially, update the corresponding GitHub issue instead of adding live progress notes to repository docs.
-- When the user asks to publish completed work, commit the accepted changes and push the working branch to `origin`.
+- When the user asks to publish completed work, commit the accepted changes, push the working branch to `origin`, create a PR, and include the PR link in the user-facing handoff.
+- When the work is considered finished in-session, prefer ending with a PR link rather than stopping at a local-only branch state.

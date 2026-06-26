@@ -4,13 +4,19 @@ import { useAuth } from '@sojecki/platform-web-platform';
 import { Heading } from '@sojecki/platform-ui';
 import { OAuthRegisterButtons } from './components/OAuthRegisterButtons';
 import { PasswordRegisterForm } from './components/PasswordRegisterForm';
+import { frontendProductConfig } from '../frontendProductConfig';
 
 export function RegisterPage() {
   const { t } = useTranslation('auth');
   const { status } = useAuth();
+  const { auth, registration } = frontendProductConfig;
+
+  if (!registration.enabled) {
+    return <Navigate replace to={registration.disabledRedirectTo} />;
+  }
 
   if (status === 'authenticated') {
-    return <Navigate replace to="/account" />;
+    return <Navigate replace to={auth.postRegistrationRedirectTo} />;
   }
 
   return (

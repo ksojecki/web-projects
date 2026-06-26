@@ -71,3 +71,4 @@ Summarize:
 - Any remaining risk or follow-up work.
 
 If the user asks to publish the finished work, follow handoff by committing the accepted changes and pushing the working branch to `origin`.
+After push, create a PR and include the PR link in the user-facing handoff when the job is finished.

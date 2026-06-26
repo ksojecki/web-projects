@@ -41,7 +41,7 @@
 - Do not spawn implementers or testers for multiple planned steps in parallel.
 - The implementer should execute the accepted current step rather than re-reviewing or re-planning it.
 - Pass only the accepted current step, success criteria, exact files, and the minimum evidence needed to each worker pass.
-- When the user asks to publish completed work, commit the accepted changes and push the working branch to `origin`.
+- When the user asks to publish completed work, commit the accepted changes, push the working branch to `origin`, create a PR, and report the PR link back in the user-facing handoff.
 - Before implementation work starts, check the current branch. If you are on `main`, create a new working branch first.
 - When running Nx commands as an AI agent, always pass `--no-tui`.
 - Install deps: `npm ci` (used in CI).

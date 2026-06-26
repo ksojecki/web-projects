@@ -10,6 +10,7 @@ import {
   useAuthForm,
 } from '@sojecki/platform-web-platform';
 import { Button, FormField } from '@sojecki/platform-ui';
+import { frontendProductConfig } from '../../frontendProductConfig';
 
 /**
  * Registration form for creating an account with email and password.
@@ -30,7 +31,9 @@ export function PasswordRegisterForm() {
   async function onSubmit(values: RegisterFormValues) {
     await registerRequest(values);
     await refreshSession();
-    await navigate('/account', { replace: true });
+    await navigate(frontendProductConfig.auth.postRegistrationRedirectTo, {
+      replace: true,
+    });
   }
 
   return (

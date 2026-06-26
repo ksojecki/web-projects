@@ -9,6 +9,7 @@ import {
   useAuthForm,
 } from '@sojecki/platform-web-platform';
 import { Button, FormField } from '@sojecki/platform-ui';
+import { frontendProductConfig } from '../../frontendProductConfig';
 
 type LoginFormProps = {
   onSuccess?: () => void;
@@ -35,7 +36,9 @@ export function LoginForm({ onSuccess }: LoginFormProps = {}) {
     if (onSuccess) {
       onSuccess();
     } else {
-      await navigate('/account', { replace: true });
+      await navigate(frontendProductConfig.auth.postLoginRedirectTo, {
+        replace: true,
+      });
     }
   }
 

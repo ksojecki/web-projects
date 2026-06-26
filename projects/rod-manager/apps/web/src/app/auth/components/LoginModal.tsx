@@ -3,6 +3,7 @@ import type { ModalWindowProps } from '@sojecki/platform-ui';
 import { ModalWindow } from '@sojecki/platform-ui';
 import { LoginForm } from './LoginForm';
 import { OAuthLoginButtons } from './OAuthLoginButtons';
+import { frontendProductConfig } from '../../frontendProductConfig';
 
 type LoginModalProps = Pick<ModalWindowProps, 'api'>;
 
@@ -11,6 +12,7 @@ type LoginModalProps = Pick<ModalWindowProps, 'api'>;
  */
 export function LoginModal({ api }: LoginModalProps) {
   const { t } = useTranslation('auth');
+  const { registration, routes } = frontendProductConfig;
 
   return (
     <ModalWindow api={api}>
@@ -27,11 +29,13 @@ export function LoginModal({ api }: LoginModalProps) {
           </div>
         </div>
       </ModalWindow.Content>
-      <ModalWindow.Actions>
-        <ModalWindow.ActionButton to="/register">
-          {t('noAccount')} {t('registerLink')}
-        </ModalWindow.ActionButton>
-      </ModalWindow.Actions>
+      {registration.enabled ? (
+        <ModalWindow.Actions>
+          <ModalWindow.ActionButton to={routes.register}>
+            {t('noAccount')} {t('registerLink')}
+          </ModalWindow.ActionButton>
+        </ModalWindow.Actions>
+      ) : undefined}
     </ModalWindow>
   );
 }

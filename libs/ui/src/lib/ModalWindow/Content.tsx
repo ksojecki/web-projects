@@ -6,7 +6,9 @@ export type ActionButtonType = ReactElement<ActionButtonProps>;
 
 export type ContentProps = { children: string | ReactNode };
 export type TitleProps = { children: string };
-export type ActionsProps = { children: ActionButtonType[] | ActionButtonType };
+export type ActionsProps = {
+  children?: ActionButtonType[] | ActionButtonType | null;
+};
 
 export type TitleType = ReactElement<ContentProps>;
 export type ContentType = ReactElement<TitleProps>;

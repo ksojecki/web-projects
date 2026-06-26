@@ -4,25 +4,29 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@sojecki/platform-web-platform';
 import type { ModalWindowApi } from '@sojecki/platform-ui';
 import { LoginModal } from '../../auth/components/LoginModal';
+import {
+  clearLoginPrompt,
+  frontendProductConfig,
+  isLoginPromptRequested,
+} from '../../frontendProductConfig';
 
 export const Navbar = () => {
   const { t } = useTranslation('layout');
   const { logout, status, user } = useAuth();
   const loginModalApi = useRef<ModalWindowApi | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { routes } = frontendProductConfig;
 
   useEffect(() => {
     const shouldOpenLogin =
-      status === 'guest' && searchParams.get('login') === '1';
+      status === 'guest' && isLoginPromptRequested(searchParams);
     if (!shouldOpenLogin) {
       return;
     }
 
     loginModalApi.current?.show();
 
-    const nextSearchParams = new URLSearchParams(searchParams);
-    nextSearchParams.delete('login');
-    setSearchParams(nextSearchParams, { replace: true });
+    setSearchParams(clearLoginPrompt(searchParams), { replace: true });
   }, [searchParams, setSearchParams, status]);
 
   return (
@@ -33,11 +37,14 @@ export const Navbar = () => {
             {t('appName')}
           </Link>
           <nav className="flex items-center gap-2">
-            <Link to="/" className="btn btn-ghost btn-sm">
+            <Link to={routes.home} className="btn btn-ghost btn-sm">
               {t('menuHome')}
             </Link>
             {status === 'authenticated' ? (
-              <Link to="/pages" className="btn btn-ghost btn-sm">
+              <Link
+                to={routes.contentManagement}
+                className="btn btn-ghost btn-sm"
+              >
                 {t('menuContentManagement')}
               </Link>
             ) : null}
@@ -55,7 +62,7 @@ export const Navbar = () => {
                   tabIndex={0}
                 >
                   <li>
-                    <Link to="/account">{t('menuAccount')}</Link>
+                    <Link to={routes.account}>{t('menuAccount')}</Link>
                   </li>
                   <li>
                     <button

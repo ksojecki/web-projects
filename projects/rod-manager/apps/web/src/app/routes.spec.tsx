@@ -5,6 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import i18n from './i18n/i18n';
 import { AppRoutes } from './routes';
+import { frontendProductConfig } from './frontendProductConfig';
 
 const fetchSpy = vi.spyOn(globalThis, 'fetch');
 
@@ -198,6 +199,7 @@ beforeEach(async () => {
 
 afterEach(() => {
   fetchSpy.mockReset();
+  frontendProductConfig.registration.enabled = true;
 });
 
 describe('AppRoutes', () => {
@@ -273,6 +275,45 @@ describe('AppRoutes', () => {
     expect(
       screen.getByRole('heading', { name: 'Create account with OAuth' }),
     ).toBeInTheDocument();
+  });
+
+  it('hides registration entry points when registration is disabled', async () => {
+    const user = userEvent.setup();
+    frontendProductConfig.registration.enabled = false;
+    mockGuestSessionWithHomePage();
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <I18nextProvider i18n={i18n}>
+          <AppRoutes />
+        </I18nextProvider>
+      </MemoryRouter>,
+    );
+
+    await user.click(await screen.findByRole('button', { name: 'Log in' }));
+
+    expect(
+      screen.queryByRole('link', { name: 'No account yet? Register' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('redirects register route to home when registration is disabled', async () => {
+    frontendProductConfig.registration.enabled = false;
+    mockGuestSessionWithHomePage();
+
+    render(
+      <MemoryRouter initialEntries={['/register']}>
+        <I18nextProvider i18n={i18n}>
+          <AppRoutes />
+        </I18nextProvider>
+      </MemoryRouter>,
+    );
+
+    await screen.findByRole('button', { name: 'Log in' });
+    expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Create account' }),
+    ).not.toBeInTheDocument();
   });
 
   it('switches the interface to Polish', async () => {
