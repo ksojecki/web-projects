@@ -11,7 +11,8 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
 
 - Always use `gpt-5.4-mini` for the implementer pass.
 - Always use `gpt-5.4-mini` for the tester pass.
-- Use a stronger review-oriented model for planning and review when the task is ambiguous, risky, or cross-cutting.
+- Keep planning and review in the current agent session by default.
+- Do not switch planning or review to a different model unless the user explicitly asks for it.
 
 ## Loop
 
@@ -26,15 +27,19 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
    - Always use `gpt-5.4-mini` for that implementer.
    - The implementer does not re-review, re-plan, or widen scope; it executes the accepted current step.
    - Keep edits scoped to that step's accepted objective.
+   - Pass only the accepted current step, success criteria, exact files, and the minimum evidence needed to complete that step.
+   - Do not resend the full plan, full repo overview, or prior-step history unless the current step cannot be completed without it.
 3. Tester.
    - Spawn a tester subagent for that same current step.
    - Always use `gpt-5.4-mini` for that tester.
    - Run the narrowest relevant validation commands first.
    - Validate the current step before moving to the next one.
    - Capture failures as concrete evidence, not guesses.
+   - Pass only the accepted current step, expected behavior, exact files, and the minimum evidence needed to validate that step.
+   - Do not resend the full plan, full repo overview, or prior-step history unless the current validation cannot be completed without it.
 4. Repeat per step.
    - Continue spawning one step-scoped implementer, then one step-scoped tester, until every planned step is complete.
-   - Do not spawn implementers for multiple planned steps in parallel by default.
+   - Do not spawn implementers or testers for multiple planned steps in parallel.
    - If a step fails validation, revise that step before broadening the change set.
 5. Review.
    - Compare the result against the original acceptance criteria and repo conventions.
@@ -49,9 +54,10 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
 - Do not skip validation before handoff on non-trivial work.
 - Prefer one behavioral change per planned step.
 - Prefer small, easy, implementation-ready steps over broad or multi-goal steps.
-- Prefer sequential step execution over parallel delegation unless parallelism is clearly necessary.
+- Execute steps sequentially.
 - If validation fails, address the root cause before starting the next step.
 - Avoid touching unrelated files unless they are strictly necessary for correctness.
+- Keep worker prompts step-local and minimal.
 - Record the commands run and the files changed so the handoff is auditable.
 
 ## Handoff

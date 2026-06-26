@@ -28,15 +28,16 @@ When the task requires planning, do not start implementation until the plan is a
 - Required model split for that skill:
   - Implementer uses `gpt-5.4-mini`.
   - Tester uses `gpt-5.4-mini`.
-  - Choose the planning/review model based on task risk and scope.
+  - Planning and review stay in the current agent session unless the user explicitly asks for a different model.
 - Split the work into small, easy-to-implement steps during planning, then execute them sequentially.
 - For one current step at a time, spawn one implementer subagent, integrate its result, then spawn one tester subagent for that same step.
 - The implementer executes the accepted current step and does not re-review or re-plan it.
-- Do not spawn implementers for multiple future steps in parallel by default; prefer the smallest active step to reduce token usage and keep context narrow.
+- Do not spawn implementers or testers for multiple future steps in parallel.
 - Keep each spawned subagent scoped to one current step so the delivery loop stays auditable, step-local, and cheap.
+- Pass only the accepted current step, success criteria, exact files, and the minimum evidence needed for that worker pass.
+- Do not resend the full plan, full repo overview, or prior-step history to each worker unless the current step cannot be completed or validated without it.
 - Treat review as the final gate after the planned steps are complete.
 - If review finds a gap, add a new corrective step and run the same sequential implementer -> tester flow for that step before reviewing again.
-- Keep the reviewer agent in the background when possible so review context is not lost between sessions.
 - Keep each pass narrow and evidence-driven.
 - Revisit the plan after any failed validation before widening the change.
 - Do not bypass this loop for non-trivial feature delivery or for fixing bugs and runtime errors.

@@ -37,8 +37,10 @@
 - For features, bug fixes, and error remediation, first agree on a plan when the task calls for planning, then execute that accepted plan through the delivery loop in `.agents/skills/agent-delivery-loop/SKILL.md`.
 - In that delivery loop, divide the plan into small, easy-to-implement steps before execution.
 - In that delivery loop, always use one `gpt-5.4-mini` implementer subagent, then one `gpt-5.4-mini` tester subagent for the same accepted current step.
-- Do not spawn implementers for multiple planned steps in parallel by default; prefer the smallest active step to reduce token usage.
+- Keep planning and review in the current agent session unless the user explicitly asks for a different model.
+- Do not spawn implementers or testers for multiple planned steps in parallel.
 - The implementer should execute the accepted current step rather than re-reviewing or re-planning it.
+- Pass only the accepted current step, success criteria, exact files, and the minimum evidence needed to each worker pass.
 - When the user asks to publish completed work, commit the accepted changes and push the working branch to `origin`.
 - Before implementation work starts, check the current branch. If you are on `main`, create a new working branch first.
 - When running Nx commands as an AI agent, always pass `--no-tui`.
