@@ -1,5 +1,9 @@
 import Fastify from 'fastify';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import type {
+  ContentPageListResponseBody,
+  ContentPageResponseBody,
+} from '@sojecki/rod-manager-pages-shared';
 import {
   createServerPlatform,
   SESSION_COOKIE_NAME,
@@ -56,7 +60,7 @@ describe('pages plugin contract tests', () => {
     });
 
     expect(pagesResponse.statusCode).toBe(200);
-    const body = pagesResponse.json<{ pages: Array<{ slug: string }> }>();
+    const body = pagesResponse.json<ContentPageListResponseBody>();
     expect(body).toHaveProperty('pages');
     expect(Array.isArray(body.pages)).toBe(true);
     expect(body.pages.every((p) => typeof p.slug === 'string')).toBe(true);
@@ -79,7 +83,7 @@ describe('pages plugin contract tests', () => {
     });
 
     expect(response.statusCode).toBe(200);
-    const body = response.json<{ page: { slug: string; contentMd: string } }>();
+    const body = response.json<ContentPageResponseBody>();
     expect(body).toHaveProperty('page');
     expect(body.page).toHaveProperty('slug', 'about');
     expect(body.page).toHaveProperty('contentMd');

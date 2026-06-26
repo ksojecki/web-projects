@@ -130,7 +130,7 @@ Some route and screen composition is still product-local in `rod-manager` and sh
 
 ### DTO Ownership Cleanup
 
-`libs/shared` should contain only genuinely reusable contracts. Product-only DTOs, especially page-related contracts, still need a final ownership review and possible relocation into `projects/rod-manager`.
+`libs/shared` should contain only genuinely reusable contracts. The page DTO move is now complete through `projects/rod-manager/plugins/pages/shared`, but product-owned contracts still need periodic review so future product-specific types do not drift back into generic packages.
 
 ### Generator and Sample Project Validation
 
@@ -161,7 +161,7 @@ Once generator and sample-project validation land, the repo still needs final do
 ### Workstream 2: Shared Contract Cleanup
 
 - review shared DTO exports
-- move product-only contracts out of `libs/shared`
+- keep product-owned DTOs in product-owned packages such as `projects/rod-manager/plugins/pages/shared`
 - keep platform exports generic and free from CMS terminology
 
 ### Workstream 3: Generator and Isolation Proof

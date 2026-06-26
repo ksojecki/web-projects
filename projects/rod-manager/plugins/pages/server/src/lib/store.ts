@@ -1,13 +1,8 @@
+import type {
+  ContentPage,
+  ContentPageSummary,
+} from '@sojecki/rod-manager-pages-shared';
 import type { ServerPlatformDbClient } from '@sojecki/platform-server-platform';
-
-export interface ContentPageSummary {
-  slug: string;
-}
-
-export interface ContentPage {
-  slug: string;
-  contentMd: string;
-}
 
 export interface PageStore {
   listPages(): ContentPageSummary[];
