@@ -53,6 +53,16 @@ describe('projectTemplateGenerator', () => {
         'projects/sample-portal/apps/web/src/app/account/AccountPage.tsx',
       ),
     ).toBe(true);
+    expect(
+      tree.exists(
+        'projects/sample-portal/apps/web/src/app/auth/LoginPanel.tsx',
+      ),
+    ).toBe(false);
+    expect(
+      tree.exists(
+        'projects/sample-portal/apps/web/src/app/layout/components/Navbar.tsx',
+      ),
+    ).toBe(false);
 
     const apiPackageJson = readJson(
       tree,
@@ -115,6 +125,23 @@ describe('projectTemplateGenerator', () => {
     );
     expect(routesSource).toContain('@sojecki/platform-web-platform');
     expect(routesSource).not.toContain('@sojecki/rod-manager');
+    expect(routesSource).toContain('<RegisterPage');
+
+    const appLayoutSource = tree.read(
+      'projects/sample-portal/apps/web/src/app/layout/AppLayout.tsx',
+      'utf-8',
+    );
+    expect(appLayoutSource).toContain('PlatformNavbar');
+    expect(appLayoutSource).toContain('PlatformFooter');
+
+    const i18nSource = tree.read(
+      'projects/sample-portal/apps/web/src/app/i18n/i18n.ts',
+      'utf-8',
+    );
+    expect(i18nSource).toContain("menuLogin: 'Log in'");
+    expect(i18nSource).toContain(
+      "passwordSectionTitle: 'Create account with password'",
+    );
 
     const rootTsConfig = readJson(tree, 'tsconfig.json') as {
       references: Array<{ path: string }>;

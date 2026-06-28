@@ -2,13 +2,13 @@ import { Navigate, Route, Routes } from 'react-router';
 import {
   AuthProvider,
   OAuthCallbackPage,
+  RegisterPage,
   RequireAuth,
 } from '@sojecki/platform-web-platform';
 import { AccountPage } from './account/AccountPage';
-import { RegisterPage } from './auth/RegisterPage';
 import { HomePage } from './HomePage';
 import { AppLayout } from './layout/AppLayout';
-import { frontendProductConfig } from './productConfig';
+import { buildLoginPromptHref, frontendProductConfig } from './productConfig';
 
 export function AppRoutes() {
   const { auth, registration, routes } = frontendProductConfig;
@@ -22,7 +22,12 @@ export function AppRoutes() {
             path={routes.register}
             element={
               registration.enabled ? (
-                <RegisterPage />
+                <RegisterPage
+                  authenticatedRedirectTo={auth.postRegistrationRedirectTo}
+                  disabledRedirectTo={registration.disabledRedirectTo}
+                  loginHref={buildLoginPromptHref()}
+                  registrationEnabled={registration.enabled}
+                />
               ) : (
                 <Navigate replace to={registration.disabledRedirectTo} />
               )

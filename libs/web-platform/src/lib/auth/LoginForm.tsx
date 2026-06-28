@@ -2,27 +2,23 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  loginSchema,
-  type LoginFormValues,
-  useAuth,
-  useAuthForm,
-} from '@sojecki/platform-web-platform';
 import { Button, FormField } from '@sojecki/platform-ui';
-import { frontendProductConfig } from '../../frontendProductConfig';
+import { useAuth } from './AuthProvider';
+import { useAuthForm } from './hooks/useAuthForm';
+import { loginSchema, type LoginFormValues } from './schemas/loginSchema';
 
-type LoginFormProps = {
+export interface LoginFormProps {
   onSuccess?: () => void;
-};
+  redirectTo?: string;
+}
 
 /**
- * Login form for authenticating with email and password.
+ * Shared login form for authenticating with email and password.
  */
-export function LoginForm({ onSuccess }: LoginFormProps = {}) {
+export function LoginForm({ onSuccess, redirectTo }: LoginFormProps = {}) {
   const { t } = useTranslation('auth');
   const { login } = useAuth();
   const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -33,18 +29,20 @@ export function LoginForm({ onSuccess }: LoginFormProps = {}) {
 
   async function onSubmit(values: LoginFormValues) {
     await login(values.email, values.password);
-    if (onSuccess) {
+
+    if (onSuccess !== undefined) {
       onSuccess();
-    } else {
-      await navigate(frontendProductConfig.auth.postLoginRedirectTo, {
-        replace: true,
-      });
+      return;
+    }
+
+    if (redirectTo !== undefined) {
+      await navigate(redirectTo, { replace: true });
     }
   }
 
   return (
     <form
-      className={'flex flex-col gap-4'}
+      className="flex flex-col gap-4"
       onSubmit={(event) => {
         void handleSubmit(withErrorHandling(onSubmit))(event);
       }}

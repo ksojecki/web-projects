@@ -414,12 +414,12 @@ function writeWebApp(tree: Tree, options: NormalizedOptions): void {
   writeFile(
     tree,
     joinPathFragments(webRoot, 'src/app/HomePage.tsx'),
-    createHomePage(options),
+    createHomePage(),
   );
   writeFile(
     tree,
     joinPathFragments(webRoot, 'src/app/account/AccountPage.tsx'),
-    createAccountPage(options),
+    createAccountPage(),
   );
   writeFile(
     tree,
@@ -433,23 +433,8 @@ function writeWebApp(tree: Tree, options: NormalizedOptions): void {
   );
   writeFile(
     tree,
-    joinPathFragments(webRoot, 'src/app/auth/LoginPanel.tsx'),
-    createLoginPanel(),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/app/auth/RegisterPage.tsx'),
-    createRegisterPage(options),
-  );
-  writeFile(
-    tree,
     joinPathFragments(webRoot, 'src/app/layout/AppLayout.tsx'),
     createAppLayout(),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/app/layout/components/Navbar.tsx'),
-    createNavbar(options),
   );
 }
 
@@ -757,6 +742,7 @@ function createStylesCss(): string {
 }
 
 @source '../../../../../libs/ui/src/**/*.{ts,tsx}';
+@source '../../../../../libs/web-platform/src/**/*.{ts,tsx}';
 `;
 }
 
@@ -772,11 +758,75 @@ void i18n.use(initReactI18next).init({
   },
   resources: {
     en: {
-      auth: {
-        checkingSession: 'Checking session...',
+      layout: {
+        appName: '${options.displayName}',
+        menuHome: 'Home',
+        menuAccount: 'Account',
+        menuLogin: 'Log in',
+        menuLogout: 'Log out',
+        menuRegister: 'Register',
+        footerText: '${options.displayName}',
       },
-      app: {
-        name: '${options.displayName}',
+      auth: {
+        or: 'or',
+        title: 'Log in',
+        hint: 'Use a local account or continue with OAuth.',
+        emailLabel: 'Email',
+        emailRequired: 'Email is required.',
+        emailInvalid: 'Enter a valid email address.',
+        passwordLabel: 'Password',
+        passwordRequired: 'Password is required.',
+        submit: 'Sign in',
+        submitting: 'Signing in...',
+        checkingSession: 'Checking session...',
+        unexpectedError: 'Unexpected server error.',
+        validationRequired: 'is required.',
+        oauthDivider: 'or continue with',
+        noAccount: "Don't have an account?",
+        registerLink: 'Register',
+        register: {
+          title: 'Create account',
+          passwordSectionTitle: 'Create account with password',
+          passwordSectionHint:
+            'Create a local account with your name, email, and password.',
+          oauthSectionTitle: 'Create account with OAuth',
+          oauthSectionHint:
+            'Use your provider profile details to create an account.',
+          oauthDivider: 'or continue with',
+          nameLabel: 'First name',
+          nameRequired: 'First name is required.',
+          surnameLabel: 'Last name',
+          surnameRequired: 'Last name is required.',
+          emailLabel: 'Email',
+          emailRequired: 'Email is required.',
+          emailInvalid: 'Enter a valid email address.',
+          passwordLabel: 'Password',
+          passwordHint:
+            'Required for account creation with email and password.',
+          passwordMinLength: 'Password must be at least 8 characters.',
+          submit: 'Create account',
+          submitting: 'Creating account...',
+          alreadyHaveAccount: 'Already have an account?',
+          loginLink: 'Log in',
+        },
+      },
+      home: {
+        badge: 'Generated project',
+        title: '${options.displayName}',
+        description:
+          'This starter product wires the shared backend and frontend platform libraries into a minimal product-local shell. Extend routes, branding, and sections here without copying auth shell code.',
+        signedInCta: 'Open account',
+        signedOutCta: 'Log in',
+        registerCta: 'Register',
+        authStateTitle: 'Current auth state',
+        authenticatedState: 'Signed in as {{email}}.',
+        guestState: 'Guest session.',
+      },
+      account: {
+        title: '${options.displayName} account',
+        welcome: 'Welcome back, {{name}}.',
+        fallbackUserName: 'user',
+        roleLabel: 'Role',
       },
     },
   },
@@ -785,7 +835,12 @@ void i18n.use(initReactI18next).init({
 }
 
 function createWebProductConfig(): string {
-  return `export interface FrontendProductRoutes {
+  return `import {
+  buildLoginPromptHref as buildSharedLoginPromptHref,
+  type LoginPromptConfig,
+} from '@sojecki/platform-web-platform';
+
+export interface FrontendProductRoutes {
   account: string;
   home: string;
   register: string;
@@ -804,14 +859,9 @@ export interface FrontendProductRegistrationConfig {
   enabled: boolean;
 }
 
-export interface FrontendProductLoginPromptConfig {
-  queryParam: string;
-  queryValue: string;
-}
-
 export interface FrontendProductConfig {
   auth: FrontendProductAuthConfig;
-  loginPrompt: FrontendProductLoginPromptConfig;
+  loginPrompt: LoginPromptConfig;
   registration: FrontendProductRegistrationConfig;
   routes: FrontendProductRoutes;
 }
@@ -840,26 +890,9 @@ export const frontendProductConfig: FrontendProductConfig = {
 };
 
 export function buildLoginPromptHref(): string {
-  const searchParams = new URLSearchParams({
-    [frontendProductConfig.loginPrompt.queryParam]:
-      frontendProductConfig.loginPrompt.queryValue,
-  });
-
-  return \`\${frontendProductConfig.routes.home}?\${searchParams.toString()}\`;
-}
-
-export function clearLoginPrompt(
-  searchParams: URLSearchParams,
-): URLSearchParams {
-  const nextSearchParams = new URLSearchParams(searchParams);
-  nextSearchParams.delete(frontendProductConfig.loginPrompt.queryParam);
-  return nextSearchParams;
-}
-
-export function isLoginPromptRequested(searchParams: URLSearchParams): boolean {
-  return (
-    searchParams.get(frontendProductConfig.loginPrompt.queryParam) ===
-    frontendProductConfig.loginPrompt.queryValue
+  return buildSharedLoginPromptHref(
+    frontendProductConfig.routes.home,
+    frontendProductConfig.loginPrompt,
   );
 }
 `;
@@ -870,13 +903,13 @@ function createRoutes(): string {
 import {
   AuthProvider,
   OAuthCallbackPage,
+  RegisterPage,
   RequireAuth,
 } from '@sojecki/platform-web-platform';
 import { AccountPage } from './account/AccountPage';
-import { RegisterPage } from './auth/RegisterPage';
 import { HomePage } from './HomePage';
 import { AppLayout } from './layout/AppLayout';
-import { frontendProductConfig } from './productConfig';
+import { buildLoginPromptHref, frontendProductConfig } from './productConfig';
 
 export function AppRoutes() {
   const { auth, registration, routes } = frontendProductConfig;
@@ -890,7 +923,12 @@ export function AppRoutes() {
             path={routes.register}
             element={
               registration.enabled ? (
-                <RegisterPage />
+                <RegisterPage
+                  authenticatedRedirectTo={auth.postRegistrationRedirectTo}
+                  disabledRedirectTo={registration.disabledRedirectTo}
+                  loginHref={buildLoginPromptHref()}
+                  registrationEnabled={registration.enabled}
+                />
               ) : (
                 <Navigate replace to={registration.disabledRedirectTo} />
               )
@@ -921,109 +959,80 @@ export function AppRoutes() {
 `;
 }
 
-function createHomePage(options: NormalizedOptions): string {
-  return `import { Link, useSearchParams } from 'react-router';
+function createHomePage(): string {
+  return `import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@sojecki/platform-web-platform';
-import { LoginPanel } from './auth/LoginPanel';
-import {
-  buildLoginPromptHref,
-  clearLoginPrompt,
-  frontendProductConfig,
-  isLoginPromptRequested,
-} from './productConfig';
+import { buildLoginPromptHref, frontendProductConfig } from './productConfig';
 
 export function HomePage() {
+  const { t } = useTranslation('home');
   const { status, user } = useAuth();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const showLoginPanel =
-    status === 'guest' && isLoginPromptRequested(searchParams);
 
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-box bg-base-100 p-6 shadow">
       <div className="space-y-3">
         <p className="text-sm uppercase tracking-[0.3em] text-base-content/60">
-          Generated project
+          {t('badge')}
         </p>
-        <h1 className="text-4xl font-semibold">${options.displayName}</h1>
+        <h1 className="text-4xl font-semibold">{t('title')}</h1>
         <p className="max-w-2xl text-base-content/75">
-          This starter product wires the shared backend and frontend platform
-          libraries into a minimal product-local shell. Extend routes, branding,
-          and sections here without copying Rod Manager app code.
+          {t('description')}
         </p>
       </div>
 
       <div className="flex flex-wrap gap-3">
         {status === 'authenticated' ? (
           <Link className="btn btn-primary" to={frontendProductConfig.routes.account}>
-            Open account
+            {t('signedInCta')}
           </Link>
         ) : (
           <Link className="btn btn-primary" to={buildLoginPromptHref()}>
-            Sign in
+            {t('signedOutCta')}
           </Link>
         )}
         {frontendProductConfig.registration.enabled ? (
           <Link className="btn btn-outline" to={frontendProductConfig.routes.register}>
-            Register
+            {t('registerCta')}
           </Link>
         ) : null}
       </div>
 
       <div className="rounded-box border border-base-300 p-4">
-        <h2 className="text-lg font-medium">Current auth state</h2>
+        <h2 className="text-lg font-medium">{t('authStateTitle')}</h2>
         <p className="text-base-content/75">
           {status === 'authenticated'
-            ? \`Signed in as \${user?.email ?? 'unknown user'}.\`
-            : 'Guest session.'}
+            ? t('authenticatedState', {
+                email: user?.email ?? 'unknown user',
+              })
+            : t('guestState')}
         </p>
       </div>
-
-      {showLoginPanel ? (
-        <div className="rounded-box border border-base-300 p-4">
-          <div className="mb-4 flex items-start justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-medium">Sign in</h2>
-              <p className="text-sm text-base-content/70">
-                This form is product-local UI layered on top of shared auth
-                primitives from libs/web-platform.
-              </p>
-            </div>
-            <button
-              className="btn btn-ghost btn-sm"
-              onClick={() => {
-                setSearchParams(clearLoginPrompt(searchParams), {
-                  replace: true,
-                });
-              }}
-              type="button"
-            >
-              Close
-            </button>
-          </div>
-          <LoginPanel />
-        </div>
-      ) : null}
     </section>
   );
 }
 `;
 }
 
-function createAccountPage(options: NormalizedOptions): string {
-  return `import { AccountShell, useAuth } from '@sojecki/platform-web-platform';
+function createAccountPage(): string {
+  return `import { useTranslation } from 'react-i18next';
+import { AccountShell, useAuth } from '@sojecki/platform-web-platform';
 import { productAccountConfig } from './productAccountConfig';
 
 export function AccountPage() {
+  const { t } = useTranslation('account');
   const { user } = useAuth();
   const sections = productAccountConfig.useSections();
 
   return (
     <AccountShell
-      roleLabel="Role"
+      roleLabel={t('roleLabel')}
       sections={sections}
-      title="${options.displayName} account"
+      title={t('title')}
       user={user}
-      welcomeMessage={\`Welcome back, \${user?.displayName ?? user?.email ?? 'user'}.\`}
+      welcomeMessage={t('welcome', {
+        name: user?.displayName ?? t('fallbackUserName'),
+      })}
     />
   );
 }
@@ -1067,269 +1076,47 @@ export function useProductAccountSections(): AccountSection[] {
 `;
 }
 
-function createLoginPanel(): string {
-  return `import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { useAuth } from '@sojecki/platform-web-platform';
-import { frontendProductConfig } from '../productConfig';
-
-export function LoginPanel() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  const [email, setEmail] = useState('admin@example.com');
-  const [password, setPassword] = useState('password');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setErrorMessage(null);
-    setIsSubmitting(true);
-
-    try {
-      await login(email, password);
-      await navigate(frontendProductConfig.auth.postLoginRedirectTo, {
-        replace: true,
-      });
-    } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : 'Login failed.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  return (
-    <form
-      className="flex max-w-md flex-col gap-3"
-      onSubmit={(event) => {
-        void handleSubmit(event);
-      }}
-    >
-      <label className="form-control">
-        <span className="label-text">Email</span>
-        <input
-          className="input input-bordered"
-          onChange={(event) => setEmail(event.target.value)}
-          type="email"
-          value={email}
-        />
-      </label>
-
-      <label className="form-control">
-        <span className="label-text">Password</span>
-        <input
-          className="input input-bordered"
-          onChange={(event) => setPassword(event.target.value)}
-          type="password"
-          value={password}
-        />
-      </label>
-
-      {errorMessage ? <p className="text-sm text-error">{errorMessage}</p> : null}
-
-      <button
-        className="btn btn-primary"
-        disabled={isSubmitting}
-        type="submit"
-      >
-        {isSubmitting ? 'Signing in...' : 'Sign in'}
-      </button>
-    </form>
-  );
-}
-`;
-}
-
-function createRegisterPage(options: NormalizedOptions): string {
-  return `import { useState } from 'react';
-import { Navigate, useNavigate } from 'react-router';
-import { register as registerUser, useAuth } from '@sojecki/platform-web-platform';
-import { frontendProductConfig } from '../productConfig';
-
-export function RegisterPage() {
-  const navigate = useNavigate();
-  const { refreshSession, status } = useAuth();
-  const { auth, registration } = frontendProductConfig;
-  const [name, setName] = useState('${options.displayName}');
-  const [surname, setSurname] = useState('Admin');
-  const [email, setEmail] = useState('admin@example.com');
-  const [password, setPassword] = useState('password');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  if (!registration.enabled) {
-    return <Navigate replace to={registration.disabledRedirectTo} />;
-  }
-
-  if (status === 'authenticated') {
-    return <Navigate replace to={auth.postRegistrationRedirectTo} />;
-  }
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setErrorMessage(null);
-    setIsSubmitting(true);
-
-    try {
-      await registerUser({
-        email,
-        name,
-        password,
-        surname,
-      });
-      await refreshSession();
-      await navigate(auth.postRegistrationRedirectTo, { replace: true });
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : 'Registration failed.',
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  return (
-    <section className="mx-auto w-full max-w-2xl rounded-box bg-base-100 p-6 shadow">
-      <div className="mb-6 space-y-2">
-        <p className="text-sm uppercase tracking-[0.3em] text-base-content/60">
-          Registration
-        </p>
-        <h1 className="text-3xl font-semibold">Create the first ${options.displayName} account</h1>
-        <p className="text-base-content/75">
-          This page is intentionally simple. Keep product-specific presentation
-          local while reusing shared auth APIs and account routing contracts.
-        </p>
-      </div>
-
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={(event) => {
-          void handleSubmit(event);
-        }}
-      >
-        <label className="form-control">
-          <span className="label-text">Name</span>
-          <input
-            className="input input-bordered"
-            onChange={(event) => setName(event.target.value)}
-            type="text"
-            value={name}
-          />
-        </label>
-
-        <label className="form-control">
-          <span className="label-text">Surname</span>
-          <input
-            className="input input-bordered"
-            onChange={(event) => setSurname(event.target.value)}
-            type="text"
-            value={surname}
-          />
-        </label>
-
-        <label className="form-control">
-          <span className="label-text">Email</span>
-          <input
-            className="input input-bordered"
-            onChange={(event) => setEmail(event.target.value)}
-            type="email"
-            value={email}
-          />
-        </label>
-
-        <label className="form-control">
-          <span className="label-text">Password</span>
-          <input
-            className="input input-bordered"
-            onChange={(event) => setPassword(event.target.value)}
-            type="password"
-            value={password}
-          />
-        </label>
-
-        {errorMessage ? <p className="text-sm text-error">{errorMessage}</p> : null}
-
-        <button
-          className="btn btn-primary"
-          disabled={isSubmitting}
-          type="submit"
-        >
-          {isSubmitting ? 'Creating account...' : 'Register'}
-        </button>
-      </form>
-    </section>
-  );
-}
-`;
-}
-
 function createAppLayout(): string {
   return `import { Outlet } from 'react-router';
-import { Navbar } from './components/Navbar';
+import { useTranslation } from 'react-i18next';
+import {
+  PlatformFooter,
+  PlatformNavbar,
+  type PlatformNavigationItem,
+} from '@sojecki/platform-web-platform';
+import { frontendProductConfig } from '../productConfig';
 
 export function AppLayout() {
+  const { t } = useTranslation('layout');
+  const navigationItems: PlatformNavigationItem[] = [
+    {
+      label: t('menuHome'),
+      to: frontendProductConfig.routes.home,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-base-200">
-      <Navbar />
+      <PlatformNavbar
+        accountLabel={t('menuAccount')}
+        accountTo={frontendProductConfig.routes.account}
+        brandLabel={t('appName')}
+        brandTo={frontendProductConfig.routes.home}
+        items={navigationItems}
+        loginLabel={t('menuLogin')}
+        loginPrompt={frontendProductConfig.loginPrompt}
+        logoutLabel={t('menuLogout')}
+        postLoginRedirectTo={frontendProductConfig.auth.postLoginRedirectTo}
+        registerLabel={t('menuRegister')}
+        registerTo={frontendProductConfig.routes.register}
+        registrationEnabled={frontendProductConfig.registration.enabled}
+        showGuestRegisterLink
+      />
       <main className="px-4 py-6">
         <Outlet />
       </main>
+      <PlatformFooter text={t('footerText')} />
     </div>
-  );
-}
-`;
-}
-
-function createNavbar(options: NormalizedOptions): string {
-  return `import { Link } from 'react-router';
-import { useAuth } from '@sojecki/platform-web-platform';
-import { buildLoginPromptHref, frontendProductConfig } from '../../productConfig';
-
-export function Navbar() {
-  const { logout, status, user } = useAuth();
-  const { registration, routes } = frontendProductConfig;
-
-  return (
-    <header className="border-b border-base-300 bg-base-100">
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4">
-        <Link className="text-lg font-semibold" to={routes.home}>
-          ${options.displayName}
-        </Link>
-
-        <nav className="flex items-center gap-3">
-          <Link className="btn btn-ghost btn-sm" to={routes.home}>
-            Home
-          </Link>
-
-          {registration.enabled && status === 'guest' ? (
-            <Link className="btn btn-ghost btn-sm" to={routes.register}>
-              Register
-            </Link>
-          ) : null}
-
-          {status === 'authenticated' ? (
-            <>
-              <Link className="btn btn-ghost btn-sm" to={routes.account}>
-                Account
-              </Link>
-              <button
-                className="btn btn-outline btn-sm"
-                onClick={() => {
-                  void logout();
-                }}
-                type="button"
-              >
-                Logout {user?.displayName ?? ''}
-              </button>
-            </>
-          ) : (
-            <Link className="btn btn-primary btn-sm" to={buildLoginPromptHref()}>
-              Sign in
-            </Link>
-          )}
-        </nav>
-      </div>
-    </header>
   );
 }
 `;

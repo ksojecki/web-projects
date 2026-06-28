@@ -1,3 +1,8 @@
+import {
+  buildLoginPromptHref as buildSharedLoginPromptHref,
+  type LoginPromptConfig,
+} from '@sojecki/platform-web-platform';
+
 export interface FrontendProductRoutes {
   account: string;
   home: string;
@@ -17,14 +22,9 @@ export interface FrontendProductRegistrationConfig {
   enabled: boolean;
 }
 
-export interface FrontendProductLoginPromptConfig {
-  queryParam: string;
-  queryValue: string;
-}
-
 export interface FrontendProductConfig {
   auth: FrontendProductAuthConfig;
-  loginPrompt: FrontendProductLoginPromptConfig;
+  loginPrompt: LoginPromptConfig;
   registration: FrontendProductRegistrationConfig;
   routes: FrontendProductRoutes;
 }
@@ -53,25 +53,8 @@ export const frontendProductConfig: FrontendProductConfig = {
 };
 
 export function buildLoginPromptHref(): string {
-  const searchParams = new URLSearchParams({
-    [frontendProductConfig.loginPrompt.queryParam]:
-      frontendProductConfig.loginPrompt.queryValue,
-  });
-
-  return `${frontendProductConfig.routes.home}?${searchParams.toString()}`;
-}
-
-export function clearLoginPrompt(
-  searchParams: URLSearchParams,
-): URLSearchParams {
-  const nextSearchParams = new URLSearchParams(searchParams);
-  nextSearchParams.delete(frontendProductConfig.loginPrompt.queryParam);
-  return nextSearchParams;
-}
-
-export function isLoginPromptRequested(searchParams: URLSearchParams): boolean {
-  return (
-    searchParams.get(frontendProductConfig.loginPrompt.queryParam) ===
-    frontendProductConfig.loginPrompt.queryValue
+  return buildSharedLoginPromptHref(
+    frontendProductConfig.routes.home,
+    frontendProductConfig.loginPrompt,
   );
 }
