@@ -92,6 +92,8 @@ const en: TranslationResources = {
     register: {
       title: 'Create account',
       passwordSectionTitle: 'Create account with password',
+      passwordSectionHint:
+        'Create a local account with your name, email, and password.',
       oauthSectionTitle: 'Create account with OAuth',
       oauthSectionHint:
         'Use your provider profile details to create an account.',

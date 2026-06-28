@@ -5,3 +5,4 @@
 }
 
 @source '../../../../../libs/ui/src/**/*.{ts,tsx}';
+@source '../../../../../libs/web-platform/src/**/*.{ts,tsx}';

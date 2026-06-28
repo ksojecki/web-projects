@@ -92,6 +92,8 @@ const pl = {
     register: {
       title: 'Utwórz konto',
       passwordSectionTitle: 'Utwórz konto z hasłem',
+      passwordSectionHint:
+        'Utwórz lokalne konto przy użyciu imienia, adresu email i hasła.',
       oauthSectionTitle: 'Utwórz konto przez OAuth',
       oauthSectionHint: 'Użyj danych profilu od dostawcy, aby utworzyć konto.',
       oauthDivider: 'lub kontynuuj przez',
