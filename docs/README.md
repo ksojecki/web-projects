@@ -31,6 +31,7 @@ This directory is the operational knowledge base for contributors and AI agents.
 - `docs/architecture/project-template-refactor-ticket.md` - repository architecture state and product-boundary rules.
 - `docs/architecture/project-template-implementation-roadmap.md` - delivery sequence and remaining follow-up work.
 - `package.json` and `tools/generators.json` - supported scaffold entrypoints for new products.
+- `docs/agents/setup.md` - cheapest-first session start and low-token command workflow for agents.
 
 ## How to use
 

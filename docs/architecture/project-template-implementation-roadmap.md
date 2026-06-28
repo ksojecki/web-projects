@@ -471,7 +471,7 @@ Keep the repeatable project-creation workflow aligned with the supported surface
 
 ### Validation
 
-- `npx nx show project <generated-project> --no-tui`
+- `npx nx show project <generated-project> --json`
 - generated project builds
 - generated project typechecks
 

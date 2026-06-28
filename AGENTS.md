@@ -25,7 +25,7 @@
 **Important**: When running terminal commands that may trigger pagers, browser windows, or interactive output:
 
 - Git commands: use `git --no-pager` (e.g., `git log --no-pager`, `git diff --no-pager`, `git show --no-pager`)
-- Nx graph exploration: use `--json` to avoid opening a browser (e.g., `npx nx graph --json`)
+- Nx graph exploration: use `--print` for stdout or `--file=<path>.json` for machine-readable output (for example `npx nx graph --file=/tmp/nx-graph.json`)
 - Pipe to `cat` or `head` for long outputs to prevent pager activation
 - These prevent output from being sent to `more`/`less` or browser windows, making results readable by agents
 
@@ -43,7 +43,7 @@
 - Pass only the accepted current step, success criteria, exact files, and the minimum evidence needed to each worker pass.
 - When the user asks to publish completed work, commit the accepted changes, push the working branch to `origin`, create a PR, and report the PR link back in the user-facing handoff.
 - Before implementation work starts, check the current branch. If you are on `main`, create a new working branch first.
-- When running Nx commands as an AI agent, always pass `--no-tui`.
+- When running task-oriented Nx commands as an AI agent, prefer `--no-tui` to suppress interactive output when the command supports it.
 - Install deps: `npm ci` (used in CI).
 - Start local SSR development as an AI agent with `npm run dev:rod-manager`, then smoke test `https://localhost:3000/` and `https://localhost:3000/api`.
 - If port `3000` is already in use, inspect the listener with `lsof -nP -iTCP:3000 -sTCP:LISTEN`. Reuse an existing `rod-manager` dev server when possible. Only stop the process automatically if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
@@ -52,7 +52,7 @@
 - Run CI-equivalent checks locally: `npx nx run-many -t lint test build typecheck --no-tui`.
 - Keep Husky hooks in sync with CI check categories using staged-file equivalents where possible; `.husky/pre-commit` should run `lint-staged`, and the `lint-staged` config should track CI lint/format expectations for staged files.
 - Apply Nx Cloud CI remediation hints: `npx nx fix-ci --no-tui`.
-- Explore project/task graph: `npx nx graph --json --no-tui` (use `--json` to avoid browser).
+- Explore project/task graph: `npx nx graph --print` for stdout or `npx nx graph --file=/tmp/nx-graph.json` for machine-readable output. Prefer `nx show` first because graph output is much larger.
 - Keep TS project refs consistent after adding projects: `npx nx sync --no-tui` (or `npx nx sync:check --no-tui` in CI).
 
 ## Project-Specific Conventions
@@ -68,6 +68,17 @@
 - TS output intent is declaration-focused (`emitDeclarationOnly: true` in `tsconfig.base.json`), so library packaging should expect `.d.ts` generation.
 - `customConditions` includes `@sojecki/platform-source`; keep this in mind when introducing conditional exports/resolution.
 - In `libs/ui`, prefer component names without a `Ui` prefix (for example `Button`, `Card`, `TextInput`).
+
+## Low-Token Navigation Workflow
+
+- Start with task-local context before broad repo reads: issue/PR text, `git --no-pager status --short`, then `rg -n` in the likely area.
+- Prefer `rg` and `rg --files` over opening full files. Read only the matching sections with `sed -n` or `rg -n -C`.
+- Use `npx nx show projects --json` to list workspace projects without opening the graph.
+- Use `npx nx show project <project-name> --json` to inspect one project's resolved root, targets, and metadata.
+- Use `npx nx show target <project-name>:<target>` when you need one target's resolved inputs or outputs.
+- Use `npx nx graph --print` or `npx nx graph --file=/tmp/nx-graph.json` only when project relationships are still unclear after `nx show`; the graph output is much larger.
+- For task execution, prefer the narrowest command that proves the change instead of jumping to workspace-wide `run-many`.
+- When a task spans sessions, keep the issue or PR updated with touched files, commands tried, current blocker, and next safe step so the next agent does not rediscover context.
 
 ## Integration Points
 
@@ -147,7 +158,7 @@ Provider credentials must be configured via environment variables:
 ## When Adding a New Project
 
 - Use the supported generator wrapper: `npm run generate:project -- <name>`.
-- Validate the generated apps with `npx nx show project @sojecki/<name>-api --no-tui` and `npx nx show project @sojecki/<name>-web --no-tui` when needed.
+- Validate the generated apps with `npx nx show project @sojecki/<name>-api --json` and `npx nx show project @sojecki/<name>-web --json` when needed.
 - Check the generated product contracts in `projects/<name>/apps/api/src/productConfig.ts` and `projects/<name>/apps/web/src/app/productConfig.ts`.
 - Run at least `npm run typecheck` after generation, and use `npx nx run-many -t lint test build typecheck --no-tui` for CI-equivalent validation when the change is broader.
 - Keep new package configs aligned with root TS/Nx conventions instead of overriding defaults unless necessary.

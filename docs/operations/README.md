@@ -12,8 +12,8 @@ npm run typecheck
 ## After adding the first Nx packages
 
 ```sh
-node ./node_modules/nx/bin/nx.js run-many -t lint test build typecheck
-node ./node_modules/nx/bin/nx.js sync
+node ./node_modules/nx/dist/bin/nx.js run-many -t lint test build typecheck --no-tui
+node ./node_modules/nx/dist/bin/nx.js sync --no-tui
 ```
 
 ## Documentation update rules
