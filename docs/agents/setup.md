@@ -11,6 +11,19 @@ Use this page to prepare a coding-agent session for this repository.
 - Inspect `.husky/pre-commit` and `.lintstagedrc.mjs` before changing staged-file validation behavior.
 - Use `rg`/`rg --files` for searches; avoid opening generated output in `dist`, `coverage`, `.nx`, and `node_modules`.
 
+### Low-token start sequence
+
+Use the cheapest discovery path that can answer the current question:
+
+```sh
+git --no-pager status --short
+rg -n "<feature|file|target clue>" .
+npx nx show projects --json
+npx nx show project <project-name> --json
+```
+
+Only read full files after `rg` or `nx show` tells you which file or project matters.
+
 ## 2) Install
 
 ```sh
@@ -62,7 +75,7 @@ npx nx run-many -t test --no-tui
 npx nx run-many -t lint test build typecheck --no-tui
 ```
 
-Always pass `--no-tui` to Nx commands. Use `npx nx graph --json --no-tui` for graph inspection.
+Prefer `--no-tui` for task-running Nx commands when the command supports it. Prefer `npx nx show ... --json` for cheap structured inspection. Use `npx nx graph --print` for stdout or `npx nx graph --file=/tmp/nx-graph.json` only when you specifically need dependency-graph data.
 
 Pre-commit behavior is defined by `.husky/pre-commit` and `.lintstagedrc.mjs`. Keep them aligned with the staged-file checks you expect contributors and agents to run locally.
 
