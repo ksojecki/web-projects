@@ -10,7 +10,7 @@ This document is architecture context for the project-template refactor.
 
 ## Summary
 
-`rod-manager` is now being treated as a reusable project template and reference implementation, not as a single authenticated portal that hosts multiple products on one shared user base.
+`rod-manager` is being treated as a reusable project template and reference implementation, not as a single authenticated portal that hosts multiple products on one shared user base.
 
 The repository direction is locked:
 
@@ -19,7 +19,7 @@ The repository direction is locked:
 - each product keeps its own database, users, sessions, OAuth records, and product data
 - reuse happens through shared libraries and generators rather than one multi-product runtime
 
-This ticket now documents the current architecture state, the major refactor moves that are already complete, and the remaining work needed to make the template workflow fully reusable.
+This ticket documents the repository architecture state, the major refactor moves that are already complete, and the remaining follow-up work needed to keep the supported template workflow clear and durable.
 
 ## Problem Statement
 
@@ -86,15 +86,27 @@ The durable model is template reuse through libraries, composition files, and ge
 The following refactor steps are already reflected in the repository:
 
 - `libs/server-platform` is the shared backend platform entrypoint.
-- backend bootstrap is now explicitly product-scoped through `projects/rod-manager/apps/api/src/productConfig.ts`.
+- backend bootstrap is explicitly product-scoped through `projects/rod-manager/apps/api/src/productConfig.ts`.
 - `projects/rod-manager/apps/api/src/main.ts` acts as a thinner product bootstrap that passes explicit product configuration into `createServerPlatform`.
 - `libs/web-platform` exists as the shared frontend platform library for auth/account foundations.
 - reusable auth mechanics already live in `libs/web-platform`, including auth provider logic, route guarding, OAuth callback handling, request helpers, and form schemas.
 - reusable account shell mechanics already live in `libs/web-platform`, including the account shell, authentication methods panel, password management form, and related types.
-- `projects/rod-manager` now composes shared account/auth pieces instead of owning all of those mechanics directly.
+- `projects/rod-manager` composes shared account/auth pieces instead of owning all of those mechanics directly.
 - `rod-manager` account content is already split between shared platform sections and product-local composition through `projects/rod-manager/apps/web/src/app/account/rodManagerAccountSections.tsx`.
 - the account section extension contract is intentionally kept as an ordered content-block API, with product-local account configuration deciding which sections render and in what order.
 - language and user-settings persistence remain product-local in `rod-manager` instead of moving into `libs/web-platform` before a second product proves a shared settings contract is needed.
+
+### Supported Template Workflow
+
+The repository already includes a supported scaffold-and-proof path:
+
+- the root generator wrapper is `npm run generate:project -- <name>`
+- the generator entrypoint is `./tools/generators.json:project-template`
+- the proof project is `projects/sample-portal`
+- generated backend apps use `projects/<product>/apps/api/src/productConfig.ts` for product-scoped bootstrap
+- generated frontend apps use `projects/<product>/apps/web/src/app/productConfig.ts` for product-scoped routes, redirects, and registration settings
+
+This is the workflow contributors should document and extend instead of describing project creation as hypothetical.
 
 ### Boundaries That Must Stay Intact
 
@@ -105,7 +117,7 @@ The following refactor steps are already reflected in the repository:
 
 ## Remaining Gaps
 
-The template direction is established, but the workflow is not complete yet.
+The template direction is established and the scaffold workflow exists. The remaining gaps are about keeping boundaries clean, validating behavior deeply enough, and ensuring the docs describe the supported workflow accurately.
 
 ### Product Configuration Surface
 
@@ -130,11 +142,11 @@ Some route and screen composition is still product-local in `rod-manager` and sh
 
 ### DTO Ownership Cleanup
 
-`libs/shared` should contain only genuinely reusable contracts. The page DTO move is now complete through `projects/rod-manager/plugins/pages/shared`, but product-owned contracts still need periodic review so future product-specific types do not drift back into generic packages.
+`libs/shared` should contain only genuinely reusable contracts. The page DTO move is complete through `projects/rod-manager/plugins/pages/shared`, but product-owned contracts still need periodic review so future product-specific types do not drift back into generic packages.
 
 ### Generator and Sample Project Validation
 
-The template is not complete until a generator and a second sample project prove that:
+The repository already includes a generator and a second sample project. Follow-up validation should continue proving that:
 
 - a new project can be scaffolded without copying `rod-manager`
 - the new project uses shared platform libraries
@@ -143,7 +155,7 @@ The template is not complete until a generator and a second sample project prove
 
 ### Documentation Follow-through
 
-Once generator and sample-project validation land, the repo still needs final documentation updates that explain:
+The repository docs need to explain the supported workflow clearly:
 
 - how to add a new product
 - what belongs in `libs/`
@@ -166,9 +178,9 @@ Once generator and sample-project validation land, the repo still needs final do
 
 ### Workstream 3: Generator and Isolation Proof
 
-- add a project generator under the repo tooling conventions
-- generate one sample second project
-- validate separate database and user ownership
+- keep the project generator aligned with the actual supported scaffold surface
+- keep `sample-portal` useful as a proof project for a second product
+- continue validating separate database and user ownership
 
 ### Workstream 4: Final Docs and Workflow Guidance
 
@@ -231,4 +243,4 @@ At minimum, validate the full refactor stream with:
 
 - `docs/architecture/adr/0002-project-template-strategy.md` records the top-level decision.
 - `docs/architecture/project-template-implementation-roadmap.md` contains the implementation sequence and file-level targets.
-- This ticket should stay focused on architecture context, current state, and remaining gaps rather than live status tracking.
+- This ticket should stay focused on architecture context, repository state, and remaining gaps rather than live status tracking.

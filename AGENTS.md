@@ -2,7 +2,7 @@
 
 ## Repo Snapshot
 
-- This is an Nx 22 workspace (`nx`, `@nx/js` in `package.json`) organized around product directories under `projects/` and shared libraries under `libs/`.
+- This is an Nx 23 workspace (`nx`, `@nx/js` in `package.json`) organized around product directories under `projects/` and shared libraries under `libs/`.
 - Product applications live in `projects/<product>/apps/` (`projects/rod-manager/apps/api`, `projects/rod-manager/apps/web`), and reusable code lives in `libs/` (`libs/shared`, `libs/ui`).
 - Treat root config as source of truth unless a project-level config overrides it intentionally.
 - Extended docs for agents and architecture are in `docs/` (`docs/agents/`, `docs/architecture/`, `docs/operations/`).
@@ -25,7 +25,7 @@
 **Important**: When running terminal commands that may trigger pagers, browser windows, or interactive output:
 
 - Git commands: use `git --no-pager` (e.g., `git log --no-pager`, `git diff --no-pager`, `git show --no-pager`)
-- Nx graph exploration: use `--json` flag instead of `--no-tui` (e.g., `npx nx graph --json`)
+- Nx graph exploration: use `--json` to avoid opening a browser (e.g., `npx nx graph --json`)
 - Pipe to `cat` or `head` for long outputs to prevent pager activation
 - These prevent output from being sent to `more`/`less` or browser windows, making results readable by agents
 
@@ -74,6 +74,17 @@
 - CI runs on GitHub Actions (`.github/workflows/ci.yml`) with Node 26 and npm cache.
 - Nx Cloud is configured (`nxCloudId` in `nx.json`); distributed agents are prepared but currently commented in CI.
 - Release flow is expected via `npx nx release --no-tui` (documented in `README.md`).
+
+## Project Template Workflow
+
+- Use the supported root wrapper to scaffold a product: `npm run generate:project -- <name>`.
+- The underlying generator entrypoint is `./tools/generators.json:project-template`, and its required input is `name`.
+- The generator creates `projects/<name>/apps/api` and `projects/<name>/apps/web`, adds a root `dev:<name>` script, and updates root TS references.
+- The proof project is `projects/sample-portal`.
+- Keep reusable platform code in `libs/`, product apps in `projects/<product>/apps/`, and product-specific features in `projects/<product>/plugins/`.
+- Treat registration as a product-scoped capability configured by the product frontend, not a workspace-wide default.
+- For backend bootstrap, use `projects/<product>/apps/api/src/productConfig.ts` as the product-scoped contract for project id, database path, seed behavior, and SSR paths.
+- For frontend composition, use `projects/<product>/apps/web/src/app/productConfig.ts` as the product-scoped contract for routes, redirects, login prompt behavior, and registration enablement.
 
 ## Authentication & OAuth
 
@@ -135,8 +146,8 @@ Provider credentials must be configured via environment variables:
 
 ## When Adding a New Project
 
-- Prefer Nx generators (example from `README.md`):
-  - `npx nx g @nx/js:lib libs/<name> --publishable --importPath=@my-org/<name> --no-tui`
-  - `npx nx g @nx/react:app <name> --bundler=vite --no-tui`, then place product apps under `projects/<product>/apps/` if they are product-specific.
-- After generation, validate inferred targets with `npx nx show project <project-name> --no-tui` and run `build` + `typecheck`.
+- Use the supported generator wrapper: `npm run generate:project -- <name>`.
+- Validate the generated apps with `npx nx show project @sojecki/<name>-api --no-tui` and `npx nx show project @sojecki/<name>-web --no-tui` when needed.
+- Check the generated product contracts in `projects/<name>/apps/api/src/productConfig.ts` and `projects/<name>/apps/web/src/app/productConfig.ts`.
+- Run at least `npm run typecheck` after generation, and use `npx nx run-many -t lint test build typecheck --no-tui` for CI-equivalent validation when the change is broader.
 - Keep new package configs aligned with root TS/Nx conventions instead of overriding defaults unless necessary.

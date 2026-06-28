@@ -1,18 +1,19 @@
 # Sojecki Platform Workspace
 
-This repository is an Nx 22 monorepo for the neutral shared platform workspace that currently hosts the RodManager React SSR web app, its Fastify API, and shared TypeScript libraries. The MVP stack is React Router, Fastify, SQLite, Vitest, Oxlint, and Prettier.
+This repository is an Nx 23 monorepo for a reusable product-template workspace. It contains a working `rod-manager` reference product, the `sample-portal` proof project, and shared TypeScript libraries for backend and frontend platform code. The stack is React Router, Fastify, SQLite, Vitest, Oxlint, and Prettier.
 
 ## Workspace Purpose
 
-The root workspace is intended to host multiple web projects that share the same backend/frontend platform concerns:
+The root workspace is intended to host multiple web projects that share the same backend and frontend platform concerns:
 
 - Fastify-based API hosting
 - React SSR application hosting
 - shared authentication, session, OAuth, and database patterns
 - shared DTOs and reusable UI primitives
 - product-specific plugins and extensions
+- generator-based project creation
 
-The first product in this workspace is Rod Manager.
+Each product keeps its own database, users, sessions, OAuth records, and product data. Reuse happens through `libs/` and the project generator, not through a shared multi-tenant runtime.
 
 ## Current Projects
 
@@ -22,6 +23,11 @@ The first product in this workspace is Rod Manager.
 - `projects/rod-manager/apps/api` - the Rod Manager Fastify bootstrap application. It starts the HTTPS server, wires the shared server platform, and registers Rod Manager server plugins.
 - `projects/rod-manager/plugins/pages/server` - the Rod Manager backend pages plugin. It adds page-related routes, store access, and migrations to the shared server platform.
 - `projects/rod-manager/plugins/pages/ui` - the Rod Manager UI-side pages plugin package for product-specific page features.
+
+### Sample Portal
+
+- `projects/sample-portal/apps/web` - a generated React SSR frontend that proves the shared web platform can bootstrap a second product without `rod-manager` dependencies.
+- `projects/sample-portal/apps/api` - a generated Fastify bootstrap application with its own product-scoped database and SSR paths.
 
 ### Shared Platform Libraries
 
@@ -52,6 +58,15 @@ If certificates need to be recreated manually:
 npm run setup:certs
 ```
 
+## Supported Commands
+
+- `npm run dev:rod-manager` - start the `rod-manager` API host and SSR web app.
+- `npm run dev:sample-portal` - start the generated `sample-portal` API host and SSR web app.
+- `npm run generate:project -- <name>` - scaffold a new template-based product under `projects/<name>/apps/`.
+- `npm run lint` - run Nx lint targets.
+- `npm run typecheck` - run Nx typecheck targets.
+- `npm run format:check` - check formatting.
+
 ## Development
 
 Run the SSR development stack:
@@ -60,28 +75,60 @@ Run the SSR development stack:
 npm run dev:rod-manager
 ```
 
-This starts the SSR app through the Fastify API server.
-
-Today that command starts the Rod Manager product:
+This starts the Rod Manager SSR app through the Fastify API server:
 
 - the API host from `projects/rod-manager/apps/api`
 - the SSR frontend from `projects/rod-manager/apps/web`
 - the Rod Manager pages plugin from `projects/rod-manager/plugins/pages/server`
+
+To run the proof project instead:
+
+```sh
+npm run dev:sample-portal
+```
 
 Local smoke checks:
 
 - `https://localhost:3000/` should return SSR HTML.
 - `https://localhost:3000/api` should return Fastify API JSON.
 
+## Template Workflow
+
+Create a new product with the supported generator:
+
+```sh
+npm run generate:project -- my-product
+```
+
+The generator creates:
+
+- `projects/my-product/apps/api`
+- `projects/my-product/apps/web`
+- product-scoped config files for backend and frontend composition
+- a root `dev:my-product` script
+
+The proof project for that workflow is `projects/sample-portal`.
+
+## Product Boundaries
+
+- Put reusable platform code in `libs/`.
+- Put product apps in `projects/<product>/apps/`.
+- Put product-specific features and plugins in `projects/<product>/plugins/`.
+- Keep registration as a product-scoped capability configured by the product, not a workspace-wide assumption.
+- Keep auth, session, OAuth, and database state isolated per product.
+
+The supported composition surface is:
+
+- backend: `projects/<product>/apps/api/src/productConfig.ts`
+- frontend: `projects/<product>/apps/web/src/app/productConfig.ts`
+
 ## Architecture Notes
 
-Use `docs/architecture/` for the MVP plan and ADRs. OAuth/session/database logic lives in `libs/server-platform/src/lib/plugins/`; keep plugin entrypoints thin and move feature logic into focused files.
+Use `docs/architecture/` for the template strategy, roadmap, and ADRs. OAuth, session, and database logic lives in `libs/server-platform/src/lib/plugins/`; keep plugin entrypoints thin and move feature logic into focused files.
 
 Shared TypeScript settings live in `tsconfig.base.json` with strict, composite, NodeNext, declaration-focused output. Nx target inference is configured in `nx.json`; prefer changing root configuration over duplicating project-level settings.
 
 The root workspace package identity is `@sojecki/platform-source`; use that shared condition when working with source-first conditional exports at the workspace level.
-
-When adding another product, keep product code under `projects/<product>/...` and keep reusable platform code in `libs/...`.
 
 ## Contributing
 
