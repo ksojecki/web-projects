@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Session Usage Analysis'
+  short_description: 'Analyze Codex session usage and estimated cost'
+  default_prompt: 'Use $session-usage-analysis to inspect a Codex session, spawned agents, and estimated cost.'

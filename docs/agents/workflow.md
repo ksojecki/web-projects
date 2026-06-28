@@ -34,8 +34,10 @@ When the task requires planning, do not start implementation until the plan is a
 - The implementer executes the accepted current step and does not re-review or re-plan it.
 - Do not spawn implementers or testers for multiple future steps in parallel.
 - Keep each spawned subagent scoped to one current step so the delivery loop stays auditable, step-local, and cheap.
+- After a completed worker result is integrated, close finished implementer/tester threads before spawning the next worker so completed agents do not consume the thread budget.
 - Pass only the accepted current step, success criteria, exact files, and the minimum evidence needed for that worker pass.
 - Do not resend the full plan, full repo overview, or prior-step history to each worker unless the current step cannot be completed or validated without it.
+- Treat the tester pass as the default authoritative validation for that step. Do not routinely rerun the same narrow validation in the parent session unless the tester found a concrete problem, a direct fix needs rechecking, or the step explicitly requires a broader integration check.
 - Treat review as the final gate after the planned steps are complete.
 - If review finds a gap, add a new corrective step and run the same sequential implementer -> tester flow for that step before reviewing again.
 - Keep each pass narrow and evidence-driven.
@@ -54,6 +56,7 @@ When the task requires planning, do not start implementation until the plan is a
 ## 5) Validation
 
 - Run lint/format and a quick smoke-check after major changes.
+- Avoid low-signal parent-session validation commands. Add coverage or extra reporting runs only when the output is decision-relevant for the current step or final review.
 - Before a PR, verify whether documentation updates are required.
 
 ## 6) Handover

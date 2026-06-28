@@ -37,9 +37,11 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
    - Capture failures as concrete evidence, not guesses.
    - Pass only the accepted current step, expected behavior, exact files, and the minimum evidence needed to validate that step.
    - Do not resend the full plan, full repo overview, or prior-step history unless the current validation cannot be completed without it.
+   - Treat the tester pass as the authoritative step-local validation unless the tester reports a concrete gap or the step explicitly requires a broader integration check.
 4. Repeat per step.
    - Continue spawning one step-scoped implementer, then one step-scoped tester, until every planned step is complete.
    - Do not spawn implementers or testers for multiple planned steps in parallel.
+   - After a worker result is integrated, close finished implementer/tester agents before spawning the next worker so thread limits do not accumulate across steps.
    - If a step fails validation, revise that step before broadening the change set.
 5. Review.
    - Compare the result against the original acceptance criteria and repo conventions.
@@ -58,6 +60,8 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
 - If validation fails, address the root cause before starting the next step.
 - Avoid touching unrelated files unless they are strictly necessary for correctness.
 - Keep worker prompts step-local and minimal.
+- Avoid redundant parent-session reruns of the same narrow validation; in-session reruns should happen only when a worker reports a concrete issue, when reviewing a direct fix, or when a broader end-to-end check is required.
+- Avoid low-signal reporting commands in the parent session. Do not add coverage or extra reporting runs unless the output will materially change the decision for the current step or final review.
 - Record the commands run and the files changed so the handoff is auditable.
 
 ## Handoff
