@@ -1,5 +1,5 @@
 {
-  "name": "@sojecki/rod-manager-api",
+  "name": "@ksojecki/rod-manager-api",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -65,15 +65,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "@sojecki/rod-manager-api:build",
+          "buildTarget": "@ksojecki/rod-manager-api:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@sojecki/rod-manager-api:build:development"
+            "buildTarget": "@ksojecki/rod-manager-api:build:development"
           },
           "production": {
-            "buildTarget": "@sojecki/rod-manager-api:build:production"
+            "buildTarget": "@ksojecki/rod-manager-api:build:production"
           }
         }
       },
@@ -110,8 +110,8 @@
     }
   },
   "dependencies": {
-    "@sojecki/rod-manager-pages-server": "0.0.1",
-    "@sojecki/platform-server-platform": "0.0.1",
+    "@ksojecki/rod-manager-pages-server": "0.0.1",
+    "@ksojecki/platform-server-platform": "0.0.1",
     "dotenv": "^17.4.2",
     "fastify": "^5.8.5"
   }

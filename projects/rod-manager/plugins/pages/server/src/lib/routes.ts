@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import type {
   ContentPageListResponseBody,
   ContentPageResponseBody,
-} from '@sojecki/rod-manager-pages-shared';
+} from '@ksojecki/rod-manager-pages-shared';
 import type { PageStore } from './store';
 
 /** Registers pages API routes on the given Fastify instance. */

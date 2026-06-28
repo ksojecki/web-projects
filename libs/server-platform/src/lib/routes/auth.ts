@@ -6,7 +6,7 @@ import type {
   OAuthProviderType,
   RegisterRequestBody,
   SessionResponse,
-} from '@sojecki/platform-shared';
+} from '@ksojecki/platform-shared';
 
 const OAUTH_PROVIDERS: OAuthProviderType[] = ['google', 'apple', 'facebook'];
 

@@ -52,9 +52,9 @@ npx nx run-many -t lint test build typecheck --no-tui
 Build and start the production SSR bundle:
 
 ```sh
-npx nx run @sojecki/rod-manager-web:build --no-tui
-npx nx run @sojecki/rod-manager-web:build-server --no-tui
-npx nx run @sojecki/rod-manager-api:build --no-tui
+npx nx run @ksojecki/rod-manager-web:build --no-tui
+npx nx run @ksojecki/rod-manager-web:build-server --no-tui
+npx nx run @ksojecki/rod-manager-api:build --no-tui
 NODE_ENV=production node dist/projects/rod-manager/apps/api/main.js
 ```
 

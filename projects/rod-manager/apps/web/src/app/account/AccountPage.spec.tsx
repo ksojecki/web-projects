@@ -7,8 +7,8 @@ import type {
   AuthenticationMethodsResponseBody,
   OAuthProviderType,
   UpdatePasswordRequestBody,
-} from '@sojecki/platform-shared';
-import type * as PlatformWebPlatform from '@sojecki/platform-web-platform';
+} from '@ksojecki/platform-shared';
+import type * as PlatformWebPlatform from '@ksojecki/platform-web-platform';
 import i18n from '../i18n/i18n';
 import { AccountPage } from './AccountPage';
 
@@ -42,7 +42,7 @@ const {
     vi.fn<(input: UpdatePasswordRequestBody) => Promise<void>>(),
 }));
 
-vi.mock('@sojecki/platform-web-platform', async (importOriginal) => {
+vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
   const actual = await importOriginal<typeof PlatformWebPlatform>();
 
   return {

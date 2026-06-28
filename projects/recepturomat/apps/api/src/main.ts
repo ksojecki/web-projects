@@ -2,7 +2,7 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import { existsSync, readFileSync } from 'node:fs';
 import type { FastifyInstance } from 'fastify';
-import { createServerPlatform } from '@sojecki/platform-server-platform';
+import { createServerPlatform } from '@ksojecki/platform-server-platform';
 import { recepturomatProjectConfig } from './productConfig';
 
 const host = process.env.HOST ?? 'localhost';

@@ -3,11 +3,11 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type {
   ContentPageListResponseBody,
   ContentPageResponseBody,
-} from '@sojecki/rod-manager-pages-shared';
+} from '@ksojecki/rod-manager-pages-shared';
 import {
   createServerPlatform,
   SESSION_COOKIE_NAME,
-} from '@sojecki/platform-server-platform';
+} from '@ksojecki/platform-server-platform';
 import { pagesServerPlugin } from './plugin';
 
 const testProjectConfig = {

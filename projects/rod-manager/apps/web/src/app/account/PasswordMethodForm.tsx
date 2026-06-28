@@ -1,2 +1,2 @@
-export { PasswordMethodForm } from '@sojecki/platform-web-platform';
-export type { PasswordMethodFormProps } from '@sojecki/platform-web-platform';
+export { PasswordMethodForm } from '@ksojecki/platform-web-platform';
+export type { PasswordMethodFormProps } from '@ksojecki/platform-web-platform';

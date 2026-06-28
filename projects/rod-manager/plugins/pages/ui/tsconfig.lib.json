@@ -8,7 +8,7 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node"],
     "paths": {
-      "@sojecki/platform-shared": ["../../../../../libs/shared/src/index.ts"]
+      "@ksojecki/platform-shared": ["../../../../../libs/shared/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],

@@ -1,5 +1,5 @@
 {
-  "name": "@sojecki/rod-manager-pages-ui",
+  "name": "@ksojecki/rod-manager-pages-ui",
   "version": "0.0.1",
   "type": "module",
   "main": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.js",
@@ -8,7 +8,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "@sojecki/platform-source": "./src/index.ts",
+      "@ksojecki/platform-source": "./src/index.ts",
       "types": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.d.ts",
       "import": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.js",
       "default": "../../../../../dist/projects/rod-manager/plugins/pages/ui/index.js"
@@ -19,7 +19,7 @@
     "!**/*.tsbuildinfo"
   ],
   "dependencies": {
-    "@sojecki/platform-shared": "0.0.1"
+    "@ksojecki/platform-shared": "0.0.1"
   },
   "nx": {
     "targets": {

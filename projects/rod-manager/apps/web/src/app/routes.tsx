@@ -4,7 +4,7 @@ import {
   OAuthCallbackPage,
   RegisterPage,
   RequireAuth,
-} from '@sojecki/platform-web-platform';
+} from '@ksojecki/platform-web-platform';
 
 import { AccountPage } from './account/AccountPage';
 import { AppLayout } from './layout/AppLayout';

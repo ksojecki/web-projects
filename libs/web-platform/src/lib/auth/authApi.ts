@@ -8,7 +8,7 @@ import type {
   RegisterRequestBody,
   SessionResponse,
   UpdatePasswordRequestBody,
-} from '@sojecki/platform-shared';
+} from '@ksojecki/platform-shared';
 
 export interface OAuthInitiateResponse {
   authorizationUrl: string;

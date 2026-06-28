@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, FormField, Heading } from '@sojecki/platform-ui';
+import { Button, FormField, Heading } from '@ksojecki/platform-ui';
 import { useAuthForm } from '../auth/hooks/useAuthForm';
 import { updatePassword } from '../auth/authApi';
 import { passwordSchema, type PasswordFormValues } from './passwordSchema';

@@ -15,7 +15,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "paths": {
-      "@sojecki/rod-manager-pages-shared": [
+      "@ksojecki/rod-manager-pages-shared": [
         "../../../../dist/projects/rod-manager/plugins/pages/shared/index.d.ts"
       ]
     }

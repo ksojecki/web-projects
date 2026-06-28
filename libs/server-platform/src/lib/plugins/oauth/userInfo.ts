@@ -1,4 +1,4 @@
-import type { OAuthUserInfo } from '@sojecki/platform-shared';
+import type { OAuthUserInfo } from '@ksojecki/platform-shared';
 
 interface OAuthUserInfoInput {
   id: string;

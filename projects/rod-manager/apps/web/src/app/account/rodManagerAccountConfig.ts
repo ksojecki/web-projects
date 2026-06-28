@@ -1,4 +1,4 @@
-import type { AccountSectionsHook } from '@sojecki/platform-web-platform';
+import type { AccountSectionsHook } from '@ksojecki/platform-web-platform';
 import { useRodManagerAccountSections } from './rodManagerAccountSections';
 
 export interface ProductAccountConfig {

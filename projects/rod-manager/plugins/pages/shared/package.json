@@ -1,5 +1,5 @@
 {
-  "name": "@sojecki/rod-manager-pages-shared",
+  "name": "@ksojecki/rod-manager-pages-shared",
   "version": "0.0.1",
   "type": "module",
   "main": "../../../../../dist/projects/rod-manager/plugins/pages/shared/index.js",
@@ -8,7 +8,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "@sojecki/platform-source": "./src/index.ts",
+      "@ksojecki/platform-source": "./src/index.ts",
       "types": "../../../../../dist/projects/rod-manager/plugins/pages/shared/index.d.ts",
       "import": "../../../../../dist/projects/rod-manager/plugins/pages/shared/index.js",
       "default": "../../../../../dist/projects/rod-manager/plugins/pages/shared/index.js"

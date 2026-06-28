@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type {
   AuthenticationMethodStatus,
   OAuthProviderType,
-} from '@sojecki/platform-shared';
+} from '@ksojecki/platform-shared';
 import {
   linkOAuthProvider,
   loadAuthenticationMethods,

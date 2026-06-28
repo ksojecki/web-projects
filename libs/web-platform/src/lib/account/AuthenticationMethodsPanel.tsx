@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import type {
   AuthenticationMethodStatus,
   OAuthProviderType,
-} from '@sojecki/platform-shared';
-import { Button, Heading } from '@sojecki/platform-ui';
+} from '@ksojecki/platform-shared';
+import { Button, Heading } from '@ksojecki/platform-ui';
 import { PasswordMethodForm } from './PasswordMethodForm';
 import type { AccountAuthenticationMethodsPanelProps } from './types';
 

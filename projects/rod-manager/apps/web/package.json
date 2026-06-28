@@ -1,5 +1,5 @@
 {
-  "name": "@sojecki/rod-manager-web",
+  "name": "@ksojecki/rod-manager-web",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -48,8 +48,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
-    "@sojecki/rod-manager-pages-shared": "0.0.1",
-    "@sojecki/platform-web-platform": "0.0.1",
+    "@ksojecki/rod-manager-pages-shared": "0.0.1",
+    "@ksojecki/platform-web-platform": "0.0.1",
     "react-hook-form": "^7.80.0",
     "zod": "^4.4.3"
   }

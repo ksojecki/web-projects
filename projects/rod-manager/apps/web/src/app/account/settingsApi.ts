@@ -1,4 +1,4 @@
-import type { ApiErrorResponse, UserLanguage } from '@sojecki/platform-shared';
+import type { ApiErrorResponse, UserLanguage } from '@ksojecki/platform-shared';
 
 export async function updateLanguagePreference(
   language: UserLanguage,

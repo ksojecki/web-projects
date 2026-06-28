@@ -1,4 +1,4 @@
-import type { ServerPlatformPlugin } from '@sojecki/platform-server-platform';
+import type { ServerPlatformPlugin } from '@ksojecki/platform-server-platform';
 import { createPageStore } from './store';
 import { registerPagesRoutes } from './routes';
 import {

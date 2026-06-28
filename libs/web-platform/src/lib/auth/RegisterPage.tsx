@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Heading } from '@sojecki/platform-ui';
+import { Heading } from '@ksojecki/platform-ui';
 import { useAuth } from './AuthProvider';
 import { OAuthButtons } from './OAuthButtons';
 import { PasswordRegisterForm } from './PasswordRegisterForm';

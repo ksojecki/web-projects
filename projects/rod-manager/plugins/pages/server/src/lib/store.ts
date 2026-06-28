@@ -1,8 +1,8 @@
 import type {
   ContentPage,
   ContentPageSummary,
-} from '@sojecki/rod-manager-pages-shared';
-import type { ServerPlatformDbClient } from '@sojecki/platform-server-platform';
+} from '@ksojecki/rod-manager-pages-shared';
+import type { ServerPlatformDbClient } from '@ksojecki/platform-server-platform';
 
 export interface PageStore {
   listPages(): ContentPageSummary[];

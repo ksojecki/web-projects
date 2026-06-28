@@ -1,5 +1,5 @@
 {
-  "name": "@sojecki/recepturomat-web",
+  "name": "@ksojecki/recepturomat-web",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -47,7 +47,7 @@
     }
   },
   "dependencies": {
-    "@sojecki/platform-web-platform": "0.0.1",
+    "@ksojecki/platform-web-platform": "0.0.1",
     "i18next": "^26.3.1",
     "react-i18next": "^17.0.8",
     "react-router": "^8.0.1"

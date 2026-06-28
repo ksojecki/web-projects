@@ -46,14 +46,14 @@ export default defineConfig(({ command }) => {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@sojecki/rod-manager-pages-shared': pagesSharedSourcePath,
-        '@sojecki/platform-web-platform': webPlatformSourcePath,
+        '@ksojecki/rod-manager-pages-shared': pagesSharedSourcePath,
+        '@ksojecki/platform-web-platform': webPlatformSourcePath,
       },
-      conditions: ['@sojecki/platform-source'],
+      conditions: ['@ksojecki/platform-source'],
     },
     ssr: {
       resolve: {
-        conditions: ['@sojecki/platform-source'],
+        conditions: ['@ksojecki/platform-source'],
       },
     },
     // Uncomment this if you are using workers.

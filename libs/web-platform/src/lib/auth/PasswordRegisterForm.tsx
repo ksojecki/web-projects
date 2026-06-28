@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, FormField } from '@sojecki/platform-ui';
+import { Button, FormField } from '@ksojecki/platform-ui';
 import { useAuth } from './AuthProvider';
 import { register as registerRequest } from './authApi';
 import { useAuthForm } from './hooks/useAuthForm';

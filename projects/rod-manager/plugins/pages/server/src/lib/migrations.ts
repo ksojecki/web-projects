@@ -1,4 +1,4 @@
-import type { ServerPlatformMigration } from '@sojecki/platform-server-platform';
+import type { ServerPlatformMigration } from '@ksojecki/platform-server-platform';
 
 const RESERVED_PAGE_SLUGS = ['account', 'register', 'pages', 'auth', 'api'];
 const RESERVED_PAGE_SLUGS_SQL = RESERVED_PAGE_SLUGS.map(

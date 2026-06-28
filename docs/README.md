@@ -27,6 +27,11 @@ This directory is the operational knowledge base for contributors and AI agents.
 ## Template Workflow Pointers
 
 - `README.md` - contributor-facing overview of the supported project-template workflow.
+- `docs/operations/workspace-development.md` - technical workspace setup,
+  command surface, naming rules, and local development guidance.
+- `README.md` also defines the naming split: nested `projects/<product>/apps/*`
+  paths for filesystem structure, flat `@ksojecki/<product>-api` and
+  `@ksojecki/<product>-web` ids for commands and package metadata.
 - `docs/architecture/adr/0002-project-template-strategy.md` - durable decision for template reuse and per-project isolation.
 - `docs/architecture/project-template-refactor-ticket.md` - repository architecture state and product-boundary rules.
 - `docs/architecture/project-template-implementation-roadmap.md` - delivery sequence and remaining follow-up work.

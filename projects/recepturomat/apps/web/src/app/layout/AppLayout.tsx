@@ -4,7 +4,7 @@ import {
   PlatformFooter,
   PlatformNavbar,
   type PlatformNavigationItem,
-} from '@sojecki/platform-web-platform';
+} from '@ksojecki/platform-web-platform';
 import { frontendProductConfig } from '../productConfig';
 
 export function AppLayout() {

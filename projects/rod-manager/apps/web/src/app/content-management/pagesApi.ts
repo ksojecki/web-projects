@@ -1,8 +1,8 @@
 import type {
   ContentPageListResponseBody,
   ContentPageResponseBody,
-} from '@sojecki/rod-manager-pages-shared';
-import type { ApiErrorResponse } from '@sojecki/platform-shared';
+} from '@ksojecki/rod-manager-pages-shared';
+import type { ApiErrorResponse } from '@ksojecki/platform-shared';
 
 export async function loadPages(): Promise<ContentPageListResponseBody> {
   return requestJson<ContentPageListResponseBody>('/api/pages', {

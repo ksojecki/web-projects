@@ -12,7 +12,7 @@ function isExternalImport(id: string) {
     return false;
   }
 
-  if (id.startsWith('@sojecki/')) {
+  if (id.startsWith('@ksojecki/')) {
     return false;
   }
 
@@ -23,11 +23,11 @@ export default defineConfig(({ mode }) => ({
   root: import.meta.dirname,
   cacheDir: '../../../../node_modules/.vite/projects/rod-manager/apps/api',
   resolve: {
-    conditions: ['@sojecki/platform-source'],
+    conditions: ['@ksojecki/platform-source'],
   },
   ssr: {
     resolve: {
-      conditions: ['@sojecki/platform-source'],
+      conditions: ['@ksojecki/platform-source'],
     },
   },
   build: {

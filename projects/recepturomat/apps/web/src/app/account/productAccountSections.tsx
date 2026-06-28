@@ -1,4 +1,4 @@
-import type { AccountSection } from '@sojecki/platform-web-platform';
+import type { AccountSection } from '@ksojecki/platform-web-platform';
 
 export function useProductAccountSections(): AccountSection[] {
   return [

@@ -4,7 +4,7 @@ import {
   scryptSync,
   timingSafeEqual,
 } from 'node:crypto';
-import type { UserRole } from '@sojecki/platform-shared';
+import type { UserRole } from '@ksojecki/platform-shared';
 import type Database from 'better-sqlite3';
 import type {
   AuthStore,

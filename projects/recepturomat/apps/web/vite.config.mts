@@ -34,11 +34,11 @@ export default defineConfig(({ command }) => {
     },
     plugins: [react(), tailwindcss()],
     resolve: {
-      conditions: ['@sojecki/platform-source'],
+      conditions: ['@ksojecki/platform-source'],
     },
     ssr: {
       resolve: {
-        conditions: ['@sojecki/platform-source'],
+        conditions: ['@ksojecki/platform-source'],
       },
     },
     build: {

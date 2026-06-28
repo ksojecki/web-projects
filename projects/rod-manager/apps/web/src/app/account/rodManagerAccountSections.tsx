@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { OAuthProviderType } from '@sojecki/platform-shared';
+import type { OAuthProviderType } from '@ksojecki/platform-shared';
 import {
   AuthenticationMethodsPanel,
   type AccountSection,
   useAuthenticationMethods,
-} from '@sojecki/platform-web-platform';
+} from '@ksojecki/platform-web-platform';
 import { LanguageSelector } from './LanguageSelector';
 
 export function useRodManagerAccountSections(): AccountSection[] {

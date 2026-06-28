@@ -1,7 +1,7 @@
 import {
   buildLoginPromptHref as buildSharedLoginPromptHref,
   type LoginPromptConfig,
-} from '@sojecki/platform-web-platform';
+} from '@ksojecki/platform-web-platform';
 
 export interface FrontendProductRoutes {
   home: string;

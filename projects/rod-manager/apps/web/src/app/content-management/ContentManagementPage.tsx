@@ -1,8 +1,8 @@
-import { Page } from '@sojecki/platform-ui';
+import { Page } from '@ksojecki/platform-ui';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import type { ContentPageSummary } from '@sojecki/rod-manager-pages-shared';
+import type { ContentPageSummary } from '@ksojecki/rod-manager-pages-shared';
 import { loadPages } from './pagesApi';
 
 export const ContentManagementPage = () => {

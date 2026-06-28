@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { AccountShell, useAuth } from '@sojecki/platform-web-platform';
+import { AccountShell, useAuth } from '@ksojecki/platform-web-platform';
 import { rodManagerAccountConfig } from './rodManagerAccountConfig';
 
 export const AccountPage = () => {

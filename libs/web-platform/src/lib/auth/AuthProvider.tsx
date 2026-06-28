@@ -7,7 +7,7 @@ import {
   useState,
   type PropsWithChildren,
 } from 'react';
-import type { AuthUser } from '@sojecki/platform-shared';
+import type { AuthUser } from '@ksojecki/platform-shared';
 import {
   loadSession,
   login as loginRequest,

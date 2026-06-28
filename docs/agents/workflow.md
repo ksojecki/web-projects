@@ -8,6 +8,9 @@ When the task requires planning, do not start implementation until the plan is a
 
 - Check `README.md`, `AGENTS.md`, and `docs/README.md`.
 - Confirm the current Nx workspace state (`nx.json`, `package.json`).
+- When commands target generated product apps, distinguish filesystem paths from
+  package ids: use `projects/<product>/apps/*` for files and
+  `@ksojecki/<product>-api` or `@ksojecki/<product>-web` for Nx/package ids.
 - Check the current git branch before starting delivery work. If the current branch is `main`, create a new working branch before making changes.
 - For new features, identify MVP scope vs non-goals.
 

@@ -1,5 +1,5 @@
 {
-  "name": "@sojecki/recepturomat-api",
+  "name": "@ksojecki/recepturomat-api",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -65,15 +65,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "@sojecki/recepturomat-api:build",
+          "buildTarget": "@ksojecki/recepturomat-api:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@sojecki/recepturomat-api:build:development"
+            "buildTarget": "@ksojecki/recepturomat-api:build:development"
           },
           "production": {
-            "buildTarget": "@sojecki/recepturomat-api:build:production"
+            "buildTarget": "@ksojecki/recepturomat-api:build:production"
           }
         }
       },
@@ -110,7 +110,7 @@
     }
   },
   "dependencies": {
-    "@sojecki/platform-server-platform": "0.0.1",
+    "@ksojecki/platform-server-platform": "0.0.1",
     "dotenv": "^17.4.2",
     "fastify": "^5.8.5"
   }

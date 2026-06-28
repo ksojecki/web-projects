@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '@sojecki/platform-web-platform';
+import { useAuth } from '@ksojecki/platform-web-platform';
 import { buildLoginPromptHref, frontendProductConfig } from './productConfig';
 
 export function HomePage() {

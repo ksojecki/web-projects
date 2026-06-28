@@ -42,14 +42,14 @@ function normalizeOptions(schema: ProjectTemplateSchema): NormalizedOptions {
   const projectName = parsedName.fileName;
 
   return {
-    apiPackageName: `@sojecki/${projectName}-api`,
+    apiPackageName: `@ksojecki/${projectName}-api`,
     displayName: toDisplayName(projectName),
     envPrefix: projectName.replace(/-/g, '_').toUpperCase(),
     name: projectName,
     projectConfigConstName: `${parsedName.propertyName}ProjectConfig`,
     projectPropertyName: parsedName.propertyName,
     projectRoot: joinPathFragments('projects', projectName),
-    webPackageName: `@sojecki/${projectName}-web`,
+    webPackageName: `@ksojecki/${projectName}-web`,
   };
 }
 
@@ -159,7 +159,7 @@ function writeApiApp(tree: Tree, options: NormalizedOptions): void {
       },
     },
     dependencies: {
-      '@sojecki/platform-server-platform': '0.0.1',
+      '@ksojecki/platform-server-platform': '0.0.1',
       dotenv: '^17.4.2',
       fastify: '^5.8.5',
     },
@@ -278,7 +278,7 @@ function writeWebApp(tree: Tree, options: NormalizedOptions): void {
       },
     },
     dependencies: {
-      '@sojecki/platform-web-platform': '0.0.1',
+      '@ksojecki/platform-web-platform': '0.0.1',
       i18next: '^26.3.1',
       'react-i18next': '^17.0.8',
       'react-router': '^8.0.1',
@@ -453,7 +453,7 @@ function isExternalImport(id: string) {
     return false;
   }
 
-  if (id.startsWith('@sojecki/')) {
+  if (id.startsWith('@ksojecki/')) {
     return false;
   }
 
@@ -464,11 +464,11 @@ export default defineConfig(({ mode }) => ({
   root: import.meta.dirname,
   cacheDir: '../../../../node_modules/.vite/${options.projectRoot}/apps/api',
   resolve: {
-    conditions: ['@sojecki/platform-source'],
+    conditions: ['@ksojecki/platform-source'],
   },
   ssr: {
     resolve: {
-      conditions: ['@sojecki/platform-source'],
+      conditions: ['@ksojecki/platform-source'],
     },
   },
   build: {
@@ -498,7 +498,7 @@ function createApiVitestConfig(): string {
 
 export default defineConfig({
   resolve: {
-    conditions: ['@sojecki/platform-source'],
+    conditions: ['@ksojecki/platform-source'],
   },
   test: {
     globals: true,
@@ -515,7 +515,7 @@ function createApiMain(options: NormalizedOptions): string {
 import Fastify from 'fastify';
 import { existsSync, readFileSync } from 'node:fs';
 import type { FastifyInstance } from 'fastify';
-import { createServerPlatform } from '@sojecki/platform-server-platform';
+import { createServerPlatform } from '@ksojecki/platform-server-platform';
 import { ${options.projectConfigConstName} } from './productConfig';
 
 const host = process.env.HOST ?? 'localhost';
@@ -577,7 +577,7 @@ server.listen({ port, host }, (err) => {
 
 function createApiProductConfig(options: NormalizedOptions): string {
   return `import path from 'node:path';
-import type { ServerPlatformProjectConfig } from '@sojecki/platform-server-platform';
+import type { ServerPlatformProjectConfig } from '@ksojecki/platform-server-platform';
 
 export const ${options.projectConfigConstName}: ServerPlatformProjectConfig = {
   projectId: '${options.name}',
@@ -656,11 +656,11 @@ export default defineConfig(({ command }) => {
     },
     plugins: [react(), tailwindcss()],
     resolve: {
-      conditions: ['@sojecki/platform-source'],
+      conditions: ['@ksojecki/platform-source'],
     },
     ssr: {
       resolve: {
-        conditions: ['@sojecki/platform-source'],
+        conditions: ['@ksojecki/platform-source'],
       },
     },
     build: {
@@ -838,7 +838,7 @@ function createWebProductConfig(): string {
   return `import {
   buildLoginPromptHref as buildSharedLoginPromptHref,
   type LoginPromptConfig,
-} from '@sojecki/platform-web-platform';
+} from '@ksojecki/platform-web-platform';
 
 export interface FrontendProductRoutes {
   account: string;
@@ -905,7 +905,7 @@ import {
   OAuthCallbackPage,
   RegisterPage,
   RequireAuth,
-} from '@sojecki/platform-web-platform';
+} from '@ksojecki/platform-web-platform';
 import { AccountPage } from './account/AccountPage';
 import { HomePage } from './HomePage';
 import { AppLayout } from './layout/AppLayout';
@@ -962,7 +962,7 @@ export function AppRoutes() {
 function createHomePage(): string {
   return `import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '@sojecki/platform-web-platform';
+import { useAuth } from '@ksojecki/platform-web-platform';
 import { buildLoginPromptHref, frontendProductConfig } from './productConfig';
 
 export function HomePage() {
@@ -1016,7 +1016,7 @@ export function HomePage() {
 
 function createAccountPage(): string {
   return `import { useTranslation } from 'react-i18next';
-import { AccountShell, useAuth } from '@sojecki/platform-web-platform';
+import { AccountShell, useAuth } from '@ksojecki/platform-web-platform';
 import { productAccountConfig } from './productAccountConfig';
 
 export function AccountPage() {
@@ -1040,7 +1040,7 @@ export function AccountPage() {
 }
 
 function createProductAccountConfig(): string {
-  return `import type { AccountSectionsHook } from '@sojecki/platform-web-platform';
+  return `import type { AccountSectionsHook } from '@ksojecki/platform-web-platform';
 import { useProductAccountSections } from './productAccountSections';
 
 export interface ProductAccountConfig {
@@ -1054,7 +1054,7 @@ export const productAccountConfig: ProductAccountConfig = {
 }
 
 function createProductAccountSections(options: NormalizedOptions): string {
-  return `import type { AccountSection } from '@sojecki/platform-web-platform';
+  return `import type { AccountSection } from '@ksojecki/platform-web-platform';
 
 export function useProductAccountSections(): AccountSection[] {
   return [
@@ -1083,7 +1083,7 @@ import {
   PlatformFooter,
   PlatformNavbar,
   type PlatformNavigationItem,
-} from '@sojecki/platform-web-platform';
+} from '@ksojecki/platform-web-platform';
 import { frontendProductConfig } from '../productConfig';
 
 export function AppLayout() {

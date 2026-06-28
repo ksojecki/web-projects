@@ -4,7 +4,7 @@ import {
   pagesSchemaMigration,
   pagesValidationRulesMigration,
 } from './migrations';
-import type { ServerPlatformPluginContext } from '@sojecki/platform-server-platform';
+import type { ServerPlatformPluginContext } from '@ksojecki/platform-server-platform';
 
 const databases: Database.Database[] = [];
 

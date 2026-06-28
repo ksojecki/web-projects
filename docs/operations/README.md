@@ -1,5 +1,8 @@
 # Operations Notes
 
+- [workspace-development.md](/Users/kamilsojecki/Projekty/rod-manager/docs/operations/workspace-development.md) -
+  workspace setup, command surface, naming rules, and local development flow.
+
 ## Standard commands
 
 ```sh

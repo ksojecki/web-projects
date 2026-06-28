@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Heading } from '@sojecki/platform-ui';
+import { Heading } from '@ksojecki/platform-ui';
 import { updateLanguagePreference } from './settingsApi';
 
 export const LanguageSelector = () => {

@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   resolve: {
-    conditions: ['@sojecki/platform-source'],
+    conditions: ['@ksojecki/platform-source'],
   },
   test: {
     globals: true,

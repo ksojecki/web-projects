@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
-import type { HeadingLevel } from '@sojecki/platform-ui';
-import { Heading } from '@sojecki/platform-ui';
+import type { HeadingLevel } from '@ksojecki/platform-ui';
+import { Heading } from '@ksojecki/platform-ui';
 
 type MarkdownBlock =
   | { type: 'heading'; level: 1 | 2 | 3; text: string }

@@ -1,5 +1,5 @@
-import type { AuthUser } from '@sojecki/platform-shared';
-import { Page } from '@sojecki/platform-ui';
+import type { AuthUser } from '@ksojecki/platform-shared';
+import { Page } from '@ksojecki/platform-ui';
 import type { AccountSection } from './types';
 
 export interface AccountShellProps {

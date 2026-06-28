@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { OAuthProviderType } from '@sojecki/platform-shared';
+import type { OAuthProviderType } from '@ksojecki/platform-shared';
 import { FaApple, FaFacebook, FaGoogle } from 'react-icons/fa';
 import { initiateOAuth } from './authApi';
 import { storeOAuthState } from './storage';

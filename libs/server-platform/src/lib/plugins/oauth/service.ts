@@ -1,7 +1,7 @@
 import type {
   OAuthProviderType,
   OAuthUserInfo,
-} from '@sojecki/platform-shared';
+} from '@ksojecki/platform-shared';
 import type { OAuthConfig, OAuthService, ProviderTokenResponse } from './types';
 import {
   buildOAuthUserInfo,

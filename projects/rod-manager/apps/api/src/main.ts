@@ -2,8 +2,8 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import { existsSync, readFileSync } from 'node:fs';
 import type { FastifyInstance } from 'fastify';
-import { createServerPlatform } from '@sojecki/platform-server-platform';
-import { pagesServerPlugin } from '@sojecki/rod-manager-pages-server';
+import { createServerPlatform } from '@ksojecki/platform-server-platform';
+import { pagesServerPlugin } from '@ksojecki/rod-manager-pages-server';
 import { rodManagerProjectConfig } from './productConfig';
 
 const host = process.env.HOST ?? 'localhost';

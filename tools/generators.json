@@ -1,5 +1,5 @@
 {
-  "name": "@sojecki/platform-source",
+  "name": "@ksojecki/platform-source",
   "version": "0.1",
   "generators": {
     "project-template": {

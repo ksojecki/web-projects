@@ -67,7 +67,7 @@
 - Keep top-level declaration order as: exported types, local types, constants, exported functions, local functions.
 - Allow exceptions only when this order breaks compilation; in such cases add a local comment with a short reason.
 - TS output intent is declaration-focused (`emitDeclarationOnly: true` in `tsconfig.base.json`), so library packaging should expect `.d.ts` generation.
-- `customConditions` includes `@sojecki/platform-source`; keep this in mind when introducing conditional exports/resolution.
+- `customConditions` includes `@ksojecki/platform-source`; keep this in mind when introducing conditional exports/resolution.
 - In `libs/ui`, prefer component names without a `Ui` prefix (for example `Button`, `Card`, `TextInput`).
 
 ## Low-Token Navigation Workflow
@@ -92,11 +92,16 @@
 - Use the supported root wrapper to scaffold a product: `npm run generate:project -- <name>`.
 - The underlying generator entrypoint is `./tools/generators.json:project-template`, and its required input is `name`.
 - The generator creates `projects/<name>/apps/api` and `projects/<name>/apps/web`, adds a root `dev:<name>` script, and updates root TS references.
+- Generated package names and Nx project ids stay flat and npm-compatible:
+  `@ksojecki/<name>-api` and `@ksojecki/<name>-web`.
 - The current generated product in this workspace is `projects/recepturomat`.
 - Keep reusable platform code in `libs/`, product apps in `projects/<product>/apps/`, and product-specific features in `projects/<product>/plugins/`.
 - Treat registration as a product-scoped capability configured by the product frontend, not a workspace-wide default.
 - For backend bootstrap, use `projects/<product>/apps/api/src/productConfig.ts` as the product-scoped contract for project id, database path, seed behavior, and SSR paths.
 - For frontend composition, use `projects/<product>/apps/web/src/app/productConfig.ts` as the product-scoped contract for routes, redirects, login prompt behavior, and registration enablement.
+- Do not introduce path-like package names such as `@ksojecki/<name>/api`; use
+  the nested `projects/<name>/apps/*` paths for filesystem structure and the
+  flat package ids in commands, imports, and `package.json`.
 
 ## Authentication & OAuth
 
@@ -159,7 +164,9 @@ Provider credentials must be configured via environment variables:
 ## When Adding a New Project
 
 - Use the supported generator wrapper: `npm run generate:project -- <name>`.
-- Validate the generated apps with `npx nx show project @sojecki/<name>-api --json` and `npx nx show project @sojecki/<name>-web --json` when needed.
+- Validate the generated apps with `npx nx show project @ksojecki/<name>-api --json` and `npx nx show project @ksojecki/<name>-web --json` when needed.
+- Keep command examples on the flat ids above even though the generated files
+  live under `projects/<name>/apps/api` and `projects/<name>/apps/web`.
 - Check the generated product contracts in `projects/<name>/apps/api/src/productConfig.ts` and `projects/<name>/apps/web/src/app/productConfig.ts`.
 - Run at least `npm run typecheck` after generation, and use `npx nx run-many -t lint test build typecheck --no-tui` for CI-equivalent validation when the change is broader.
 - Keep new package configs aligned with root TS/Nx conventions instead of overriding defaults unless necessary.

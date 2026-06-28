@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { Button } from './Button';
 import { Card } from './Card';
 
-describe('@sojecki/platform-ui', () => {
+describe('@ksojecki/platform-ui', () => {
   it('renders a shared card title and content', () => {
     render(<Card title="Shared card">Reusable content</Card>);
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import type { OAuthProviderType } from '@sojecki/platform-shared';
-import { Heading } from '@sojecki/platform-ui';
+import type { OAuthProviderType } from '@ksojecki/platform-shared';
+import { Heading } from '@ksojecki/platform-ui';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { useAuth } from './AuthProvider';
 import { completeOAuthCallback } from './authApi';

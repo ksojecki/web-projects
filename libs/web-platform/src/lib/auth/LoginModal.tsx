@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import type { ModalWindowProps } from '@sojecki/platform-ui';
-import { ModalWindow } from '@sojecki/platform-ui';
+import type { ModalWindowProps } from '@ksojecki/platform-ui';
+import { ModalWindow } from '@ksojecki/platform-ui';
 import { LoginForm } from './LoginForm';
 import { OAuthButtons } from './OAuthButtons';
 

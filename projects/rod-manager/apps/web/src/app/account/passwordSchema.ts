@@ -1,4 +1,4 @@
 export {
   passwordSchema,
   type PasswordFormValues,
-} from '@sojecki/platform-web-platform';
+} from '@ksojecki/platform-web-platform';

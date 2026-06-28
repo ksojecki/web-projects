@@ -12,11 +12,11 @@ describe('projectTemplateGenerator', () => {
       'package.json',
       JSON.stringify(
         {
-          name: '@sojecki/platform-source',
+          name: '@ksojecki/platform-source',
           private: true,
           scripts: {
             'dev:rod-manager':
-              'node ./node_modules/nx/dist/bin/nx.js run @sojecki/rod-manager-api:serve --no-tui',
+              'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:serve --no-tui',
           },
         },
         null,
@@ -77,20 +77,20 @@ describe('projectTemplateGenerator', () => {
       name: string;
     };
 
-    expect(apiPackageJson.name).toBe('@sojecki/recepturomat-api');
+    expect(apiPackageJson.name).toBe('@ksojecki/recepturomat-api');
     expect(apiPackageJson.dependencies).toEqual(
       expect.objectContaining({
-        '@sojecki/platform-server-platform': '0.0.1',
+        '@ksojecki/platform-server-platform': '0.0.1',
       }),
     );
     expect(apiPackageJson.dependencies).not.toHaveProperty(
-      '@sojecki/rod-manager-pages-server',
+      '@ksojecki/rod-manager-pages-server',
     );
 
-    expect(webPackageJson.name).toBe('@sojecki/recepturomat-web');
+    expect(webPackageJson.name).toBe('@ksojecki/recepturomat-web');
     expect(webPackageJson.dependencies).toEqual(
       expect.objectContaining({
-        '@sojecki/platform-web-platform': '0.0.1',
+        '@ksojecki/platform-web-platform': '0.0.1',
       }),
     );
 
@@ -100,9 +100,9 @@ describe('projectTemplateGenerator', () => {
     expect(rootPackageJson.scripts).toEqual(
       expect.objectContaining({
         'dev:rod-manager':
-          'node ./node_modules/nx/dist/bin/nx.js run @sojecki/rod-manager-api:serve --no-tui',
+          'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:serve --no-tui',
         'dev:recepturomat':
-          'node ./node_modules/nx/dist/bin/nx.js run @sojecki/recepturomat-api:serve --no-tui',
+          'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:serve --no-tui',
       }),
     );
     expect(rootPackageJson.scripts).not.toHaveProperty('dev');
@@ -121,8 +121,8 @@ describe('projectTemplateGenerator', () => {
       'projects/recepturomat/apps/web/src/app/routes.tsx',
       'utf-8',
     );
-    expect(routesSource).toContain('@sojecki/platform-web-platform');
-    expect(routesSource).not.toContain('@sojecki/rod-manager');
+    expect(routesSource).toContain('@ksojecki/platform-web-platform');
+    expect(routesSource).not.toContain('@ksojecki/rod-manager');
     expect(routesSource).toContain('<RegisterPage');
 
     const webProductConfig = tree.read(

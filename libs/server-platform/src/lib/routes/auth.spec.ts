@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import type { SessionResponse } from '@sojecki/platform-shared';
+import type { SessionResponse } from '@ksojecki/platform-shared';
 import type { ServerPlatformProjectConfig } from '../contracts/bootstrap.contract';
 import databasePlugin from '../plugins/database';
 import sessionPlugin from '../plugins/session';

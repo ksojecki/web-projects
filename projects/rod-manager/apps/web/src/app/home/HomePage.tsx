@@ -1,4 +1,4 @@
-import { Page } from '@sojecki/platform-ui';
+import { Page } from '@ksojecki/platform-ui';
 import { useTranslation } from 'react-i18next';
 
 export const HomePage = () => {

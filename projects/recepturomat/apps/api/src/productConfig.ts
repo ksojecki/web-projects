@@ -1,5 +1,5 @@
 import path from 'node:path';
-import type { ServerPlatformProjectConfig } from '@sojecki/platform-server-platform';
+import type { ServerPlatformProjectConfig } from '@ksojecki/platform-server-platform';
 
 export const recepturomatProjectConfig: ServerPlatformProjectConfig = {
   projectId: 'recepturomat',

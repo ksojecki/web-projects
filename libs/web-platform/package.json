@@ -1,5 +1,5 @@
 {
-  "name": "@sojecki/platform-web-platform",
+  "name": "@ksojecki/platform-web-platform",
   "version": "0.0.1",
   "type": "module",
   "main": "../../dist/libs/web-platform/index.js",
@@ -8,7 +8,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "@sojecki/platform-source": "./src/index.ts",
+      "@ksojecki/platform-source": "./src/index.ts",
       "types": "../../dist/libs/web-platform/index.d.ts",
       "import": "../../dist/libs/web-platform/index.js",
       "default": "../../dist/libs/web-platform/index.js"
@@ -58,8 +58,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
-    "@sojecki/platform-shared": "0.0.1",
-    "@sojecki/platform-ui": "0.0.1",
+    "@ksojecki/platform-shared": "0.0.1",
+    "@ksojecki/platform-ui": "0.0.1",
     "react-hook-form": "^7.80.0",
     "react-i18next": "^17.0.8",
     "react-icons": "^5.6.0",

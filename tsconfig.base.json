@@ -17,6 +17,6 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["@sojecki/platform-source"]
+    "customConditions": ["@ksojecki/platform-source"]
   }
 }

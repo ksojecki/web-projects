@@ -1,10 +1,10 @@
 {
-  "name": "@sojecki/platform-source",
+  "name": "@ksojecki/platform-source",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev:rod-manager": "node ./node_modules/nx/dist/bin/nx.js run @sojecki/rod-manager-api:serve --no-tui",
-    "dev:recepturomat": "node ./node_modules/nx/dist/bin/nx.js run @sojecki/recepturomat-api:serve --no-tui",
+    "dev:rod-manager": "node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:serve --no-tui",
+    "dev:recepturomat": "node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:serve --no-tui",
     "generate:project": "npx nx g ./tools/generators.json:project-template",
     "lint": "node ./node_modules/nx/dist/bin/nx.js run-many -t lint --no-tui",
     "typecheck": "node ./node_modules/nx/dist/bin/nx.js run-many -t typecheck --no-tui",
