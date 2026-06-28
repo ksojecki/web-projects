@@ -35,7 +35,7 @@ The repository already supports the following template workflow:
 - scaffold a product with `npm run generate:project -- <name>`
 - use `projects/<product>/apps/api/src/productConfig.ts` for product-scoped backend bootstrap
 - use `projects/<product>/apps/web/src/app/productConfig.ts` for product-scoped frontend composition
-- use `projects/sample-portal` as the proof that the generator creates a second product without `rod-manager` app dependencies
+- use `projects/recepturomat` as the generated second product that proves the scaffold works without `rod-manager` app dependencies
 
 The remaining roadmap work should preserve and validate that supported surface.
 
@@ -483,19 +483,19 @@ Keep validating the template with a real second project in the workspace.
 
 ### Proof Project
 
-- `projects/sample-portal/apps/api`
-- `projects/sample-portal/apps/web`
+- `projects/recepturomat/apps/api`
+- `projects/recepturomat/apps/web`
 
 ### Required Validation
 
-1. The sample project has a different database path than `rod-manager`.
-2. User registration in the sample project does not create rows in the `rod-manager` database.
+1. The generated Recepturomat project has a different database path than `rod-manager`.
+2. User registration in the generated Recepturomat project does not create rows in the `rod-manager` database.
 3. Session cookies and auth tables remain isolated by application runtime.
 4. Shared auth/account code is consumed from libraries, not copied from `rod-manager`.
 
 ### Files Likely to Be Touched
 
-- `projects/sample-portal/**/*`
+- `projects/recepturomat/**/*`
 - generator files when the scaffold surface changes
 - workspace config files if Nx inference requires additions
 

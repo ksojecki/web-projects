@@ -1,6 +1,6 @@
 # Sojecki Platform Workspace
 
-This repository is an Nx 23 monorepo for a reusable product-template workspace. It contains a working `rod-manager` reference product, the `sample-portal` proof project, and shared TypeScript libraries for backend and frontend platform code. The stack is React Router, Fastify, SQLite, Vitest, Oxlint, and Prettier.
+This repository is an Nx 23 monorepo for a reusable product-template workspace. It contains a working `rod-manager` reference product, the generated `recepturomat` migration shell, and shared TypeScript libraries for backend and frontend platform code. The stack is React Router, Fastify, SQLite, Vitest, Oxlint, and Prettier.
 
 ## Workspace Purpose
 
@@ -24,10 +24,10 @@ Each product keeps its own database, users, sessions, OAuth records, and product
 - `projects/rod-manager/plugins/pages/server` - the Rod Manager backend pages plugin. It adds page-related routes, store access, and migrations to the shared server platform.
 - `projects/rod-manager/plugins/pages/ui` - the Rod Manager UI-side pages plugin package for product-specific page features.
 
-### Sample Portal
+### Recepturomat
 
-- `projects/sample-portal/apps/web` - a generated React SSR frontend that proves the shared web platform can bootstrap a second product without `rod-manager` dependencies.
-- `projects/sample-portal/apps/api` - a generated Fastify bootstrap application with its own product-scoped database and SSR paths.
+- `projects/recepturomat/apps/web` - a generated React SSR frontend that establishes the Recepturomat product shell inside this workspace.
+- `projects/recepturomat/apps/api` - a generated Fastify bootstrap application with Recepturomat-specific database and SSR paths.
 
 ### Shared Platform Libraries
 
@@ -61,7 +61,7 @@ npm run setup:certs
 ## Supported Commands
 
 - `npm run dev:rod-manager` - start the `rod-manager` API host and SSR web app.
-- `npm run dev:sample-portal` - start the generated `sample-portal` API host and SSR web app.
+- `npm run dev:recepturomat` - start the generated `recepturomat` API host and SSR web app.
 - `npm run generate:project -- <name>` - scaffold a new template-based product under `projects/<name>/apps/`.
 - `npm run lint` - run Nx lint targets.
 - `npm run typecheck` - run Nx typecheck targets.
@@ -81,10 +81,10 @@ This starts the Rod Manager SSR app through the Fastify API server:
 - the SSR frontend from `projects/rod-manager/apps/web`
 - the Rod Manager pages plugin from `projects/rod-manager/plugins/pages/server`
 
-To run the proof project instead:
+To run the generated Recepturomat shell instead:
 
 ```sh
-npm run dev:sample-portal
+npm run dev:recepturomat
 ```
 
 Local smoke checks:
@@ -107,7 +107,7 @@ The generator creates:
 - product-scoped config files for backend and frontend composition
 - a root `dev:my-product` script
 
-The proof project for that workflow is `projects/sample-portal`.
+The current generated product for that workflow is `projects/recepturomat`.
 
 ## Product Boundaries
 

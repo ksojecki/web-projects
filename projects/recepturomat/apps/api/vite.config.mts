@@ -21,7 +21,7 @@ function isExternalImport(id: string) {
 
 export default defineConfig(({ mode }) => ({
   root: import.meta.dirname,
-  cacheDir: '../../../../node_modules/.vite/projects/sample-portal/apps/api',
+  cacheDir: '../../../../node_modules/.vite/projects/recepturomat/apps/api',
   resolve: {
     conditions: ['@sojecki/platform-source'],
   },
@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     ssr: 'src/main.ts',
-    outDir: '../../../../dist/projects/sample-portal/apps/api',
+    outDir: '../../../../dist/projects/recepturomat/apps/api',
     emptyOutDir: true,
     reportCompressedSize: false,
     sourcemap: mode !== 'production',

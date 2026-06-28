@@ -13,7 +13,7 @@ export default defineConfig(({ command }) => {
 
   return {
     root: import.meta.dirname,
-    cacheDir: '../../../../node_modules/.vite/projects/sample-portal/apps/web',
+    cacheDir: '../../../../node_modules/.vite/projects/recepturomat/apps/web',
     server: {
       port: 4200,
       host: 'localhost',
@@ -42,7 +42,7 @@ export default defineConfig(({ command }) => {
       },
     },
     build: {
-      outDir: '../../../../dist/projects/sample-portal/apps/web/client',
+      outDir: '../../../../dist/projects/recepturomat/apps/web/client',
       emptyOutDir: true,
       reportCompressedSize: true,
       commonjsOptions: {

@@ -16,6 +16,12 @@
       "path": "./libs/web-platform"
     },
     {
+      "path": "./projects/recepturomat/apps/api"
+    },
+    {
+      "path": "./projects/recepturomat/apps/web"
+    },
+    {
       "path": "./projects/rod-manager/apps/api"
     },
     {
@@ -29,12 +35,6 @@
     },
     {
       "path": "./projects/rod-manager/plugins/pages/ui"
-    },
-    {
-      "path": "./projects/sample-portal/apps/api"
-    },
-    {
-      "path": "./projects/sample-portal/apps/web"
     }
   ]
 }

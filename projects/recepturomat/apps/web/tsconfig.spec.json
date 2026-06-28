@@ -5,7 +5,7 @@
     "lib": ["dom", "es2022"],
     "module": "esnext",
     "moduleResolution": "bundler",
-    "tsBuildInfoFile": "../../../../dist/projects/sample-portal/apps/web/tsconfig.spec.tsbuildinfo",
+    "tsBuildInfoFile": "../../../../dist/projects/recepturomat/apps/web/tsconfig.spec.tsbuildinfo",
     "types": [
       "node",
       "vitest/globals",

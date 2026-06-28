@@ -1,10 +1,10 @@
 {
   "extends": "../../../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../../../../dist/projects/sample-portal/apps/api",
+    "outDir": "../../../../dist/projects/recepturomat/apps/api",
     "types": ["node"],
     "rootDir": "src",
-    "tsBuildInfoFile": "../../../../dist/projects/sample-portal/apps/api/tsconfig.app.tsbuildinfo"
+    "tsBuildInfoFile": "../../../../dist/projects/recepturomat/apps/api/tsconfig.app.tsbuildinfo"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],

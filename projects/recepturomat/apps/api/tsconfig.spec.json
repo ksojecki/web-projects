@@ -5,7 +5,7 @@
     "rootDir": "src",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "tsBuildInfoFile": "../../../../dist/projects/sample-portal/apps/api/tsconfig.spec.tsbuildinfo"
+    "tsBuildInfoFile": "../../../../dist/projects/recepturomat/apps/api/tsconfig.spec.tsbuildinfo"
   },
   "include": ["src/**/*.ts"],
   "references": [

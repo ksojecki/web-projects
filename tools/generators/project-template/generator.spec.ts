@@ -37,49 +37,47 @@ describe('projectTemplateGenerator', () => {
   });
 
   it('scaffolds template-based api and web apps without rod-manager dependencies', async () => {
-    await projectTemplateGenerator(tree, { name: 'sample-portal' });
+    await projectTemplateGenerator(tree, { name: 'recepturomat' });
 
-    expect(tree.exists('projects/sample-portal/apps/api/src/main.ts')).toBe(
+    expect(tree.exists('projects/recepturomat/apps/api/src/main.ts')).toBe(
       true,
     );
     expect(
-      tree.exists('projects/sample-portal/apps/api/src/productConfig.ts'),
+      tree.exists('projects/recepturomat/apps/api/src/productConfig.ts'),
     ).toBe(true);
     expect(
-      tree.exists('projects/sample-portal/apps/web/src/app/routes.tsx'),
-    ).toBe(true);
-    expect(
-      tree.exists(
-        'projects/sample-portal/apps/web/src/app/account/AccountPage.tsx',
-      ),
+      tree.exists('projects/recepturomat/apps/web/src/app/routes.tsx'),
     ).toBe(true);
     expect(
       tree.exists(
-        'projects/sample-portal/apps/web/src/app/auth/LoginPanel.tsx',
+        'projects/recepturomat/apps/web/src/app/account/AccountPage.tsx',
       ),
+    ).toBe(true);
+    expect(
+      tree.exists('projects/recepturomat/apps/web/src/app/auth/LoginPanel.tsx'),
     ).toBe(false);
     expect(
       tree.exists(
-        'projects/sample-portal/apps/web/src/app/layout/components/Navbar.tsx',
+        'projects/recepturomat/apps/web/src/app/layout/components/Navbar.tsx',
       ),
     ).toBe(false);
 
     const apiPackageJson = readJson(
       tree,
-      'projects/sample-portal/apps/api/package.json',
+      'projects/recepturomat/apps/api/package.json',
     ) as {
       dependencies: Record<string, string>;
       name: string;
     };
     const webPackageJson = readJson(
       tree,
-      'projects/sample-portal/apps/web/package.json',
+      'projects/recepturomat/apps/web/package.json',
     ) as {
       dependencies: Record<string, string>;
       name: string;
     };
 
-    expect(apiPackageJson.name).toBe('@sojecki/sample-portal-api');
+    expect(apiPackageJson.name).toBe('@sojecki/recepturomat-api');
     expect(apiPackageJson.dependencies).toEqual(
       expect.objectContaining({
         '@sojecki/platform-server-platform': '0.0.1',
@@ -89,7 +87,7 @@ describe('projectTemplateGenerator', () => {
       '@sojecki/rod-manager-pages-server',
     );
 
-    expect(webPackageJson.name).toBe('@sojecki/sample-portal-web');
+    expect(webPackageJson.name).toBe('@sojecki/recepturomat-web');
     expect(webPackageJson.dependencies).toEqual(
       expect.objectContaining({
         '@sojecki/platform-web-platform': '0.0.1',
@@ -103,24 +101,24 @@ describe('projectTemplateGenerator', () => {
       expect.objectContaining({
         'dev:rod-manager':
           'node ./node_modules/nx/dist/bin/nx.js run @sojecki/rod-manager-api:serve --no-tui',
-        'dev:sample-portal':
-          'node ./node_modules/nx/dist/bin/nx.js run @sojecki/sample-portal-api:serve --no-tui',
+        'dev:recepturomat':
+          'node ./node_modules/nx/dist/bin/nx.js run @sojecki/recepturomat-api:serve --no-tui',
       }),
     );
     expect(rootPackageJson.scripts).not.toHaveProperty('dev');
 
     const productConfig = tree.read(
-      'projects/sample-portal/apps/api/src/productConfig.ts',
+      'projects/recepturomat/apps/api/src/productConfig.ts',
       'utf-8',
     );
-    expect(productConfig).toContain("projectId: 'sample-portal'");
-    expect(productConfig).toContain('SAMPLE_PORTAL_AUTH_DB_PATH');
+    expect(productConfig).toContain("projectId: 'recepturomat'");
+    expect(productConfig).toContain('RECEPTUROMAT_AUTH_DB_PATH');
     expect(productConfig).toContain(
-      'dist/projects/sample-portal/apps/web/client',
+      'dist/projects/recepturomat/apps/web/client',
     );
 
     const routesSource = tree.read(
-      'projects/sample-portal/apps/web/src/app/routes.tsx',
+      'projects/recepturomat/apps/web/src/app/routes.tsx',
       'utf-8',
     );
     expect(routesSource).toContain('@sojecki/platform-web-platform');
@@ -128,7 +126,7 @@ describe('projectTemplateGenerator', () => {
     expect(routesSource).toContain('<RegisterPage');
 
     const webProductConfig = tree.read(
-      'projects/sample-portal/apps/web/src/app/productConfig.ts',
+      'projects/recepturomat/apps/web/src/app/productConfig.ts',
       'utf-8',
     );
     expect(webProductConfig).toContain(
@@ -151,14 +149,14 @@ describe('projectTemplateGenerator', () => {
     expect(webProductConfig).toContain('frontendProductConfig.loginPrompt');
 
     const appLayoutSource = tree.read(
-      'projects/sample-portal/apps/web/src/app/layout/AppLayout.tsx',
+      'projects/recepturomat/apps/web/src/app/layout/AppLayout.tsx',
       'utf-8',
     );
     expect(appLayoutSource).toContain('PlatformNavbar');
     expect(appLayoutSource).toContain('PlatformFooter');
 
     const i18nSource = tree.read(
-      'projects/sample-portal/apps/web/src/app/i18n/i18n.ts',
+      'projects/recepturomat/apps/web/src/app/i18n/i18n.ts',
       'utf-8',
     );
     expect(i18nSource).toContain("menuLogin: 'Log in'");
@@ -171,8 +169,8 @@ describe('projectTemplateGenerator', () => {
     };
     expect(rootTsConfig.references).toEqual(
       expect.arrayContaining([
-        { path: './projects/sample-portal/apps/api' },
-        { path: './projects/sample-portal/apps/web' },
+        { path: './projects/recepturomat/apps/api' },
+        { path: './projects/recepturomat/apps/web' },
       ]),
     );
   });

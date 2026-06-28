@@ -10,13 +10,13 @@ void i18n.use(initReactI18next).init({
   resources: {
     en: {
       layout: {
-        appName: 'Sample Portal',
+        appName: 'Recepturomat',
         menuHome: 'Home',
         menuAccount: 'Account',
         menuLogin: 'Log in',
         menuLogout: 'Log out',
         menuRegister: 'Register',
-        footerText: 'Sample Portal',
+        footerText: 'Recepturomat',
       },
       auth: {
         or: 'or',
@@ -63,7 +63,7 @@ void i18n.use(initReactI18next).init({
       },
       home: {
         badge: 'Generated project',
-        title: 'Sample Portal',
+        title: 'Recepturomat',
         description:
           'This starter product wires the shared backend and frontend platform libraries into a minimal product-local shell. Extend routes, branding, and sections here without copying auth shell code.',
         signedInCta: 'Open account',
@@ -74,7 +74,7 @@ void i18n.use(initReactI18next).init({
         guestState: 'Guest session.',
       },
       account: {
-        title: 'Sample Portal account',
+        title: 'Recepturomat account',
         welcome: 'Welcome back, {{name}}.',
         fallbackUserName: 'user',
         roleLabel: 'Role',

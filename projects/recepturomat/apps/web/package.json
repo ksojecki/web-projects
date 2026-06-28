@@ -1,5 +1,5 @@
 {
-  "name": "@sojecki/sample-portal-web",
+  "name": "@sojecki/recepturomat-web",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -10,37 +10,37 @@
           "^build"
         ],
         "options": {
-          "cwd": "projects/sample-portal/apps/web",
+          "cwd": "projects/recepturomat/apps/web",
           "command": "node ../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json && node ../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.spec.json && node ../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.node.json"
         }
       },
       "lint": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "node node_modules/oxlint/bin/oxlint projects/sample-portal/apps/web --config .oxlintrc.json"
+          "command": "node node_modules/oxlint/bin/oxlint projects/recepturomat/apps/web --config .oxlintrc.json"
         }
       },
       "build-server": {
         "executor": "nx:run-commands",
         "outputs": [
-          "{workspaceRoot}/dist/projects/sample-portal/apps/web/server"
+          "{workspaceRoot}/dist/projects/recepturomat/apps/web/server"
         ],
         "options": {
-          "cwd": "projects/sample-portal/apps/web",
-          "command": "node ../../../../node_modules/vite/bin/vite.js build --ssr src/entry-server.tsx --outDir ../../../../dist/projects/sample-portal/apps/web/server"
+          "cwd": "projects/recepturomat/apps/web",
+          "command": "node ../../../../node_modules/vite/bin/vite.js build --ssr src/entry-server.tsx --outDir ../../../../dist/projects/recepturomat/apps/web/server"
         }
       },
       "test": {
         "executor": "nx:run-commands",
         "options": {
-          "cwd": "projects/sample-portal/apps/web",
+          "cwd": "projects/recepturomat/apps/web",
           "command": "node ../../../../node_modules/vitest/vitest.mjs run --config vite.config.mts"
         }
       },
       "format": {
         "executor": "nx:run-commands",
         "options": {
-          "cwd": "projects/sample-portal/apps/web",
+          "cwd": "projects/recepturomat/apps/web",
           "command": "node ../../../../node_modules/prettier/bin/prettier.cjs --write ."
         }
       }

@@ -4,8 +4,8 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "composite": true,
-    "outDir": "../../../../dist/projects/sample-portal/apps/web",
-    "tsBuildInfoFile": "../../../../dist/projects/sample-portal/apps/web/tsconfig.node.tsbuildinfo"
+    "outDir": "../../../../dist/projects/recepturomat/apps/web",
+    "tsBuildInfoFile": "../../../../dist/projects/recepturomat/apps/web/tsconfig.node.tsbuildinfo"
   },
   "include": ["vite.config.mts"]
 }

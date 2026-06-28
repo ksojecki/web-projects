@@ -1,8 +1,8 @@
 {
   "extends": "../../../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../../../../dist/projects/sample-portal/apps/web",
-    "tsBuildInfoFile": "../../../../dist/projects/sample-portal/apps/web/tsconfig.app.tsbuildinfo",
+    "outDir": "../../../../dist/projects/recepturomat/apps/web",
+    "tsBuildInfoFile": "../../../../dist/projects/recepturomat/apps/web/tsconfig.app.tsbuildinfo",
     "jsx": "react-jsx",
     "lib": ["dom"],
     "types": [

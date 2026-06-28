@@ -3,7 +3,7 @@ import Fastify from 'fastify';
 import { existsSync, readFileSync } from 'node:fs';
 import type { FastifyInstance } from 'fastify';
 import { createServerPlatform } from '@sojecki/platform-server-platform';
-import { samplePortalProjectConfig } from './productConfig';
+import { recepturomatProjectConfig } from './productConfig';
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
@@ -46,7 +46,7 @@ function getHttpsOptions() {
 
 server.register(async (instance) => {
   await createServerPlatform(instance, {
-    project: samplePortalProjectConfig,
+    project: recepturomatProjectConfig,
     plugins: [],
   });
 });

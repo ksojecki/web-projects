@@ -102,7 +102,7 @@ The repository already includes a supported scaffold-and-proof path:
 
 - the root generator wrapper is `npm run generate:project -- <name>`
 - the generator entrypoint is `./tools/generators.json:project-template`
-- the proof project is `projects/sample-portal`
+- the current generated product in the workspace is `projects/recepturomat`
 - generated backend apps use `projects/<product>/apps/api/src/productConfig.ts` for product-scoped bootstrap
 - generated frontend apps use `projects/<product>/apps/web/src/app/productConfig.ts` for product-scoped routes, redirects, and registration settings
 
@@ -179,7 +179,7 @@ The repository docs need to explain the supported workflow clearly:
 ### Workstream 3: Generator and Isolation Proof
 
 - keep the project generator aligned with the actual supported scaffold surface
-- keep `sample-portal` useful as a proof project for a second product
+- keep `recepturomat` useful as the generated second product proof
 - continue validating separate database and user ownership
 
 ### Workstream 4: Final Docs and Workflow Guidance

@@ -92,7 +92,7 @@
 - Use the supported root wrapper to scaffold a product: `npm run generate:project -- <name>`.
 - The underlying generator entrypoint is `./tools/generators.json:project-template`, and its required input is `name`.
 - The generator creates `projects/<name>/apps/api` and `projects/<name>/apps/web`, adds a root `dev:<name>` script, and updates root TS references.
-- The proof project is `projects/sample-portal`.
+- The current generated product in this workspace is `projects/recepturomat`.
 - Keep reusable platform code in `libs/`, product apps in `projects/<product>/apps/`, and product-specific features in `projects/<product>/plugins/`.
 - Treat registration as a product-scoped capability configured by the product frontend, not a workspace-wide default.
 - For backend bootstrap, use `projects/<product>/apps/api/src/productConfig.ts` as the product-scoped contract for project id, database path, seed behavior, and SSR paths.
