@@ -33,7 +33,7 @@
 
 - During Codex initialization for this repository, always load `.agents/skills/agent-delivery-loop/SKILL.md` before starting substantial work.
 - Default delivery mechanism for non-trivial work: use the Agent Workflow in `docs/agents/workflow.md`.
-- Track task progress in GitHub issues. Use repository docs for durable guidance, ADRs, and implementation plans, not as the live status tracker for active work.
+- Track task progress in GitHub issues. Always start by finding the relevant GitHub issue; if the work has no issue yet, create one before implementation. Use repository docs for durable guidance, ADRs, and implementation plans, not as the live status tracker for active work.
 - For features, bug fixes, and error remediation, first agree on a plan when the task calls for planning, then execute that accepted plan through the delivery loop in `.agents/skills/agent-delivery-loop/SKILL.md`.
 - In that delivery loop, divide the plan into small, easy-to-implement steps before execution.
 - In that delivery loop, always use one `gpt-5.4-mini` implementer subagent, then one `gpt-5.4-mini` tester subagent for the same accepted current step.
@@ -42,6 +42,7 @@
 - The implementer should execute the accepted current step rather than re-reviewing or re-planning it.
 - Pass only the accepted current step, success criteria, exact files, and the minimum evidence needed to each worker pass.
 - When the user asks to publish completed work, commit the accepted changes, push the working branch to `origin`, create a PR, and report the PR link back in the user-facing handoff.
+- PR titles or descriptions must include the GitHub issue number that identifies the work item.
 - Before implementation work starts, check the current branch. If you are on `main`, create a new working branch first.
 - When running task-oriented Nx commands as an AI agent, prefer `--no-tui` to suppress interactive output when the command supports it.
 - Install deps: `npm ci` (used in CI).

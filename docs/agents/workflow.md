@@ -16,7 +16,10 @@ When the task requires planning, do not start implementation until the plan is a
 - Define implementation steps and validation points.
 - Divide the plan into small, easy-to-implement, implementation-ready steps.
 - If a durable architecture decision is made, create or update an ADR.
-- Track active task progress in GitHub issues. Keep local docs focused on architecture, workflow, and implementation guidance.
+- Track active task progress in GitHub issues. Start by finding the relevant
+  issue; if there is no issue for the work, create one before implementation.
+  Keep local docs focused on architecture, workflow, and implementation
+  guidance.
 - Follow root-level defaults (TS, Oxlint, Prettier).
 - Treat plan acceptance as the gate to start delivery work.
 - When using this repository workflow, treat plan acceptance as the point where the delivery loop begins spawning step-scoped subagents.
@@ -65,4 +68,6 @@ When the task requires planning, do not start implementation until the plan is a
 - Add links to updated docs and ADRs when relevant.
 - When task status changes materially, update the corresponding GitHub issue instead of adding live progress notes to repository docs.
 - When the user asks to publish completed work, commit the accepted changes, push the working branch to `origin`, create a PR, and include the PR link in the user-facing handoff.
+- Include the relevant GitHub issue number in every PR title or description so
+  the work item is identifiable from the PR.
 - When the work is considered finished in-session, prefer ending with a PR link rather than stopping at a local-only branch state.

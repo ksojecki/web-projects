@@ -7,6 +7,7 @@ Use this list before closing a task.
 - [ ] Is the change within MVP scope?
 - [ ] Is the change aligned with `docs/architecture/mvp-plan-react-fastify-sqlite.md`?
 - [ ] Is a new ADR required, or does an existing ADR need an update?
+- [ ] Is the work tracked by a GitHub issue, and does the PR title or description include that issue number?
 - [ ] If the task was non-trivial, was the accepted plan executed through the Agent Workflow delivery loop?
 
 ## Quality
