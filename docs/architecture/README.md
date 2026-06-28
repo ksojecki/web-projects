@@ -10,6 +10,8 @@
   context.
 - `project-template-implementation-roadmap.md` - durable implementation guide
   for the project-template stream.
+- `recepturomat-source-inventory.md` - concrete legacy source snapshot for the
+  Recepturomat migration stream.
 - `recepturomat-migration.md` - Recepturomat migration architecture and issue
   breakdown.
 

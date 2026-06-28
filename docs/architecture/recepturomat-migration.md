@@ -12,6 +12,10 @@ workspace with:
 - MongoDB collections for users, settings, and recipes.
 - Custom JWT authentication and bearer-token frontend state.
 
+For the concrete legacy file inventory, route map, and bootstrap details, start
+with [`recepturomat-source-inventory.md`](./recepturomat-source-inventory.md).
+This document stays at the migration strategy level.
+
 The target workspace is the Nx 23 product-template structure in this repository.
 Recepturomat should enter the workspace through the supported generator:
 
