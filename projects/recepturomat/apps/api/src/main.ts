@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import type { FastifyInstance } from 'fastify';
 import { createServerPlatform } from '@ksojecki/platform-server-platform';
 import { recepturomatProjectConfig } from './productConfig';
+import { recepturomatRecipeApiPlugin } from './recipe-api';
 import { recipeStorePlugin } from './recipe-store';
 
 const host = process.env.HOST ?? 'localhost';
@@ -54,6 +55,7 @@ server.register(async (instance) => {
     project: recepturomatProjectConfig,
     plugins: [],
   });
+  await instance.register(recepturomatRecipeApiPlugin);
 });
 
 server.listen({ port, host }, (err) => {

@@ -1,0 +1,1 @@
+export { recepturomatRecipeApiPlugin } from './plugin';

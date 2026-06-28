@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import Database from 'better-sqlite3';
-import type { FastifyPluginAsync } from 'fastify';
+import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 import type { RecepturomatRecipeStoreConfig } from '../productConfig';
 import { bootstrapRecipeDatabase, resolveRecipeDatabasePath } from './database';
 import { createRecipeStore } from './store';
@@ -13,7 +14,10 @@ declare module 'fastify' {
 }
 
 export const recipeStorePlugin: FastifyPluginAsync<RecepturomatRecipeStoreConfig> =
-  async function recipeStorePlugin(fastify, opts) {
+  fp(async function recipeStorePlugin(
+    fastify: FastifyInstance,
+    opts: RecepturomatRecipeStoreConfig,
+  ) {
     const databasePath = resolveRecipeDatabasePath(opts.path);
     const recipeDatabase = new Database(databasePath);
 
@@ -31,4 +35,4 @@ export const recipeStorePlugin: FastifyPluginAsync<RecepturomatRecipeStoreConfig
 
       recipeDatabase.close();
     });
-  };
+  });
