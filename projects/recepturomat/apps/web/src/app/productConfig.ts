@@ -6,6 +6,9 @@ import {
 export interface FrontendProductRoutes {
   account: string;
   home: string;
+  recipeDetail: string;
+  recipeEdit: string;
+  recipeNew: string;
   register: string;
 }
 
@@ -33,13 +36,16 @@ export const frontendProductConfig: FrontendProductConfig = {
   routes: {
     home: '/',
     account: '/account',
+    recipeDetail: '/recipe/:recipeId',
+    recipeEdit: '/recipe/:recipeId/edit',
+    recipeNew: '/recipe/new',
     register: '/register',
   },
   auth: {
     guestRedirectTo: '/?login=1',
-    postLoginRedirectTo: '/account',
-    postRegistrationRedirectTo: '/account',
-    oauthAuthenticatedFallbackTo: '/account',
+    postLoginRedirectTo: '/',
+    postRegistrationRedirectTo: '/',
+    oauthAuthenticatedFallbackTo: '/',
     oauthGuestFallbackTo: '/',
   },
   registration: {
@@ -57,4 +63,15 @@ export function buildLoginPromptHref(): string {
     frontendProductConfig.routes.home,
     frontendProductConfig.loginPrompt,
   );
+}
+
+export function buildRecipeDetailPath(recipeId: string): string {
+  return frontendProductConfig.routes.recipeDetail.replace(
+    ':recipeId',
+    recipeId,
+  );
+}
+
+export function buildRecipeEditPath(recipeId: string): string {
+  return frontendProductConfig.routes.recipeEdit.replace(':recipeId', recipeId);
 }

@@ -6,8 +6,11 @@ import {
   RequireAuth,
 } from '@ksojecki/platform-web-platform';
 import { AccountPage } from './account/AccountPage';
-import { HomePage } from './HomePage';
 import { AppLayout } from './layout/AppLayout';
+import { EditRecipePage } from './recipes/EditRecipePage';
+import { NewRecipePage } from './recipes/NewRecipePage';
+import { RecipePage } from './recipes/RecipePage';
+import { RecipesListPage } from './recipes/RecipesListPage';
 import { buildLoginPromptHref, frontendProductConfig } from './productConfig';
 
 export function AppRoutes() {
@@ -17,7 +20,10 @@ export function AppRoutes() {
     <AuthProvider>
       <Routes>
         <Route element={<AppLayout />}>
-          <Route path={routes.home} element={<HomePage />} />
+          <Route path={routes.home} element={<RecipesListPage />} />
+          <Route path={routes.recipeDetail} element={<RecipePage />} />
+          <Route path={routes.recipeEdit} element={<EditRecipePage />} />
+          <Route path={routes.recipeNew} element={<NewRecipePage />} />
           <Route
             path={routes.register}
             element={
