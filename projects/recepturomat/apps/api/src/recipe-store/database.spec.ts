@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { isAbsolute, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { bootstrapRecipeDatabase, resolveRecipeDatabasePath } from './database';
 import { legacyRecipeSeedData } from './seedData';
@@ -75,11 +75,10 @@ describe('recipe database bootstrap', () => {
   });
 
   it('resolves relative sqlite paths under the workspace root', () => {
-    const resolved = resolveRecipeDatabasePath(
-      'tmp/recepturomat/recipes.sqlite',
-    );
+    const relativePath = 'tmp/recepturomat/recipes.sqlite';
+    const resolved = resolveRecipeDatabasePath(relativePath);
 
-    expect(resolved).toContain('/Users/kamilsojecki/Projekty/rod-manager/');
-    expect(resolved).toContain('tmp/recepturomat/recipes.sqlite');
+    expect(isAbsolute(resolved)).toBe(true);
+    expect(resolved).toBe(resolve(process.cwd(), relativePath));
   });
 });
