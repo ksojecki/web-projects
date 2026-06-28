@@ -12,7 +12,7 @@ The target remains:
 - reusable platform mechanics move into shared libraries
 - each future project gets its own `api` app, `web` app, database, and user base
 
-This document is implementation-oriented and should be used as the delivery sequence for the refactor.
+This document is implementation-oriented and should be used as the delivery sequence for the refactor. Several steps below already reflect repository state; keep this document aligned with the supported workflow instead of treating completed work as hypothetical.
 
 ## Success Definition
 
@@ -28,15 +28,26 @@ The refactor is complete when:
 - Track current status, sequencing, and progress updates in GitHub issues.
 - Update this document when the implementation plan or acceptance criteria change.
 
+## Supported Workflow
+
+The repository already supports the following template workflow:
+
+- scaffold a product with `npm run generate:project -- <name>`
+- use `projects/<product>/apps/api/src/productConfig.ts` for product-scoped backend bootstrap
+- use `projects/<product>/apps/web/src/app/productConfig.ts` for product-scoped frontend composition
+- use `projects/sample-portal` as the proof that the generator creates a second product without `rod-manager` app dependencies
+
+The remaining roadmap work should preserve and validate that supported surface.
+
 ## Delivery Sequence
 
-## Step 1: Lock the Architecture in an ADR
+## Step 1: Keep the Architecture Decision Current
 
 ### Goal
 
-Freeze the core decision before code movement starts.
+Keep the core decision current when the template strategy changes.
 
-### Files to Add
+### Files to Maintain
 
 - `docs/architecture/adr/0002-project-template-strategy.md`
 
@@ -54,7 +65,7 @@ Freeze the core decision before code movement starts.
 
 ### Validation
 
-- ADR is accepted before implementation starts
+- ADR updates stay aligned with the implemented template strategy
 
 ## Step 2: Audit and Mark the Existing Reusable Surface
 
@@ -428,23 +439,20 @@ Frontend composition should declare:
 - product-specific behavior is declared in small composition files
 - shared code no longer contains `rod-manager` assumptions
 
-## Step 9: Build a Generator for New Projects
+## Step 9: Maintain the Generator for New Projects
 
 ### Goal
 
-Create a repeatable workflow for new project creation.
+Keep the repeatable project-creation workflow aligned with the supported surface.
 
-### Suggested Generator Location
+### Generator Location
 
 - `tools/generators/project-template/`
 
-If the workspace uses a different generator convention, match that instead.
-
-### Files to Add
+### Files to Maintain
 
 - `tools/generators/project-template/generator.ts`
 - `tools/generators/project-template/schema.json`
-- `tools/generators/project-template/files/**/*`
 
 ### Generator Output
 
@@ -467,18 +475,16 @@ If the workspace uses a different generator convention, match that instead.
 - generated project builds
 - generated project typechecks
 
-## Step 10: Prove Isolation with a Sample Second Project
+## Step 10: Keep the Sample Second Project as Isolation Proof
 
 ### Goal
 
-Verify the template with a real second project in the workspace.
+Keep validating the template with a real second project in the workspace.
 
-### Suggested Output
+### Proof Project
 
 - `projects/sample-portal/apps/api`
 - `projects/sample-portal/apps/web`
-
-The actual name can be temporary.
 
 ### Required Validation
 
@@ -489,7 +495,8 @@ The actual name can be temporary.
 
 ### Files Likely to Be Touched
 
-- new generated project files
+- `projects/sample-portal/**/*`
+- generator files when the scaffold surface changes
 - workspace config files if Nx inference requires additions
 
 ## Step 11: Update Tests Around the New Boundaries
@@ -539,6 +546,7 @@ Make the new workflow discoverable.
 - what belongs in `libs/`
 - what belongs in `projects/<product>/`
 - how auth/user isolation is preserved
+- how product-scoped registration is configured
 
 ## Suggested Implementation Order for Actual Delivery
 
@@ -549,8 +557,8 @@ Make the new workflow discoverable.
 5. introduce backend project bootstrap contract
 6. clean shared DTO ownership
 7. add product composition files to `rod-manager`
-8. build project generator
-9. generate sample second project
+8. land and maintain the project generator
+9. keep the sample second project validated
 10. update tests
 11. update docs
 
@@ -564,7 +572,7 @@ Because this is a large refactor, split work into small PRs:
 4. backend bootstrap contract
 5. DTO boundary cleanup
 6. generator
-7. sample project and final docs
+7. sample project validation and final docs
 
 ## Notes for Execution
 
