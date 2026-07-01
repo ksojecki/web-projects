@@ -35,6 +35,7 @@
 - Default delivery mechanism for non-trivial work: use the Agent Workflow in `docs/agents/workflow.md`.
 - For Nx-specific questions and read-only workspace exploration, prefer the Nx MCP server first when it is available in the current session. Use it for docs lookups, graph inspection, and running-task introspection, then use the Nx CLI for repo-contract commands and validation.
 - Track task progress in GitHub issues. Always start by finding the relevant GitHub issue; if the work has no issue yet, create one before implementation. Use repository docs for durable guidance, ADRs, and implementation plans, not as the live status tracker for active work.
+- When a workflow step needs GitHub network access through `gh` or equivalent remote issue/PR inspection, request elevated access automatically instead of waiting for a sandbox failure first.
 - For features, bug fixes, and error remediation, first agree on a plan when the task calls for planning, then execute that accepted plan through the delivery loop in `.agents/skills/agent-delivery-loop/SKILL.md`.
 - In that delivery loop, divide the plan into small, easy-to-implement steps before execution.
 - In that delivery loop, always use one `gpt-5.4-mini` implementer subagent, then one `gpt-5.4-mini` tester subagent for the same accepted current step.

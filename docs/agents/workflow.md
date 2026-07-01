@@ -24,6 +24,9 @@ When the task requires planning, do not start implementation until the plan is a
   issue; if there is no issue for the work, create one before implementation.
   Keep local docs focused on architecture, workflow, and implementation
   guidance.
+- When a step depends on GitHub network access through `gh` such as issue lookup,
+  issue creation, push-adjacent PR inspection, or PR creation, request elevated
+  access automatically instead of waiting for a sandbox failure first.
 - Follow root-level defaults (TS, Oxlint, Prettier).
 - Treat plan acceptance as the gate to start delivery work.
 - When using this repository workflow, treat plan acceptance as the point where the delivery loop begins spawning step-scoped subagents.

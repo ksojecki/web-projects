@@ -8,6 +8,8 @@ Use this page to prepare a coding-agent session for this repository.
 - During Codex initialization for this repository, always load `.agents/skills/agent-delivery-loop/SKILL.md`.
 - If Nx MCP is available in the session, use it first for Nx docs, graph inspection, and running-task introspection before falling back to broader file reads.
 - Check current worktree state with `git --no-pager status --short`.
+- If you need GitHub issue or PR access through `gh`, request elevated access up
+  front instead of waiting for the command to fail on sandboxed network access.
 - Inspect `package.json`, `nx.json`, and the touched project package/config files before changing code.
 - Inspect `.husky/pre-commit` and `.lintstagedrc.mjs` before changing staged-file validation behavior.
 - Use `rg`/`rg --files` for searches; avoid opening generated output in `dist`, `coverage`, `.nx`, and `node_modules`.
