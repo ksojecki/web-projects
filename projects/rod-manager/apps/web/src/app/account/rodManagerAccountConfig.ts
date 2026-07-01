@@ -1,8 +1,8 @@
-import type { AccountSectionsHook } from '@ksojecki/platform-web-platform';
-import { useRodManagerAccountSections } from './rodManagerAccountSections';
+import type { AccountExtraSectionsHook } from '@ksojecki/platform-web-platform';
+import { useRodManagerExtraAccountSections } from './rodManagerAccountSections';
 
 export interface ProductAccountConfig {
-  useSections: AccountSectionsHook;
+  useExtraSections: AccountExtraSectionsHook;
 }
 
 /**
@@ -11,5 +11,5 @@ export interface ProductAccountConfig {
  * libs/web-platform.
  */
 export const rodManagerAccountConfig: ProductAccountConfig = {
-  useSections: useRodManagerAccountSections,
+  useExtraSections: useRodManagerExtraAccountSections,
 };

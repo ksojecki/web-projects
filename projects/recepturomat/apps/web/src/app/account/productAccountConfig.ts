@@ -1,10 +1,10 @@
-import type { AccountSectionsHook } from '@ksojecki/platform-web-platform';
-import { useProductAccountSections } from './productAccountSections';
+import type { AccountExtraSectionsHook } from '@ksojecki/platform-web-platform';
+import { useProductExtraAccountSections } from './productAccountSections';
 
 export interface ProductAccountConfig {
-  useSections: AccountSectionsHook;
+  useExtraSections: AccountExtraSectionsHook;
 }
 
 export const productAccountConfig: ProductAccountConfig = {
-  useSections: useProductAccountSections,
+  useExtraSections: useProductExtraAccountSections,
 };

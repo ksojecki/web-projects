@@ -1,11 +1,16 @@
 import { useTranslation } from 'react-i18next';
-import { AccountShell, useAuth } from '@ksojecki/platform-web-platform';
+import {
+  AccountShell,
+  useAuth,
+  useDefaultAccountSections,
+} from '@ksojecki/platform-web-platform';
 import { productAccountConfig } from './productAccountConfig';
 
 export function AccountPage() {
   const { t } = useTranslation('account');
   const { user } = useAuth();
-  const sections = productAccountConfig.useSections();
+  const extraSections = productAccountConfig.useExtraSections();
+  const sections = useDefaultAccountSections(extraSections);
 
   return (
     <AccountShell

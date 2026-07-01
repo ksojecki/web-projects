@@ -1,6 +1,6 @@
 import type { AccountSection } from '@ksojecki/platform-web-platform';
 
-export function useProductAccountSections(): AccountSection[] {
+export function useProductExtraAccountSections(): AccountSection[] {
   return [
     {
       id: 'starter-notes',

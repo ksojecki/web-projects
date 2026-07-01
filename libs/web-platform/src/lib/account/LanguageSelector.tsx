@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Heading } from '@ksojecki/platform-ui';
 import { updateLanguagePreference } from './settingsApi';
 
-export const LanguageSelector = () => {
+export function LanguageSelector() {
   const { i18n, t } = useTranslation('layout');
   const locale = i18n.resolvedLanguage === 'pl' ? 'pl' : 'en';
 
@@ -30,4 +30,4 @@ export const LanguageSelector = () => {
       </div>
     </div>
   );
-};
+}

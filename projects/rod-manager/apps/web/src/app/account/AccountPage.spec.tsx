@@ -112,6 +112,9 @@ describe('AccountPage', () => {
     );
 
     expect(
+      await screen.findByRole('heading', { name: 'Language' }),
+    ).toBeInTheDocument();
+    expect(
       await screen.findByRole('heading', { name: 'Authentication methods' }),
     ).toBeInTheDocument();
     expect(await screen.findByText('Password')).toBeInTheDocument();
