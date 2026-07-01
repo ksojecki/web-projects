@@ -12,6 +12,9 @@ void i18n.use(initReactI18next).init({
       layout: {
         appName: 'Recepturomat',
         footerBrowseTitle: 'Recipes',
+        languageEnglish: 'EN',
+        languageLabel: 'Language',
+        languagePolish: 'PL',
         menuAddRecipe: 'Add recipe',
         menuHome: 'Recipes',
         menuAccount: 'Account',
@@ -81,6 +84,48 @@ void i18n.use(initReactI18next).init({
         welcome: 'Welcome back, {{name}}.',
         fallbackUserName: 'user',
         roleLabel: 'Role',
+        authentication: {
+          title: 'Authentication methods',
+          description:
+            'Manage how you sign in to your account. At least one authentication method must remain connected.',
+          loadError: 'Failed to load authentication methods.',
+          linkStartError: 'Failed to start authentication method linking.',
+          unlinkError: 'Failed to disconnect authentication method.',
+          connected: 'Connected',
+          notConnected: 'Not connected',
+          passwordLabel: 'Password',
+          passwordCannotBeDisabled:
+            'Password authentication can be changed, but it cannot be disabled after it is set.',
+          setPasswordTitle: 'Set password',
+          setPasswordDescription:
+            'Add a local password so you can sign in without an external provider.',
+          changePasswordTitle: 'Change password',
+          changePasswordDescription:
+            'Update your local password for password-based sign in.',
+          currentPasswordLabel: 'Current password',
+          newPasswordLabel: 'New password',
+          confirmPasswordLabel: 'Confirm new password',
+          setPasswordAction: 'Set password',
+          changePasswordAction: 'Change password',
+          savingPasswordAction: 'Saving password...',
+          cancelAction: 'Cancel',
+          connectAction: 'Connect',
+          connectingAction: 'Connecting...',
+          disconnectAction: 'Disconnect',
+          disconnectingAction: 'Disconnecting...',
+          requiredAction: 'Required',
+          lastMethodHint:
+            'This method cannot be disconnected because it is currently the only active sign-in method.',
+          passwordConnected: 'Password authentication has been enabled.',
+          passwordChanged: 'Password has been updated.',
+          oauthDisconnected: '{{provider}} has been disconnected.',
+        },
+        password: {
+          currentRequired: 'Current password is required.',
+          newMinLength: 'New password must be at least 8 characters long.',
+          confirmRequired: 'Password confirmation is required.',
+          confirmMismatch: 'Password confirmation must match the new password.',
+        },
       },
       recipes: {
         actions: {
@@ -184,3 +229,5 @@ void i18n.use(initReactI18next).init({
     },
   },
 });
+
+export default i18n;

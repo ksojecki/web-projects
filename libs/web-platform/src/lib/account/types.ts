@@ -17,6 +17,7 @@ export interface AccountSection {
 }
 
 export type AccountSectionsHook = () => AccountSection[];
+export type AccountExtraSectionsHook = () => AccountSection[];
 
 export interface AccountAuthenticationMethodsPanelProps {
   errorMessage: string | null;

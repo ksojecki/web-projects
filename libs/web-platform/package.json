@@ -43,6 +43,20 @@
           "command": "node ../../node_modules/typescript/bin/tsc --build tsconfig.lib.json"
         }
       },
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "libs/web-platform",
+          "command": "node ../../node_modules/vitest/vitest.mjs run --config vitest.config.mts"
+        }
+      },
+      "test-ci--src/lib/account/useDefaultAccountSections.spec.tsx": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "libs/web-platform",
+          "command": "node ../../node_modules/vitest/vitest.mjs run --config vitest.config.mts src/lib/account/useDefaultAccountSections.spec.tsx"
+        }
+      },
       "format": {
         "executor": "nx:run-commands",
         "options": {
