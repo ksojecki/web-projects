@@ -20,11 +20,11 @@ export function useRecipesList({
 }: UseRecipesListOptions = {}): UseRecipesListResult {
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [recipes, setRecipes] = useState<RecipeListEntry[]>([]);
+  const [allRecipes, setAllRecipes] = useState<RecipeListEntry[]>([]);
 
   const refresh = useCallback(async (): Promise<void> => {
     if (!enabled) {
-      setRecipes([]);
+      setAllRecipes([]);
       setError(null);
       setIsLoading(false);
       return;
@@ -34,26 +34,21 @@ export function useRecipesList({
 
     try {
       const nextRecipes = await listRecipes();
-      const normalizedQuery = searchQuery?.trim().toLocaleLowerCase();
-      const filteredRecipes = sortRecipesByName(nextRecipes).filter((recipe) =>
-        normalizedQuery === undefined || normalizedQuery.length === 0
-          ? true
-          : recipe.name.toLocaleLowerCase().includes(normalizedQuery),
-      );
-
-      setRecipes(filteredRecipes);
+      setAllRecipes(sortRecipesByName(nextRecipes));
       setError(null);
     } catch (caughtError) {
       setError(toError(caughtError));
-      setRecipes([]);
+      setAllRecipes([]);
     } finally {
       setIsLoading(false);
     }
-  }, [enabled, searchQuery]);
+  }, [enabled]);
 
   useEffect(() => {
     void refresh();
   }, [refresh]);
+
+  const recipes = filterRecipes(allRecipes, searchQuery);
 
   return {
     error,
@@ -65,6 +60,21 @@ export function useRecipesList({
 
 function toError(error: unknown): Error {
   return error instanceof Error ? error : new Error('Unexpected server error.');
+}
+
+function filterRecipes(
+  recipes: RecipeListEntry[],
+  searchQuery: string | undefined,
+): RecipeListEntry[] {
+  const normalizedQuery = searchQuery?.trim().toLocaleLowerCase();
+
+  if (normalizedQuery === undefined || normalizedQuery.length === 0) {
+    return recipes;
+  }
+
+  return recipes.filter((recipe) =>
+    recipe.name.toLocaleLowerCase().includes(normalizedQuery),
+  );
 }
 
 function sortRecipesByName(recipes: RecipeListEntry[]): RecipeListEntry[] {
