@@ -74,7 +74,7 @@ export function createOAuthService(
         );
       }
 
-      const data = (await response.json()) as ProviderTokenResponse;
+      const data = await parseProviderTokenResponse(response);
 
       return {
         accessToken: data.access_token,
@@ -124,7 +124,7 @@ export function createOAuthService(
         throw new Error('Failed to refresh access token');
       }
 
-      const data = (await response.json()) as ProviderTokenResponse;
+      const data = await parseProviderTokenResponse(response);
 
       return {
         accessToken: data.access_token,
@@ -149,7 +149,12 @@ async function fetchGoogleUserInfo(
     throw new Error('Failed to get user info from google');
   }
 
-  const data = (await response.json()) as Record<string, unknown>;
+  const data = await response.json();
+
+  if (!isRecord(data)) {
+    throw new Error('Failed to get user info from google');
+  }
+
   return buildOAuthUserInfo({
     id: normalizeValue(data.sub) || normalizeValue(data.id),
     email: normalizeValue(data.email),
@@ -185,8 +190,11 @@ async function fetchFacebookUserInfo(
     throw new Error('Failed to get user info from Facebook');
   }
 
-  const data = (await response.json()) as Record<string, unknown>;
-  const picture = data.picture as Record<string, unknown> | undefined;
+  const data = await response.json();
+
+  if (!isRecord(data)) {
+    throw new Error('Failed to get user info from Facebook');
+  }
 
   return buildOAuthUserInfo({
     id: normalizeValue(data.id),
@@ -194,10 +202,7 @@ async function fetchFacebookUserInfo(
     name: normalizeValue(data.first_name),
     surname: normalizeValue(data.last_name),
     displayName: normalizeValue(data.name),
-    picture:
-      normalizeValue(
-        (picture?.data as Record<string, unknown> | undefined)?.url,
-      ) || undefined,
+    picture: normalizeValue(getFacebookPictureUrl(data)) || undefined,
   });
 }
 
@@ -212,4 +217,52 @@ function getProviderConfig(
   }
 
   return config;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function getFacebookPictureUrl(data: Record<string, unknown>): unknown {
+  const picture = data.picture;
+
+  if (!isRecord(picture)) {
+    return undefined;
+  }
+
+  const pictureData = picture.data;
+
+  if (!isRecord(pictureData)) {
+    return undefined;
+  }
+
+  return pictureData.url;
+}
+
+async function parseProviderTokenResponse(
+  response: Response,
+): Promise<ProviderTokenResponse> {
+  const value = await response.json();
+
+  if (!isProviderTokenResponse(value)) {
+    throw new Error('Failed to parse OAuth provider token response.');
+  }
+
+  return value;
+}
+
+function isProviderTokenResponse(
+  value: unknown,
+): value is ProviderTokenResponse {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return (
+    typeof value.access_token === 'string' &&
+    (value.refresh_token === undefined ||
+      typeof value.refresh_token === 'string') &&
+    (value.expires_in === undefined || typeof value.expires_in === 'number') &&
+    (value.id_token === undefined || typeof value.id_token === 'string')
+  );
 }

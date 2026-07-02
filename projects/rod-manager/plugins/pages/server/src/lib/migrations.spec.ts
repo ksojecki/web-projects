@@ -1,4 +1,5 @@
 import Database from 'better-sqlite3';
+import Fastify from 'fastify';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   pagesSchemaMigration,
@@ -7,6 +8,7 @@ import {
 import type { ServerPlatformPluginContext } from '@ksojecki/platform-server-platform';
 
 const databases: Database.Database[] = [];
+const fastifyInstances: Array<ReturnType<typeof Fastify>> = [];
 
 function createTestContext(): {
   db: Database.Database;
@@ -14,12 +16,16 @@ function createTestContext(): {
 } {
   const db = new Database(':memory:');
   databases.push(db);
+  const fastify = Fastify();
+  fastifyInstances.push(fastify);
   const ctx: ServerPlatformPluginContext = {
-    fastify: {} as ServerPlatformPluginContext['fastify'],
+    fastify,
     services: {
-      authStore: {} as ServerPlatformPluginContext['services']['authStore'],
-      db: db as unknown as ServerPlatformPluginContext['services']['db'],
-      logger: {} as ServerPlatformPluginContext['services']['logger'],
+      authStore: {
+        findUserById: () => undefined,
+      },
+      db: createDbClient(db),
+      logger: fastify.log,
     },
   };
   void pagesSchemaMigration.up(ctx);
@@ -30,6 +36,10 @@ function createTestContext(): {
 afterEach(() => {
   for (const db of databases.splice(0)) {
     db.close();
+  }
+
+  for (const fastify of fastifyInstances.splice(0)) {
+    void fastify.close();
   }
 });
 
@@ -77,3 +87,16 @@ describe('pages migrations', () => {
     });
   });
 });
+
+function createDbClient(
+  db: Database.Database,
+): ServerPlatformPluginContext['services']['db'] {
+  return {
+    prepare(sql) {
+      return db.prepare(sql);
+    },
+    exec(sql) {
+      db.exec(sql);
+    },
+  };
+}

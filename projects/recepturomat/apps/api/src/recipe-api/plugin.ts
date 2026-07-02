@@ -19,8 +19,6 @@ interface RecipePayload {
   ingredients?: unknown;
 }
 
-const RECIPE_UNITS = new Set<RecipeIngredient['unit']>(['g', 'ml', 'pcs']);
-
 export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
   async function recepturomatRecipeApiPlugin(fastify) {
     fastify.get(
@@ -221,7 +219,11 @@ function parseIngredient(payload: unknown): RecipeIngredient | undefined {
     return undefined;
   }
 
-  const ingredient = payload as RecipeIngredientPayload;
+  if (!isRecipeIngredientPayload(payload)) {
+    return undefined;
+  }
+
+  const ingredient = payload;
   const name = normalizeNonEmptyString(ingredient.name);
   const amount = normalizeNumber(ingredient.amount);
   const unit = normalizeUnit(ingredient.unit);
@@ -262,12 +264,26 @@ function normalizeNumber(value: unknown): number | undefined {
 }
 
 function normalizeUnit(value: unknown): RecipeIngredient['unit'] | undefined {
-  if (
-    typeof value !== 'string' ||
-    !RECIPE_UNITS.has(value as RecipeIngredient['unit'])
-  ) {
+  if (typeof value !== 'string' || !isRecipeUnit(value)) {
     return undefined;
   }
 
-  return value as RecipeIngredient['unit'];
+  return value;
+}
+
+function isRecipeUnit(value: string): value is RecipeIngredient['unit'] {
+  return value === 'g' || value === 'ml' || value === 'pcs';
+}
+
+function isRecipeIngredientPayload(
+  value: unknown,
+): value is RecipeIngredientPayload {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    ('name' in value ||
+      'amount' in value ||
+      'unit' in value ||
+      'recipeId' in value)
+  );
 }

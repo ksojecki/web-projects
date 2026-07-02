@@ -57,9 +57,20 @@ export default fp<DatabasePluginOptions>(function databasePlugin(
 
   fastify.decorate('authStore', createStore(db));
   fastify.decorate('userSettingsStore', createUserSettingsStore(db));
-  fastify.decorate('db', db as unknown as ServerPlatformDbClient);
+  fastify.decorate('db', createDatabaseClient(db));
 
   fastify.addHook('onClose', async () => {
     db.close();
   });
 });
+
+function createDatabaseClient(db: Database.Database): ServerPlatformDbClient {
+  return {
+    prepare(sql: string) {
+      return db.prepare(sql);
+    },
+    exec(sql: string) {
+      db.exec(sql);
+    },
+  };
+}

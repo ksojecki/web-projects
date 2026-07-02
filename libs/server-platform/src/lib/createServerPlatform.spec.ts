@@ -1,4 +1,4 @@
-import type { FastifyInstance } from 'fastify';
+import Fastify from 'fastify';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ServerPlatformProjectConfig } from './contracts/bootstrap.contract';
 import type { ServerPlatformSsrOptions } from './routes/ssr';
@@ -52,30 +52,41 @@ describe('createServerPlatform', () => {
   });
 
   it('throws an actionable error when project config is missing', async () => {
-    const register = vi.fn<(plugin: unknown, options?: unknown) => void>();
-    const fastify = { register } as unknown as FastifyInstance;
-
-    await expect(
-      createServerPlatform(fastify, {} as never),
-    ).rejects.toThrowError(
-      'createServerPlatform requires opts.project with database.path and database.seedInitialUser.',
-    );
-    expect(register).not.toHaveBeenCalled();
-  });
-
-  it('throws the same actionable error when options are undefined', async () => {
-    const register = vi.fn<(plugin: unknown, options?: unknown) => void>();
-    const fastify = { register } as unknown as FastifyInstance;
+    const fastify = Fastify();
+    const register = vi
+      .spyOn(fastify, 'register')
+      // @ts-expect-error Fastify's register spy expects an overloaded return type here.
+      .mockImplementation(() => fastify);
 
     await expect(createServerPlatform(fastify, undefined)).rejects.toThrowError(
       'createServerPlatform requires opts.project with database.path and database.seedInitialUser.',
     );
     expect(register).not.toHaveBeenCalled();
+
+    await fastify.close();
+  });
+
+  it('throws the same actionable error when options are undefined', async () => {
+    const fastify = Fastify();
+    const register = vi
+      .spyOn(fastify, 'register')
+      // @ts-expect-error Fastify's register spy expects an overloaded return type here.
+      .mockImplementation(() => fastify);
+
+    await expect(createServerPlatform(fastify, undefined)).rejects.toThrowError(
+      'createServerPlatform requires opts.project with database.path and database.seedInitialUser.',
+    );
+    expect(register).not.toHaveBeenCalled();
+
+    await fastify.close();
   });
 
   it('skips SSR route registration when SSR options are not provided', async () => {
-    const register = vi.fn<(plugin: unknown, options?: unknown) => void>();
-    const fastify = { register } as unknown as FastifyInstance;
+    const fastify = Fastify();
+    const register = vi
+      .spyOn(fastify, 'register')
+      // @ts-expect-error Fastify's register spy expects an overloaded return type here.
+      .mockImplementation(() => fastify);
 
     await createServerPlatform(fastify, { project: testProjectConfig });
 
@@ -83,11 +94,16 @@ describe('createServerPlatform', () => {
       project: testProjectConfig,
     });
     expect(register).not.toHaveBeenCalledWith(mocks.ssrRoute);
+
+    await fastify.close();
   });
 
   it('registers the SSR route with explicit product configuration', async () => {
-    const register = vi.fn<(plugin: unknown, options?: unknown) => void>();
-    const fastify = { register } as unknown as FastifyInstance;
+    const fastify = Fastify();
+    const register = vi
+      .spyOn(fastify, 'register')
+      // @ts-expect-error Fastify's register spy expects an overloaded return type here.
+      .mockImplementation(() => fastify);
     const ssr: ServerPlatformSsrOptions = {
       webRoot: 'apps/storefront',
       production: {
@@ -104,5 +120,7 @@ describe('createServerPlatform', () => {
     });
 
     expect(register).toHaveBeenCalledWith(mocks.ssrRoute, ssr);
+
+    await fastify.close();
   });
 });

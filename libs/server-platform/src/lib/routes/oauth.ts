@@ -56,7 +56,7 @@ function cleanupExpiredStates(): void {
 }
 
 function isOAuthProviderType(provider: string): provider is OAuthProviderType {
-  return OAUTH_PROVIDERS.includes(provider as OAuthProviderType);
+  return OAUTH_PROVIDERS.some((candidate) => candidate === provider);
 }
 
 async function validateOAuthProvider(

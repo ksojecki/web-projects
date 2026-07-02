@@ -27,7 +27,11 @@ export function retrieveOAuthState(state: string): StoredOAuthState | null {
   sessionStorage.removeItem(`${OAUTH_STATE_PREFIX}${state}`);
 
   try {
-    const parsed = JSON.parse(stored) as StoredOAuthStateRecord;
+    const parsed = JSON.parse(stored);
+
+    if (!isStoredOAuthStateRecord(parsed)) {
+      return null;
+    }
 
     if (Date.now() - parsed.timestamp > OAUTH_STATE_MAX_AGE_MS) {
       return null;
@@ -40,4 +44,22 @@ export function retrieveOAuthState(state: string): StoredOAuthState | null {
   } catch {
     return null;
   }
+}
+
+function isStoredOAuthStateRecord(
+  value: unknown,
+): value is StoredOAuthStateRecord {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return (
+    typeof value.state === 'string' &&
+    typeof value.codeVerifier === 'string' &&
+    typeof value.timestamp === 'number'
+  );
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }

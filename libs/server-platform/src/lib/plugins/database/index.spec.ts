@@ -2,7 +2,6 @@ import { tmpdir } from 'node:os';
 import { mkdtempSync, existsSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import Fastify from 'fastify';
-import type { FastifyInstance } from 'fastify';
 import { afterEach, describe, expect, it } from 'vitest';
 import databasePlugin from './index';
 
@@ -13,29 +12,27 @@ describe('database plugin', () => {
   });
 
   it('throws an actionable error when project config is missing', async () => {
-    expect(() =>
-      (
-        databasePlugin as unknown as (
-          fastify: FastifyInstance,
-          opts: unknown,
-        ) => void
-      )({} as FastifyInstance, {}),
-    ).toThrowError(
+    const fastify = Fastify();
+
+    // @ts-expect-error This test intentionally verifies the plugin's missing-options runtime guard.
+    await expect(fastify.register(databasePlugin, {})).rejects.toThrowError(
       'databasePlugin requires opts.project with database.path and database.seedInitialUser.',
     );
+
+    await fastify.close();
   });
 
   it('throws the same actionable error when options are undefined', async () => {
-    expect(() =>
-      (
-        databasePlugin as unknown as (
-          fastify: FastifyInstance,
-          opts: unknown,
-        ) => void
-      )({} as FastifyInstance, undefined),
-    ).toThrowError(
+    const fastify = Fastify();
+
+    await expect(
+      // @ts-expect-error This test intentionally verifies the plugin's missing-options runtime guard.
+      fastify.register(databasePlugin, undefined),
+    ).rejects.toThrowError(
       'databasePlugin requires opts.project with database.path and database.seedInitialUser.',
     );
+
+    await fastify.close();
   });
 
   it('keeps seeded and created users isolated across sqlite files', async () => {

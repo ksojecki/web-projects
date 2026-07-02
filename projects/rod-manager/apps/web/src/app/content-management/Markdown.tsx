@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react';
-import type { HeadingLevel } from '@ksojecki/platform-ui';
 import { Heading } from '@ksojecki/platform-ui';
 
 type MarkdownBlock =
@@ -85,7 +84,7 @@ export function renderMarkdown(contentMd: string): ReactElement[] {
       return (
         <Heading
           key={`heading-${String(index)}`}
-          level={(block.level + 1) as HeadingLevel}
+          level={toHeadingLevel(block.level)}
         >
           {block.text}
         </Heading>
@@ -110,4 +109,15 @@ export function renderMarkdown(contentMd: string): ReactElement[] {
       </p>
     );
   });
+}
+
+function toHeadingLevel(level: 1 | 2 | 3) {
+  switch (level) {
+    case 1:
+      return 2;
+    case 2:
+      return 3;
+    case 3:
+      return 4;
+  }
 }
