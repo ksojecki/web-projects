@@ -41,9 +41,11 @@ export default async function (
       wildcard: false,
     });
 
-    const serverModule = (await import(
-      pathToFileURL(serverEntryPath).href
-    )) as RenderModule;
+    const serverModule = await import(pathToFileURL(serverEntryPath).href);
+
+    if (!isRenderModule(serverModule)) {
+      throw new Error('SSR module does not export a render function.');
+    }
 
     fastify.get('/*', async (request, reply) => {
       const url = request.raw.url ?? '/';
@@ -100,9 +102,12 @@ export default async function (
     try {
       const template = await readFile(templatePath, 'utf-8');
       const transformedTemplate = await vite.transformIndexHtml(url, template);
-      const serverModule = (await vite.ssrLoadModule(
-        '/src/entry-server.tsx',
-      )) as RenderModule;
+      const serverModule = await vite.ssrLoadModule('/src/entry-server.tsx');
+
+      if (!isRenderModule(serverModule)) {
+        throw new Error('SSR module does not export a render function.');
+      }
+
       const html = await renderPage(
         url,
         transformedTemplate,
@@ -112,7 +117,9 @@ export default async function (
       await reply.type('text/html').send(html);
       return;
     } catch (error) {
-      vite.ssrFixStacktrace(error as Error);
+      if (error instanceof Error) {
+        vite.ssrFixStacktrace(error);
+      }
       request.log.error(error);
       await reply.status(500).type('text/plain').send('SSR render failed');
       return;
@@ -131,4 +138,12 @@ async function renderPage(
 ): Promise<string> {
   const appHtml = await render(url);
   return template.replace('<!--ssr-outlet-->', appHtml);
+}
+
+function isRenderModule(value: unknown): value is RenderModule {
+  return isRecord(value) && typeof value.render === 'function';
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }

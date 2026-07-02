@@ -175,9 +175,15 @@ export function RecipeForm({
                     <select
                       className="select select-bordered"
                       onChange={(event) => {
+                        const unit = event.currentTarget.value;
+
+                        if (!isRecipeUnit(unit)) {
+                          return;
+                        }
+
                         updateIngredient(index, {
                           ...ingredient,
-                          unit: event.target.value as RecipeUnit,
+                          unit,
                         });
                       }}
                       value={ingredient.unit}
@@ -320,4 +326,8 @@ function validateRecipe(
   }
 
   return null;
+}
+
+function isRecipeUnit(value: string): value is RecipeUnit {
+  return value === 'g' || value === 'ml' || value === 'pcs';
 }

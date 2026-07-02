@@ -19,9 +19,9 @@ export async function updateLanguagePreference(
 
 async function parseErrorMessage(response: Response): Promise<string> {
   try {
-    const error = (await response.json()) as ApiErrorResponse;
+    const error = await response.json();
 
-    if (error.message.length > 0) {
+    if (hasErrorMessage(error)) {
       return error.message;
     }
   } catch {
@@ -29,4 +29,16 @@ async function parseErrorMessage(response: Response): Promise<string> {
   }
 
   return 'Unexpected server error.';
+}
+
+function hasErrorMessage(value: unknown): value is ApiErrorResponse {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return typeof value.message === 'string' && value.message.length > 0;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }

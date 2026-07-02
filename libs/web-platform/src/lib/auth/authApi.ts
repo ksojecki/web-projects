@@ -127,9 +127,9 @@ export async function logout(): Promise<void> {
 
 async function parseErrorMessage(response: Response): Promise<string> {
   try {
-    const error = (await response.json()) as ApiErrorResponse;
+    const error = await response.json();
 
-    if (error.message.length > 0) {
+    if (hasErrorMessage(error)) {
       return error.message;
     }
   } catch {
@@ -149,5 +149,17 @@ async function requestJson<T>(url: string, init: RequestInit): Promise<T> {
     throw new Error(await parseErrorMessage(response));
   }
 
-  return (await response.json()) as T;
+  return await response.json();
+}
+
+function hasErrorMessage(value: unknown): value is ApiErrorResponse {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return typeof value.message === 'string' && value.message.length > 0;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }

@@ -186,7 +186,11 @@ export function RecipePage() {
             <select
               className="select select-bordered w-full sm:w-40"
               onChange={(event) => {
-                setWeightUnit(event.target.value as 'g' | 'pcs');
+                const unit = event.currentTarget.value;
+
+                if (unit === 'g' || unit === 'pcs') {
+                  setWeightUnit(unit);
+                }
               }}
               value={weightUnit}
             >
