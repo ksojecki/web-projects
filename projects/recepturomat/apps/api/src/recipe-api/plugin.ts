@@ -63,18 +63,12 @@ export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
           return;
         }
 
-        const existingRecipe = fastify.recipeStore.getByRecipeId(
-          recipe.recipeId,
+        const createdRecipe = createRecipeWithStableSlug(
+          fastify.recipeStore.listRecipes(),
+          recipe,
         );
 
-        if (existingRecipe !== undefined) {
-          await reply
-            .status(409)
-            .send({ message: 'Recipe with this identifier already exists.' });
-          return;
-        }
-
-        await reply.status(201).send(fastify.recipeStore.upsert(recipe));
+        await reply.status(201).send(fastify.recipeStore.upsert(createdRecipe));
       },
     );
 
@@ -127,23 +121,24 @@ export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
 
 function parseRecipePayload(
   payload: RecipePayload,
+): Omit<Recipe, 'recipeId'> | undefined;
+function parseRecipePayload(
+  payload: RecipePayload,
+  routeRecipeId: string,
+): Recipe | undefined;
+function parseRecipePayload(
+  payload: RecipePayload,
   routeRecipeId?: string,
-): Recipe | undefined {
+): Recipe | Omit<Recipe, 'recipeId'> | undefined {
   if (typeof payload !== 'object' || payload === null) {
     return undefined;
   }
 
-  const recipeId =
-    routeRecipeId !== undefined
-      ? routeRecipeId
-      : normalizeNonEmptyString(payload.recipeId);
-  const bodyRecipeId = normalizeOptionalNonEmptyString(payload.recipeId);
   const name = normalizeNonEmptyString(payload.name);
   const defaultWeight = normalizeNumber(payload.defaultWeight);
   const ingredients = parseIngredients(payload.ingredients);
 
   if (
-    recipeId === undefined ||
     name === undefined ||
     defaultWeight === undefined ||
     ingredients === undefined
@@ -151,16 +146,54 @@ function parseRecipePayload(
     return undefined;
   }
 
-  if (bodyRecipeId !== undefined && bodyRecipeId !== recipeId) {
-    return undefined;
+  if (routeRecipeId !== undefined) {
+    return {
+      recipeId: routeRecipeId,
+      name,
+      defaultWeight,
+      ingredients,
+    };
   }
 
   return {
-    recipeId,
     name,
     defaultWeight,
     ingredients,
   };
+}
+
+function createRecipeWithStableSlug(
+  existingRecipes: Recipe[],
+  recipe: Omit<Recipe, 'recipeId'>,
+): Recipe {
+  const baseRecipeId = slugifyRecipeName(recipe.name);
+  const existingRecipeIds = new Set(
+    existingRecipes.map((candidate) => candidate.recipeId),
+  );
+  let recipeId = baseRecipeId;
+  let suffix = 2;
+
+  while (existingRecipeIds.has(recipeId)) {
+    recipeId = `${baseRecipeId}-${suffix}`;
+    suffix += 1;
+  }
+
+  return {
+    ...recipe,
+    recipeId,
+  };
+}
+
+function slugifyRecipeName(name: string): string {
+  const normalized = name
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-+/g, '-');
+
+  return normalized.length > 0 ? normalized : 'recipe';
 }
 
 function parseIngredients(payload: unknown): RecipeIngredient[] | undefined {
