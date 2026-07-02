@@ -37,5 +37,9 @@ export const Heading = ({ children, className, level }: HeadingProps) => {
           {children}
         </h6>
       );
+    default:
+      return (
+        <h6 className={joinClassNames('text-3xl', className)}>{children}</h6>
+      );
   }
 };

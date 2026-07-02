@@ -5,9 +5,11 @@ import { SESSION_COOKIE_NAME } from './types';
 /**
  * Reads the session token from request cookies.
  */
-export function getSessionToken(this: FastifyRequest): string | undefined {
+function readSessionToken(this: FastifyRequest): string | undefined {
   return this.cookies[SESSION_COOKIE_NAME];
 }
+
+export const getSessionToken = readSessionToken;
 
 /**
  * Creates a request-bound function that resolves and caches the current session.
@@ -23,9 +25,11 @@ export function createGetSessionDecorator(getAuthStore: () => AuthStore) {
 /**
  * Checks whether an authenticated session exists for the current request.
  */
-export function hasSession(this: FastifyRequest): boolean {
+function checkSession(this: FastifyRequest): boolean {
   return this.getSession() !== undefined;
 }
+
+export const hasSession = checkSession;
 
 export function resolveSessionFromRequest(
   authStore: AuthStore,

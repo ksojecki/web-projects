@@ -1,7 +1,6 @@
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply } from 'fastify';
 import { SESSION_COOKIE_NAME } from './types';
-import type { AuthStore, AuthStoreSession } from '../database';
-import { resolveSessionFromRequest } from './checkSession';
+import type { AuthStore } from '../database';
 
 export const COOKIE_OPTIONS = {
   path: '/',
@@ -11,31 +10,6 @@ export const COOKIE_OPTIONS = {
 } as const;
 
 export const COOKIE_MAX_AGE = 60 * 60 * 8;
-
-/**
- * Reads the session token from request cookies.
- */
-export function getSessionToken(this: FastifyRequest): string | undefined {
-  return this.cookies[SESSION_COOKIE_NAME];
-}
-
-/**
- * Creates a request-bound function that resolves and caches the current session.
- */
-export function createGetSessionDecorator(getAuthStore: () => AuthStore) {
-  return function getSession(
-    this: FastifyRequest,
-  ): AuthStoreSession | undefined {
-    return resolveSessionFromRequest(getAuthStore(), this);
-  };
-}
-
-/**
- * Checks whether an authenticated session exists for the current request.
- */
-export function hasSession(this: FastifyRequest): boolean {
-  return this.getSession() !== undefined;
-}
 
 /**
  * Creates a reply-bound function that starts a new authenticated session.
