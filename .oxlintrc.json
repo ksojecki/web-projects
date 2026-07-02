@@ -54,7 +54,7 @@
     ],
     "eslint/no-var": "error",
     "eslint/prefer-const": "error",
-    "import/no-named-as-default-member": "off",
+    "import/no-named-as-default-member": "error",
     "import/no-unassigned-import": [
       "error",
       {

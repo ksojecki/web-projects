@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import i18n, { use as installI18nextPlugin } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './en';
 import pl, { type TranslationResources } from './pl';
@@ -20,7 +20,7 @@ export const resources = {
 } as const;
 
 if (!i18n.isInitialized) {
-  void i18n.use(initReactI18next).init({
+  void installI18nextPlugin(initReactI18next).init({
     resources,
     lng: 'en',
     fallbackLng: 'en',
