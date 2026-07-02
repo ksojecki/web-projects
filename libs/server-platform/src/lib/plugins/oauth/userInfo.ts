@@ -23,7 +23,13 @@ export function decodeJwtPayload(token: string): Record<string, unknown> {
   const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
   const decoded = Buffer.from(padded, 'base64').toString('utf-8');
 
-  return JSON.parse(decoded) as Record<string, unknown>;
+  const parsed = JSON.parse(decoded);
+
+  if (!isRecord(parsed)) {
+    throw new Error('Invalid JWT payload');
+  }
+
+  return parsed;
 }
 
 export function normalizeValue(value: unknown): string {
@@ -75,4 +81,8 @@ function splitDisplayName(displayName: string): {
     name: first,
     surname: rest.join(' '),
   };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }

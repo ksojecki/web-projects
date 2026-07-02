@@ -70,7 +70,7 @@ export function RecipesListPage() {
   }
 
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-6">
+    <div className="mx-auto flex max-w-5xl flex-col gap-5">
       <PageHeader
         actions={
           <Link asButton to={frontendProductConfig.routes.recipeNew}>
@@ -121,22 +121,22 @@ export function RecipesListPage() {
           <Paragraph tone="muted">{t('list.empty')}</Paragraph>
         </Section>
       ) : (
-        <section className="grid gap-4">
+        <section className="grid gap-3">
           {recipes.map((recipe) => (
-            <Card key={recipe.recipeId}>
+            <Card
+              className="border border-base-200 bg-base-100 shadow-none"
+              key={recipe.recipeId}
+            >
               <Link
-                className="flex items-start justify-between gap-4 no-underline"
+                className="flex items-start gap-3 no-underline"
                 to={buildRecipeDetailPath(recipe.recipeId)}
               >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                   <span className="text-lg font-semibold text-base-content">
                     {recipe.name}
                   </span>
                   <Paragraph tone="muted">{t('list.openRecipe')}</Paragraph>
                 </div>
-                <span className="rounded-full bg-base-200 px-3 py-1 text-sm text-base-content/70">
-                  {recipe.recipeId}
-                </span>
               </Link>
             </Card>
           ))}

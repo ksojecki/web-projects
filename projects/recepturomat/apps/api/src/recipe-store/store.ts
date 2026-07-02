@@ -2,16 +2,41 @@ import type Database from 'better-sqlite3';
 import type { Recipe, RecipeRow, RecipeStore } from './types';
 
 function mapRecipeRow(row: RecipeRow): Recipe {
+  const ingredients = JSON.parse(row.ingredients_json);
+
+  if (!isRecipeIngredientArray(ingredients)) {
+    throw new Error('Invalid recipe row.');
+  }
+
   return {
     recipeId: row.recipe_id,
     name: row.name,
     defaultWeight: row.default_weight,
-    ingredients: JSON.parse(row.ingredients_json) as Recipe['ingredients'],
+    ingredients,
   };
 }
 
 function serializeIngredients(recipe: Recipe): string {
   return JSON.stringify(recipe.ingredients);
+}
+
+function isRecipeIngredientArray(
+  value: unknown,
+): value is Recipe['ingredients'] {
+  return (
+    Array.isArray(value) &&
+    value.every(
+      (ingredient) =>
+        isRecord(ingredient) &&
+        typeof ingredient.name === 'string' &&
+        typeof ingredient.amount === 'number' &&
+        typeof ingredient.unit === 'string',
+    )
+  );
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }
 
 export function createRecipeStore(db: Database.Database): RecipeStore {

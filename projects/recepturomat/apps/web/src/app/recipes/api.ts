@@ -56,14 +56,14 @@ async function requestJson<T>(url: string, init: RequestInit): Promise<T> {
     throw new Error(await parseErrorMessage(response));
   }
 
-  return (await response.json()) as T;
+  return await response.json();
 }
 
 async function parseErrorMessage(response: Response): Promise<string> {
   try {
-    const payload = (await response.json()) as { message?: unknown };
+    const payload = await response.json();
 
-    if (typeof payload.message === 'string' && payload.message.length > 0) {
+    if (hasMessage(payload)) {
       return payload.message;
     }
   } catch {
@@ -71,4 +71,16 @@ async function parseErrorMessage(response: Response): Promise<string> {
   }
 
   return 'Unexpected server error.';
+}
+
+function hasMessage(value: unknown): value is { message: string } {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return typeof value.message === 'string' && value.message.length > 0;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }

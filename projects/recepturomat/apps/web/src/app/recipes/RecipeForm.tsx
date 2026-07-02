@@ -84,40 +84,22 @@ export function RecipeForm({
             />
           </label>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="form-control">
-              <span className="label-text">{t('form.recipeId')}</span>
-              <input
-                className="input input-bordered"
-                onChange={(event) => {
-                  setRecipe((current) => ({
-                    ...current,
-                    recipeId: event.target.value,
-                  }));
-                }}
-                readOnly={initialRecipe.recipeId !== 'new'}
-                type="text"
-                value={recipe.recipeId}
-              />
-            </label>
-
-            <label className="form-control">
-              <span className="label-text">{t('form.defaultWeight')}</span>
-              <input
-                className="input input-bordered"
-                min="1"
-                onChange={(event) => {
-                  setRecipe((current) => ({
-                    ...current,
-                    defaultWeight: Number(event.target.value),
-                  }));
-                }}
-                step="0.01"
-                type="number"
-                value={recipe.defaultWeight}
-              />
-            </label>
-          </div>
+          <label className="form-control max-w-sm">
+            <span className="label-text">{t('form.defaultWeight')}</span>
+            <input
+              className="input input-bordered"
+              min="1"
+              onChange={(event) => {
+                setRecipe((current) => ({
+                  ...current,
+                  defaultWeight: Number(event.target.value),
+                }));
+              }}
+              step="0.01"
+              type="number"
+              value={recipe.defaultWeight}
+            />
+          </label>
         </div>
       </Section>
 
@@ -193,9 +175,15 @@ export function RecipeForm({
                     <select
                       className="select select-bordered"
                       onChange={(event) => {
+                        const unit = event.currentTarget.value;
+
+                        if (!isRecipeUnit(unit)) {
+                          return;
+                        }
+
                         updateIngredient(index, {
                           ...ingredient,
-                          unit: event.target.value as RecipeUnit,
+                          unit,
                         });
                       }}
                       value={ingredient.unit}
@@ -303,7 +291,6 @@ function normalizeRecipe(recipe: Recipe): Recipe {
   return {
     ...recipe,
     name: recipe.name.trim(),
-    recipeId: recipe.recipeId.trim(),
     ingredients: recipe.ingredients.map((ingredient) => ({
       ...ingredient,
       name: ingredient.name.trim(),
@@ -316,7 +303,7 @@ function validateRecipe(
   recipe: Recipe,
   t: (key: string) => string,
 ): string | null {
-  if (recipe.recipeId.length === 0 || recipe.name.length === 0) {
+  if (recipe.name.length === 0) {
     return t('errors.missingFields');
   }
 
@@ -339,4 +326,8 @@ function validateRecipe(
   }
 
   return null;
+}
+
+function isRecipeUnit(value: string): value is RecipeUnit {
+  return value === 'g' || value === 'ml' || value === 'pcs';
 }

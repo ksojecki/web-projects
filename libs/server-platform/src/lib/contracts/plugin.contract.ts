@@ -18,7 +18,7 @@ export interface ServerPlatformAuthStore {
 }
 
 export interface ServerPlatformDbStatement<
-  TParams extends readonly JsonValue[] = readonly JsonValue[],
+  TParams extends unknown[] = unknown[],
   TResult = JsonValue,
 > {
   get(...params: TParams): TResult | undefined;
@@ -27,10 +27,7 @@ export interface ServerPlatformDbStatement<
 }
 
 export interface ServerPlatformDbClient {
-  prepare<
-    TParams extends readonly JsonValue[] = readonly JsonValue[],
-    TResult = JsonValue,
-  >(
+  prepare<TParams extends unknown[] = unknown[], TResult = JsonValue>(
     sql: string,
   ): ServerPlatformDbStatement<TParams, TResult>;
   exec(sql: string): void;

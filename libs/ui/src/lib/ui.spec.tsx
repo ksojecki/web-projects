@@ -22,7 +22,7 @@ describe('@ksojecki/platform-ui', () => {
 
     const button = screen.getByRole('button', { name: 'Save changes' });
 
-    expect((button as HTMLButtonElement).disabled).toBe(true);
+    expect(button.hasAttribute('disabled')).toBe(true);
   });
 
   it('renders structural content primitives', () => {

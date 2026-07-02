@@ -110,11 +110,16 @@ describe('AccountPage', () => {
     );
 
     expect(
+      await screen.findByRole('heading', { name: 'Account' }),
+    ).toBeInTheDocument();
+    expect(
       await screen.findByRole('heading', { name: 'Language' }),
     ).toBeInTheDocument();
     expect(
       await screen.findByRole('heading', { name: 'Authentication methods' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Recepturomat starter notes')).toBeInTheDocument();
+    expect(
+      screen.queryByText('Recepturomat starter notes'),
+    ).not.toBeInTheDocument();
   });
 });

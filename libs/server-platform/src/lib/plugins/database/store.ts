@@ -33,10 +33,9 @@ export function verifyPassword(
   password: string,
   passwordHash: string,
 ): boolean {
-  const [salt, expectedHex] = passwordHash.split(':') as [
-    string | undefined,
-    string | undefined,
-  ];
+  const parts = passwordHash.split(':');
+  const salt = parts[0];
+  const expectedHex = parts[1];
 
   if (salt === undefined || expectedHex === undefined) {
     return false;
