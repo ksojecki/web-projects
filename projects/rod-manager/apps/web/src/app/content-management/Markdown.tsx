@@ -120,4 +120,5 @@ function toHeadingLevel(level: 1 | 2 | 3) {
     case 3:
       return 4;
   }
+  return 4;
 }

@@ -42,8 +42,8 @@
   "rules": {
     "eslint/curly": "error",
     "eslint/eqeqeq": "error",
-    "eslint/no-shadow": "off",
-    "eslint/no-underscore-dangle": "off",
+    "eslint/no-shadow": "error",
+    "eslint/no-underscore-dangle": "error",
     "eslint/no-unused-vars": [
       "error",
       {
@@ -55,17 +55,29 @@
     "eslint/no-var": "error",
     "eslint/prefer-const": "error",
     "import/no-named-as-default-member": "off",
-    "import/no-unassigned-import": "off",
-    "oxc/no-this-in-exported-function": "off",
+    "import/no-unassigned-import": [
+      "error",
+      {
+        "allow": [
+          "**/*.css",
+          "**/app/i18n/i18n",
+          "**/i18n/i18n",
+          "**/types",
+          "@testing-library/jest-dom/vitest",
+          "dotenv/config"
+        ]
+      }
+    ],
+    "oxc/no-this-in-exported-function": "error",
     "react/react-in-jsx-scope": "off",
     "typescript/consistent-type-imports": "error",
-    "typescript/consistent-return": "off",
+    "typescript/consistent-return": "error",
     "typescript/no-explicit-any": "error",
     "typescript/no-floating-promises": "error",
     "typescript/no-misused-promises": "error",
     "typescript/no-unsafe-type-assertion": "error",
-    "unicorn/no-empty-file": "off",
-    "react/exhaustive-deps": "warn",
+    "unicorn/no-empty-file": "error",
+    "react/exhaustive-deps": "error",
     "react/rules-of-hooks": "error",
     "react/self-closing-comp": "error",
     "jsx_a11y/alt-text": "error",

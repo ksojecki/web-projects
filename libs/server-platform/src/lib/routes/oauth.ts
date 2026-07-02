@@ -322,7 +322,7 @@ function oauthRoutes(fastify: FastifyInstance) {
     Querystring: { code: string; state: string; error?: string };
   }>('/api/auth/oauth/callback/:provider', async (request, reply) => {
     const { provider } = request.params;
-    const { code, state, error } = request.query;
+    const { code, state, error: oauthError } = request.query;
 
     // Validate provider
     if (!isOAuthProviderType(provider)) {
@@ -331,9 +331,9 @@ function oauthRoutes(fastify: FastifyInstance) {
     }
 
     // Check for OAuth error from provider
-    if (error) {
+    if (oauthError) {
       await reply.status(400).send({
-        message: `OAuth authorization denied: ${error}`,
+        message: `OAuth authorization denied: ${oauthError}`,
       });
       return;
     }
