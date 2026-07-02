@@ -55,7 +55,6 @@ describe('recepturomat recipe api plugin', () => {
       expect(listResponse.json()).toEqual([]);
 
       const createPayload = {
-        recipeId: 'test-tart',
         name: 'Test Tart',
         defaultWeight: 1200,
         ingredients: [
@@ -72,7 +71,28 @@ describe('recepturomat recipe api plugin', () => {
       });
 
       expect(createResponse.statusCode).toBe(201);
-      expect(createResponse.json()).toEqual(createPayload);
+      const createdRecipe = createResponse.json();
+
+      expect(createdRecipe).toEqual({
+        ...createPayload,
+        recipeId: 'test-tart',
+      });
+
+      const createConflictResponse = await serverHarness.server.inject({
+        method: 'POST',
+        url: '/api/recipes',
+        cookies: authCookie,
+        payload: {
+          ...createPayload,
+          name: 'Test Tart',
+        },
+      });
+
+      expect(createConflictResponse.statusCode).toBe(201);
+      expect(createConflictResponse.json()).toEqual({
+        ...createPayload,
+        recipeId: 'test-tart-2',
+      });
 
       const getResponse = await serverHarness.server.inject({
         method: 'GET',
@@ -81,10 +101,10 @@ describe('recepturomat recipe api plugin', () => {
       });
 
       expect(getResponse.statusCode).toBe(200);
-      expect(getResponse.json()).toEqual(createPayload);
+      expect(getResponse.json()).toEqual(createdRecipe);
 
       const updatePayload = {
-        recipeId: 'test-tart',
+        recipeId: 'ignored-update-id',
         name: 'Updated Tart',
         defaultWeight: 1250,
         ingredients: [{ name: 'Cream', amount: 450, unit: 'ml' }],
@@ -98,7 +118,10 @@ describe('recepturomat recipe api plugin', () => {
       });
 
       expect(updateResponse.statusCode).toBe(200);
-      expect(updateResponse.json()).toEqual(updatePayload);
+      expect(updateResponse.json()).toEqual({
+        ...updatePayload,
+        recipeId: 'test-tart',
+      });
 
       const deleteResponse = await serverHarness.server.inject({
         method: 'DELETE',

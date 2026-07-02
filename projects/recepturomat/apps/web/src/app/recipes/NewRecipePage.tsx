@@ -14,7 +14,7 @@ const emptyRecipe: Recipe = {
   defaultWeight: 1000,
   ingredients: [],
   name: '',
-  recipeId: 'new',
+  recipeId: '',
 };
 
 export function NewRecipePage() {
