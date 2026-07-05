@@ -12,6 +12,11 @@ When the task requires planning, do not start implementation until the plan is a
 - When commands target generated product apps, distinguish filesystem paths from
   package ids: use `projects/<product>/apps/*` for files and
   `@ksojecki/<product>-api` or `@ksojecki/<product>-web` for Nx/package ids.
+- When the task touches runtime behavior, choose the target product up front and
+  anchor the session to its launch contract: `rod-manager` defaults to
+  `https://localhost:3000/` with Chrome DevTools on `127.0.0.1:9222`,
+  `recepturomat` defaults to `https://localhost:3100/` with Chrome DevTools on
+  `127.0.0.1:9333`.
 - Check the current git branch before starting delivery work. If the current branch is `main`, create a new working branch before making changes.
 - For new features, identify MVP scope vs non-goals.
 
@@ -30,6 +35,14 @@ When the task requires planning, do not start implementation until the plan is a
 - Follow root-level defaults (TS, Oxlint, Prettier).
 - Treat plan acceptance as the gate to start delivery work.
 - When using this repository workflow, treat plan acceptance as the point where the delivery loop begins spawning step-scoped subagents.
+- When launch or auth behavior matters, account for env precedence explicitly:
+  shell env wins, then `.env`, `.env.local`, `projects/<product>/.env`, and
+  `projects/<product>/.env.local`, with later files overriding earlier ones.
+- In project-local env files, use the same plain keys as root env files
+  (`PORT`, `WEB_PORT`, `AUTH_DB_PATH`, `AUTH_SEED_INITIAL_USER`,
+  `OAUTH_REDIRECT_BASE_URL`, `CHROME_USER_DATA_DIR`, `CHROME_DEBUG_PORT`).
+  Product identity comes from the selected project and code defaults, not from
+  env key prefixes.
 
 ## 3) Delivery Loop
 
@@ -62,6 +75,10 @@ When the task requires planning, do not start implementation until the plan is a
 - Keep generated code and comments in English.
 - For new plugins, use a folder-based structure with `index.ts` as a thin entrypoint and focused modules (types + implementation files), matching the `database` plugin style.
 - For larger modules in general, split by responsibility once complexity grows (avoid monolithic files).
+- For browser-facing debugging, prefer `nx run <api-project>:launch --no-tui`
+  or its thin `npm run launch:<project>` alias over a raw `dev:<project>`
+  session so the browser comes up on the product's expected port with a
+  dedicated Chrome profile and remote debugging port.
 
 ## 5) Validation
 
@@ -69,6 +86,14 @@ When the task requires planning, do not start implementation until the plan is a
 - Keep Nx CLI commands as the validation contract even when Nx MCP is available. Use `npx nx show ...`, `npx nx sync:check --no-tui`, and task-running commands such as `npx nx run-many ... --no-tui` for executable verification.
 - Avoid low-signal parent-session validation commands. Add coverage or extra reporting runs only when the output is decision-relevant for the current step or final review.
 - Before a PR, verify whether documentation updates are required.
+- For UI debugging after `npm run launch:<project>`, use the Chrome-backed
+  browser path exposed through Codex's bundled browser plugin and the existing
+  `node_repl` backend. Do not document or depend on a fake standalone
+  `chrome-devtools` MCP server for this repo.
+- Authenticate the launched localhost session before evaluating SSR, hydrated UI
+  state, or `/api` behavior. If Chrome-backed browser access is unavailable in
+  the current environment, fall back to authenticated `curl` plus rendered HTML
+  inspection and say so explicitly.
 
 ## 6) Handover
 

@@ -42,29 +42,71 @@ npm run setup:certs
 ## 3) Run Locally
 
 ```sh
-npm run dev:rod-manager
+npx nx run @ksojecki/rod-manager-api:launch --no-tui
 ```
 
-This starts the SSR app through the Fastify API server.
+This starts the SSR app through the Fastify API server, waits for it to become
+reachable, then opens Puppeteer's managed Chrome for Testing with a repo-local
+profile and remote debugging enabled.
 
-When running as an AI agent, prefer:
+Choose the product explicitly:
+
+```sh
+npx nx run @ksojecki/rod-manager-api:launch --no-tui
+npx nx run @ksojecki/recepturomat-api:launch --no-tui
+```
+
+The root `npm run launch:<project>` commands are thin aliases to these Nx
+targets.
+
+Default launch endpoints:
+
+- `rod-manager`: `https://localhost:3000/`, Chrome DevTools on `127.0.0.1:9222`
+- `recepturomat`: `https://localhost:3100/`, Chrome DevTools on `127.0.0.1:9333`
+
+If you only need the backend/SSR process without opening Chrome, use:
 
 ```sh
 npm run dev:rod-manager
+npm run dev:recepturomat
 ```
+
+Env precedence for launch and dev sessions is:
+
+1. shell environment
+2. `.env`
+3. `.env.local`
+4. `projects/<product>/.env`
+5. `projects/<product>/.env.local`
+
+Later files override earlier files. Use the root files for shared defaults and
+the project-local files for per-product overrides such as ports, DB paths, auth
+seed flags, OAuth redirect URLs, Chrome debug ports, and Chrome user-data
+directories.
+
+Auth seeding defaults are shared from the root env (`AUTH_SEED_INITIAL_USER`,
+`AUTH_INITIAL_USER_EMAIL`, `AUTH_INITIAL_USER_PASSWORD`). If a project-local env
+file sets `AUTH_SEED_INITIAL_USER`, that override applies only to that project.
 
 Smoke checks:
 
-- `https://localhost:3000/` should be verified through an authenticated session and return SSR HTML.
-- `https://localhost:3000/api` should be verified through the same authenticated session and return API JSON.
+- `https://localhost:<product-port>/` should be verified through an authenticated session and return SSR HTML.
+- `https://localhost:<product-port>/api` should be verified through the same authenticated session and return API JSON.
 
-If port `3000` is already in use, inspect the listener with:
+If a product's default port is already in use, inspect the listener with:
 
 ```sh
-lsof -nP -iTCP:3000 -sTCP:LISTEN
+lsof -nP -iTCP:<product-port> -sTCP:LISTEN
 ```
 
-Reuse an existing `rod-manager` dev server when possible. Only stop the process automatically if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
+Reuse an existing matching dev server when possible. Only stop the process
+automatically if it is clearly a stale server from this repository; otherwise
+report the conflict and ask the user.
+
+For UI debugging after the Nx launch target or its npm alias, use Codex's Chrome-backed
+browser path. On this machine that path comes from the bundled browser plugin
+using the existing `node_repl` backend; there is no separate
+`[mcp_servers.chrome-devtools]` block to configure or depend on.
 
 ## 4) Validate Changes
 

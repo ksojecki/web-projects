@@ -1,10 +1,16 @@
-import 'dotenv/config';
 import Fastify from 'fastify';
 import { existsSync, readFileSync } from 'node:fs';
 import type { FastifyInstance } from 'fastify';
+import {
+  applyProductRuntimeDefaults,
+  loadProductEnv,
+} from '@ksojecki/platform-shared';
 import { createServerPlatform } from '@ksojecki/platform-server-platform';
 import { pagesServerPlugin } from '@ksojecki/rod-manager-pages-server';
 import { rodManagerProjectConfig } from './productConfig';
+
+loadProductEnv('rod-manager');
+applyProductRuntimeDefaults('rod-manager');
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;

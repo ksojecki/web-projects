@@ -3,6 +3,27 @@ import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import projectTemplateGenerator from './generator';
 
+type PackageJsonWithDependencies = {
+  dependencies: Record<string, string>;
+  name: string;
+};
+
+type RootPackageJson = {
+  scripts: Record<string, string>;
+};
+
+type ApiProjectPackageJson = {
+  nx: {
+    targets: Record<string, { options?: Record<string, string> }>;
+  };
+};
+
+type TsConfigWithReferences = {
+  references: Array<{ path: string }>;
+};
+
+type JsonObject = Record<string, unknown>;
+
 describe('projectTemplateGenerator', () => {
   let tree: Tree;
 
@@ -17,6 +38,8 @@ describe('projectTemplateGenerator', () => {
           scripts: {
             'dev:rod-manager':
               'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:serve --no-tui',
+            'launch:rod-manager':
+              'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:launch --no-tui',
           },
         },
         null,
@@ -62,20 +85,14 @@ describe('projectTemplateGenerator', () => {
       ),
     ).toBe(false);
 
-    const apiPackageJson = readJson(
+    const apiPackageJson = readPackageJsonWithDependencies(
       tree,
       'projects/recepturomat/apps/api/package.json',
-    ) as {
-      dependencies: Record<string, string>;
-      name: string;
-    };
-    const webPackageJson = readJson(
+    );
+    const webPackageJson = readPackageJsonWithDependencies(
       tree,
       'projects/recepturomat/apps/web/package.json',
-    ) as {
-      dependencies: Record<string, string>;
-      name: string;
-    };
+    );
 
     expect(apiPackageJson.name).toBe('@ksojecki/recepturomat-api');
     expect(apiPackageJson.dependencies).toEqual(
@@ -94,15 +111,15 @@ describe('projectTemplateGenerator', () => {
       }),
     );
 
-    const rootPackageJson = readJson(tree, 'package.json') as {
-      scripts: Record<string, string>;
-    };
+    const rootPackageJson = readRootPackageJson(tree, 'package.json');
     expect(rootPackageJson.scripts).toEqual(
       expect.objectContaining({
         'dev:rod-manager':
           'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:serve --no-tui',
         'dev:recepturomat':
           'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:serve --no-tui',
+        'launch:recepturomat':
+          'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:launch --no-tui',
       }),
     );
     expect(rootPackageJson.scripts).not.toHaveProperty('dev');
@@ -112,9 +129,17 @@ describe('projectTemplateGenerator', () => {
       'utf-8',
     );
     expect(productConfig).toContain("projectId: 'recepturomat'");
-    expect(productConfig).toContain('RECEPTUROMAT_AUTH_DB_PATH');
+    expect(productConfig).toContain('process.env.AUTH_DB_PATH');
     expect(productConfig).toContain(
       'dist/projects/recepturomat/apps/web/client',
+    );
+
+    const apiProjectPackageJson = readApiProjectPackageJson(
+      tree,
+      'projects/recepturomat/apps/api/package.json',
+    );
+    expect(apiProjectPackageJson.nx.targets.launch.options?.command).toContain(
+      'tools/launch/launch-product.mjs',
     );
 
     const routesSource = tree.read(
@@ -164,9 +189,7 @@ describe('projectTemplateGenerator', () => {
       "passwordSectionTitle: 'Create account with password'",
     );
 
-    const rootTsConfig = readJson(tree, 'tsconfig.json') as {
-      references: Array<{ path: string }>;
-    };
+    const rootTsConfig = readTsConfigWithReferences(tree, 'tsconfig.json');
     expect(rootTsConfig.references).toEqual(
       expect.arrayContaining([
         { path: './projects/recepturomat/apps/api' },
@@ -175,3 +198,117 @@ describe('projectTemplateGenerator', () => {
     );
   });
 });
+
+function readApiProjectPackageJson(
+  tree: Tree,
+  path: string,
+): ApiProjectPackageJson {
+  const value = readJson(tree, path);
+
+  if (!isApiProjectPackageJson(value)) {
+    throw new Error(`Expected ${path} to contain Nx launch target metadata.`);
+  }
+
+  return value;
+}
+
+function readPackageJsonWithDependencies(
+  tree: Tree,
+  path: string,
+): PackageJsonWithDependencies {
+  const value = readJson(tree, path);
+
+  if (!isPackageJsonWithDependencies(value)) {
+    throw new Error(`Expected ${path} to contain name and dependencies.`);
+  }
+
+  return value;
+}
+
+function readRootPackageJson(tree: Tree, path: string): RootPackageJson {
+  const value = readJson(tree, path);
+
+  if (!isRootPackageJson(value)) {
+    throw new Error(`Expected ${path} to contain scripts.`);
+  }
+
+  return value;
+}
+
+function readTsConfigWithReferences(
+  tree: Tree,
+  path: string,
+): TsConfigWithReferences {
+  const value = readJson(tree, path);
+
+  if (!isTsConfigWithReferences(value)) {
+    throw new Error(`Expected ${path} to contain TypeScript references.`);
+  }
+
+  return value;
+}
+
+function hasStringRecordProperty(
+  value: JsonObject,
+  key: string,
+): value is JsonObject & Record<typeof key, Record<string, string>> {
+  const property = value[key];
+
+  return (
+    typeof property === 'object' &&
+    property !== null &&
+    Object.values(property).every((entry) => typeof entry === 'string')
+  );
+}
+
+function hasJsonObjectProperty(
+  value: JsonObject,
+  key: string,
+): value is JsonObject & Record<typeof key, JsonObject> {
+  const property = value[key];
+
+  return typeof property === 'object' && property !== null;
+}
+
+function isApiProjectPackageJson(
+  value: unknown,
+): value is ApiProjectPackageJson {
+  if (!isJsonObject(value) || !hasJsonObjectProperty(value, 'nx')) {
+    return false;
+  }
+
+  const { nx } = value;
+
+  return hasJsonObjectProperty(nx, 'targets');
+}
+
+function isJsonObject(value: unknown): value is JsonObject {
+  return typeof value === 'object' && value !== null;
+}
+
+function isPackageJsonWithDependencies(
+  value: unknown,
+): value is PackageJsonWithDependencies {
+  return (
+    isJsonObject(value) &&
+    typeof value.name === 'string' &&
+    hasStringRecordProperty(value, 'dependencies')
+  );
+}
+
+function isRootPackageJson(value: unknown): value is RootPackageJson {
+  return isJsonObject(value) && hasStringRecordProperty(value, 'scripts');
+}
+
+function isTsConfigWithReferences(
+  value: unknown,
+): value is TsConfigWithReferences {
+  return (
+    isJsonObject(value) &&
+    Array.isArray(value.references) &&
+    value.references.every(
+      (reference) =>
+        isJsonObject(reference) && typeof reference.path === 'string',
+    )
+  );
+}

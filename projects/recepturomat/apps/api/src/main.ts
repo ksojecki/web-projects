@@ -1,11 +1,17 @@
-import 'dotenv/config';
 import Fastify from 'fastify';
 import { existsSync, readFileSync } from 'node:fs';
 import type { FastifyInstance } from 'fastify';
+import {
+  applyProductRuntimeDefaults,
+  loadProductEnv,
+} from '@ksojecki/platform-shared';
 import { createServerPlatform } from '@ksojecki/platform-server-platform';
 import { recepturomatProjectConfig } from './productConfig';
 import { recepturomatRecipeApiPlugin } from './recipe-api';
 import { recipeStorePlugin } from './recipe-store';
+
+loadProductEnv('recepturomat');
+applyProductRuntimeDefaults('recepturomat');
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;

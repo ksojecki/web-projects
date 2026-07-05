@@ -14,11 +14,18 @@ const pagesSharedSourcePath = fileURLToPath(
   ),
 );
 
-export default defineConfig(({ command }) => {
+export default defineConfig(async ({ command }) => {
+  const { getProductApiPort, getProductWebPort, loadProductEnv } =
+    await import('../../../../scripts/workspace-config.mjs');
+
+  loadProductEnv('rod-manager');
+
   const nodeEnv =
     command === 'build'
       ? 'production'
       : (process.env.NODE_ENV ?? 'development');
+  const apiPort = getProductApiPort('rod-manager');
+  const webPort = getProductWebPort('rod-manager');
 
   process.env.NODE_ENV = nodeEnv;
 
@@ -26,18 +33,18 @@ export default defineConfig(({ command }) => {
     root: import.meta.dirname,
     cacheDir: '../../../../node_modules/.vite/projects/rod-manager/apps/web',
     server: {
-      port: 4200,
+      port: webPort,
       host: 'localhost',
       proxy: {
         '/api': {
-          target: 'https://localhost:3000',
+          target: `https://localhost:${String(apiPort)}`,
           changeOrigin: true,
           secure: false,
         },
       },
     },
     preview: {
-      port: 4200,
+      port: webPort,
       host: 'localhost',
     },
     define: {

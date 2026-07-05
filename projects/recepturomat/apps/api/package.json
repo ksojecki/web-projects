@@ -77,6 +77,14 @@
           }
         }
       },
+      "launch": {
+        "continuous": true,
+        "cache": false,
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node ./tools/launch/launch-product.mjs --project-id recepturomat --serve-target @ksojecki/recepturomat-api:serve --default-api-port 3100 --default-frontend-base-url https://localhost:3100 --default-chrome-debug-port 9333"
+        }
+      },
       "typecheck": {
         "dependsOn": [
           "^build"

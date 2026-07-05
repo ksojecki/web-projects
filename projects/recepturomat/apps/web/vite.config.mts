@@ -3,11 +3,18 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-export default defineConfig(({ command }) => {
+export default defineConfig(async ({ command }) => {
+  const { getProductApiPort, getProductWebPort, loadProductEnv } =
+    await import('../../../../scripts/workspace-config.mjs');
+
+  loadProductEnv('recepturomat');
+
   const nodeEnv =
     command === 'build'
       ? 'production'
       : (process.env.NODE_ENV ?? 'development');
+  const apiPort = getProductApiPort('recepturomat');
+  const webPort = getProductWebPort('recepturomat');
 
   process.env.NODE_ENV = nodeEnv;
 
@@ -15,18 +22,18 @@ export default defineConfig(({ command }) => {
     root: import.meta.dirname,
     cacheDir: '../../../../node_modules/.vite/projects/recepturomat/apps/web',
     server: {
-      port: 4200,
+      port: webPort,
       host: 'localhost',
       proxy: {
         '/api': {
-          target: 'https://localhost:3000',
+          target: `https://localhost:${String(apiPort)}`,
           changeOrigin: true,
           secure: false,
         },
       },
     },
     preview: {
-      port: 4200,
+      port: webPort,
       host: 'localhost',
     },
     define: {

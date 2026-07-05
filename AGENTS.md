@@ -48,12 +48,16 @@
 - Before implementation work starts, check the current branch. If you are on `main`, create a new working branch first.
 - When running task-oriented Nx commands as an AI agent, prefer `--no-tui` to suppress interactive output when the command supports it.
 - Install deps: `npm ci` (used in CI).
-- Start local SSR development as an AI agent with `npm run dev:rod-manager`, then smoke test `https://localhost:3000/` and `https://localhost:3000/api` through an authenticated session.
-- If port `3000` is already in use, inspect the listener with `lsof -nP -iTCP:3000 -sTCP:LISTEN`. Reuse an existing `rod-manager` dev server when possible. Only stop the process automatically if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
+- Prefer `nx run <api-project>:launch --no-tui` for local UI work and browser debugging. Today that means `npx nx run @ksojecki/rod-manager-api:launch --no-tui` on `https://localhost:3000/` with Chrome DevTools on `127.0.0.1:9222`, or `npx nx run @ksojecki/recepturomat-api:launch --no-tui` on `https://localhost:3100/` with Chrome DevTools on `127.0.0.1:9333`. The root `npm run launch:<project>` commands are thin aliases to those Nx targets.
+- `npm run dev:<project>` remains the server-only path when you do not need Chrome to be opened for UI debugging.
+- Launch-time env resolution is: shell env first, then `.env`, `.env.local`, `projects/<project>/.env`, and `projects/<project>/.env.local`. Later files override earlier files; project-local files are the intended place for per-product overrides such as `PORT`, `WEB_PORT`, `AUTH_DB_PATH`, `AUTH_SEED_INITIAL_USER`, `OAUTH_REDIRECT_BASE_URL`, `CHROME_USER_DATA_DIR`, and `CHROME_DEBUG_PORT`.
+- When validating auth seeding, treat `AUTH_SEED_INITIAL_USER`, `AUTH_INITIAL_USER_EMAIL`, and `AUTH_INITIAL_USER_PASSWORD` as shared defaults. A project-local `AUTH_SEED_INITIAL_USER` override applies only to that product.
+- If a product's default API port is already in use, inspect the listener with `lsof -nP -iTCP:<port> -sTCP:LISTEN` and reuse an existing matching dev server when possible. Only stop the process automatically if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
 - Run lint via npm script: `npm run lint` (delegates to Nx `lint` targets).
 - Run formatting checks: `npm run format:check`; auto-fix formatting: `npm run format`.
 - Run CI-equivalent checks locally: `npx nx run-many -t lint test build typecheck --no-tui`.
-- For frontend review work, inspect the rendered localhost page before judging the UI from source alone. Reuse an existing local server on port `3000` when available, authenticate the localhost session before evaluating page or API behavior, compare the first SSR shell with the hydrated/authenticated state, and capture concrete evidence from rendered HTML, API payloads, or browser automation. If browser access is blocked by the environment, report that blocker explicitly and fall back to the best available rendered-page evidence instead of guessing from code only.
+- For frontend review work, inspect the rendered localhost page before judging the UI from source alone. Prefer the Nx `launch` target or its npm alias so Codex can debug the real page through the Chrome-backed browser path after launch, authenticate the localhost session before evaluating page or API behavior, compare the first SSR shell with the hydrated/authenticated state, and capture concrete evidence from rendered HTML, API payloads, browser automation, or DevTools inspection. If browser access is blocked by the environment, report that blocker explicitly and fall back to the best available rendered-page evidence instead of guessing from code only.
+- On this machine there is no standalone `[mcp_servers.chrome-devtools]` entry. The supported Chrome path is the bundled browser plugin talking to the existing `node_repl` backend with Chrome enabled, alongside the repo-local Nx MCP configuration.
 - Keep Husky hooks in sync with CI check categories using staged-file equivalents where possible; `.husky/pre-commit` should run `lint-staged`, and the `lint-staged` config should track CI lint/format expectations for staged files.
 - Apply Nx Cloud CI remediation hints: `npx nx fix-ci --no-tui`.
 - Explore project/task graph: `npx nx graph --print` for stdout or `npx nx graph --file=/tmp/nx-graph.json` for machine-readable output. Prefer `nx show` first because graph output is much larger.
@@ -124,7 +128,7 @@ Provider credentials must be configured via environment variables:
 - `OAUTH_GOOGLE_CLIENT_ID` / `OAUTH_GOOGLE_CLIENT_SECRET` — Google OAuth 2.0 app credentials.
 - `OAUTH_APPLE_CLIENT_ID` / `OAUTH_APPLE_CLIENT_SECRET` / `OAUTH_APPLE_TEAM_ID` — Apple Sign In credentials.
 - `OAUTH_FACEBOOK_CLIENT_ID` / `OAUTH_FACEBOOK_CLIENT_SECRET` — Facebook app credentials.
-- `OAUTH_REDIRECT_BASE_URL` — Base URL for OAuth callbacks (default: `http://localhost:3000`); must match provider redirect URI config.
+- `OAUTH_REDIRECT_BASE_URL` — Base URL for OAuth callbacks; in local launch/dev sessions it falls back to the selected product's default localhost URL when unset, and it must match the provider redirect URI config.
 
 ### Adding a New OAuth Provider
 
