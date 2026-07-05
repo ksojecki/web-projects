@@ -19,7 +19,7 @@ git clone https://github.com/hardikpandya/stop-slop ~/.codex/skills/stop-slop
   front.
 - Inspect `package.json`, `nx.json`, and the touched project package/config files before changing code.
 - Inspect `.husky/pre-commit` and `.lintstagedrc.mjs` before changing staged-file validation behavior.
-- Use `rg`/`rg --files` for searches; avoid opening generated output in `dist`, `coverage`, `.nx`, and `node_modules`.
+- Use `rg`/`rg --files` for searches; avoid generated output in `dist`, `coverage`, `.nx`, and `node_modules`. For broad searches, add `--glob '!**/node_modules/**' --glob '!**/.nx/**'`.
 
 ### Low-token start sequence
 
@@ -27,7 +27,7 @@ Use the cheapest discovery path that can answer the current question:
 
 ```sh
 git --no-pager status --short
-rg -n "<feature|file|target clue>" .
+rg -n "<feature|file|target clue>" . --glob '!**/node_modules/**' --glob '!**/.nx/**'
 npx nx show projects --json
 npx nx show project <project-name> --json
 ```

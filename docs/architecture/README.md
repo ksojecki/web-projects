@@ -10,6 +10,7 @@ Root architecture docs cover workspace-wide decisions. Product migration notes l
 - [Project-template context](project-template-refactor-ticket.md)
 - [Project-template roadmap](project-template-implementation-roadmap.md)
 - [Server-platform externalization plan](server-platform-externalization-plan.md)
+- [Complexity reduction audit](complexity-audit.md)
 
 ## Owner Docs
 

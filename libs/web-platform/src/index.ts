@@ -20,6 +20,7 @@ export * from './lib/account/settingsApi';
 export * from './lib/account/types';
 export * from './lib/account/useDefaultAccountSections';
 export * from './lib/account/useAuthenticationMethods';
+export * from './lib/http';
 export * from './lib/shell/loginPrompt';
 export * from './lib/shell/PlatformFooter';
 export * from './lib/shell/PlatformNavbar';

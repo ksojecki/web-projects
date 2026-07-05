@@ -16,8 +16,6 @@ export default defineConfig(async ({ command }) => {
   const apiPort = getProductApiPort('recepturomat');
   const webPort = getProductWebPort('recepturomat');
 
-  process.env.NODE_ENV = nodeEnv;
-
   return {
     root: import.meta.dirname,
     cacheDir: '../../../../node_modules/.vite/projects/recepturomat/apps/web',

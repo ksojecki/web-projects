@@ -95,9 +95,12 @@ describe('projectTemplateGenerator', () => {
     expect(apiPackageJson.name).toBe('@ksojecki/recepturomat-api');
     expect(apiPackageJson.dependencies).toEqual(
       expect.objectContaining({
+        '@ksojecki/platform-shared': '0.0.1',
         '@ksojecki/platform-server-platform': '0.0.1',
       }),
     );
+    expect(apiPackageJson.dependencies).not.toHaveProperty('dotenv');
+    expect(apiPackageJson.dependencies).not.toHaveProperty('fastify');
     expect(apiPackageJson.dependencies).not.toHaveProperty(
       '@ksojecki/rod-manager-pages-server',
     );
@@ -127,10 +130,19 @@ describe('projectTemplateGenerator', () => {
       'utf-8',
     );
     expect(productConfig).toContain("projectId: 'recepturomat'");
-    expect(productConfig).toContain('process.env.AUTH_DB_PATH');
+    expect(productConfig).toContain("loadProductEnv('recepturomat')");
+    expect(productConfig).toContain("getProductAuthDbPath('recepturomat')");
+    expect(productConfig).toContain('getProductSeedInitialUser()');
     expect(productConfig).toContain(
       'dist/projects/recepturomat/apps/web/client',
     );
+
+    const apiMain = tree.read(
+      'projects/recepturomat/apps/api/src/main.ts',
+      'utf-8',
+    );
+    expect(apiMain).toContain('startProductServer');
+    expect(apiMain).not.toContain('Fastify from');
 
     const apiProjectPackageJson = readApiProjectPackageJson(
       tree,
@@ -177,6 +189,23 @@ describe('projectTemplateGenerator', () => {
     );
     expect(appLayoutSource).toContain('PlatformNavbar');
     expect(appLayoutSource).toContain('PlatformFooter');
+
+    const accountPageSource = tree.read(
+      'projects/recepturomat/apps/web/src/app/account/AccountPage.tsx',
+      'utf-8',
+    );
+    expect(accountPageSource).toContain('useDefaultAccountSections');
+    expect(accountPageSource).not.toContain('productAccountConfig');
+    expect(
+      tree.exists(
+        'projects/recepturomat/apps/web/src/app/account/productAccountConfig.ts',
+      ),
+    ).toBe(false);
+    expect(
+      tree.exists(
+        'projects/recepturomat/apps/web/src/app/account/productAccountSections.tsx',
+      ),
+    ).toBe(false);
 
     const i18nSource = tree.read(
       'projects/recepturomat/apps/web/src/app/i18n/i18n.ts',

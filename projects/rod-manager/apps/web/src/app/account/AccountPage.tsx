@@ -4,13 +4,11 @@ import {
   useAuth,
   useDefaultAccountSections,
 } from '@ksojecki/platform-web-platform';
-import { rodManagerAccountConfig } from './rodManagerAccountConfig';
 
 export const AccountPage = () => {
   const { t } = useTranslation('account');
   const { user } = useAuth();
-  const extraSections = rodManagerAccountConfig.useExtraSections();
-  const sections = useDefaultAccountSections(extraSections);
+  const sections = useDefaultAccountSections();
 
   return (
     <AccountShell

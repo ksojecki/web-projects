@@ -1,74 +1,16 @@
-import Fastify from 'fastify';
-import { existsSync, readFileSync } from 'node:fs';
-import type { FastifyInstance } from 'fastify';
-import {
-  applyProductRuntimeDefaults,
-  loadProductEnv,
-} from '@ksojecki/platform-shared';
-import { createServerPlatform } from '@ksojecki/platform-server-platform';
+import { startProductServer } from '@ksojecki/platform-server-platform';
 import { recepturomatProjectConfig } from './productConfig';
 import { recepturomatRecipeApiPlugin } from './recipe-api';
 import { recipeStorePlugin } from './recipe-store';
 
-loadProductEnv('recepturomat');
-applyProductRuntimeDefaults('recepturomat');
-
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-const isProduction = process.env.NODE_ENV === 'production';
-
-const defaultDevKeyPath = '.cert/localhost-key.pem';
-const defaultDevCertPath = '.cert/localhost-cert.pem';
-const httpsOptions = getHttpsOptions();
-
-const server = Fastify({
-  logger: true,
-  https: httpsOptions,
-}) as FastifyInstance;
-
-function getHttpsOptions() {
-  const httpsKeyPath =
-    process.env.HTTPS_KEY_PATH ??
-    (isProduction ? undefined : defaultDevKeyPath);
-  const httpsCertPath =
-    process.env.HTTPS_CERT_PATH ??
-    (isProduction ? undefined : defaultDevCertPath);
-
-  if (httpsKeyPath === undefined || httpsCertPath === undefined) {
-    throw new Error(
-      'HTTPS requires HTTPS_KEY_PATH and HTTPS_CERT_PATH in production.',
+void startProductServer({
+  productId: 'recepturomat',
+  project: recepturomatProjectConfig,
+  async registerFeaturePlugins(server) {
+    await server.register(
+      recipeStorePlugin,
+      recepturomatProjectConfig.recipeStore,
     );
-  }
-
-  if (!existsSync(httpsKeyPath) || !existsSync(httpsCertPath)) {
-    throw new Error(
-      `Missing TLS files: ${httpsKeyPath} and ${httpsCertPath}. Run npm install for local development or provide certificate paths via HTTPS_KEY_PATH and HTTPS_CERT_PATH.`,
-    );
-  }
-
-  return {
-    key: readFileSync(httpsKeyPath),
-    cert: readFileSync(httpsCertPath),
-  };
-}
-
-server.register(async (instance) => {
-  await instance.register(
-    recipeStorePlugin,
-    recepturomatProjectConfig.recipeStore,
-  );
-  await createServerPlatform(instance, {
-    project: recepturomatProjectConfig,
-    plugins: [],
-  });
-  await instance.register(recepturomatRecipeApiPlugin);
-});
-
-server.listen({ port, host }, (err) => {
-  if (err) {
-    server.log.error(err);
-    process.exit(1);
-  } else {
-    console.log(`[ ready ] https://${host}:${String(port)}`);
-  }
+    await server.register(recepturomatRecipeApiPlugin);
+  },
 });

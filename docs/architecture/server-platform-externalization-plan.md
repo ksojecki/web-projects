@@ -241,7 +241,6 @@ Historical implementation tasks:
 Deliverables:
 
 - `projects/rod-manager/plugins/pages/server` package.
-- `projects/rod-manager/plugins/pages/ui` package for `WebPlatform` integration.
 - Pages-specific store and migrations relocated from core db plugin.
 
 Tasks:
@@ -345,7 +344,6 @@ Mitigation: Keep DTOs in one shared package + contract tests.
 - [ ] Introduce `ServerPlatformPlugin` contract and plugin registry.
 - [ ] Refactor `projects/rod-manager/apps/api/src/main.ts` to bootstrap-only host.
 - [ ] Extract `pages` routes and store into `projects/rod-manager/plugins/pages/server`.
-- [ ] Add paired `WebPlatform` extension in `projects/rod-manager/plugins/pages/ui`.
 - [ ] Move pages migrations to plugin package.
 - [ ] Keep auth/session store (including `store.ts`) in core package.
 - [ ] Add contract tests for pages DTOs and error responses.

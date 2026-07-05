@@ -165,9 +165,8 @@ function writeApiApp(tree: Tree, options: NormalizedOptions): void {
       },
     },
     dependencies: {
+      '@ksojecki/platform-shared': '0.0.1',
       '@ksojecki/platform-server-platform': '0.0.1',
-      dotenv: '^17.4.2',
-      fastify: '^5.8.5',
     },
   });
 
@@ -192,6 +191,7 @@ function writeApiApp(tree: Tree, options: NormalizedOptions): void {
     include: ['src/**/*.ts'],
     exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
     references: [
+      { path: '../../../../libs/shared/tsconfig.lib.json' },
       { path: '../../../../libs/server-platform/tsconfig.lib.json' },
     ],
   });
@@ -207,6 +207,7 @@ function writeApiApp(tree: Tree, options: NormalizedOptions): void {
     },
     include: ['src/**/*.ts'],
     references: [
+      { path: '../../../../libs/shared/tsconfig.lib.json' },
       { path: '../../../../libs/server-platform/tsconfig.lib.json' },
     ],
   });
@@ -429,16 +430,6 @@ function writeWebApp(tree: Tree, options: NormalizedOptions): void {
   );
   writeFile(
     tree,
-    joinPathFragments(webRoot, 'src/app/account/productAccountConfig.ts'),
-    createProductAccountConfig(),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/app/account/productAccountSections.tsx'),
-    createProductAccountSections(options),
-  );
-  writeFile(
-    tree,
     joinPathFragments(webRoot, 'src/app/layout/AppLayout.tsx'),
     createAppLayout(),
   );
@@ -447,7 +438,12 @@ function writeWebApp(tree: Tree, options: NormalizedOptions): void {
 function createApiViteConfig(options: NormalizedOptions): string {
   return `/// <reference types="vitest" />
 import { builtinModules } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
+
+const sharedSourcePath = fileURLToPath(
+  new URL('../../../../libs/shared/src/index.ts', import.meta.url),
+);
 
 const nodeBuiltins = new Set([
   ...builtinModules,
@@ -470,6 +466,9 @@ export default defineConfig(({ mode }) => ({
   root: import.meta.dirname,
   cacheDir: '../../../../node_modules/.vite/${options.projectRoot}/apps/api',
   resolve: {
+    alias: {
+      '@ksojecki/platform-shared': sharedSourcePath,
+    },
     conditions: ['@ksojecki/platform-source'],
   },
   ssr: {
@@ -500,10 +499,18 @@ export default defineConfig(({ mode }) => ({
 }
 
 function createApiVitestConfig(): string {
-  return `import { defineConfig } from 'vitest/config';
+  return `import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vitest/config';
+
+const sharedSourcePath = fileURLToPath(
+  new URL('../../../../libs/shared/src/index.ts', import.meta.url),
+);
 
 export default defineConfig({
   resolve: {
+    alias: {
+      '@ksojecki/platform-shared': sharedSourcePath,
+    },
     conditions: ['@ksojecki/platform-source'],
   },
   test: {
@@ -517,66 +524,12 @@ export default defineConfig({
 }
 
 function createApiMain(options: NormalizedOptions): string {
-  return `import 'dotenv/config';
-import Fastify from 'fastify';
-import { existsSync, readFileSync } from 'node:fs';
-import type { FastifyInstance } from 'fastify';
-import { createServerPlatform } from '@ksojecki/platform-server-platform';
+  return `import { startProductServer } from '@ksojecki/platform-server-platform';
 import { ${options.projectConfigConstName} } from './productConfig';
 
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-const isProduction = process.env.NODE_ENV === 'production';
-
-const defaultDevKeyPath = '.cert/localhost-key.pem';
-const defaultDevCertPath = '.cert/localhost-cert.pem';
-const httpsOptions = getHttpsOptions();
-
-const server = Fastify({
-  logger: true,
-  https: httpsOptions,
-}) as FastifyInstance;
-
-function getHttpsOptions() {
-  const httpsKeyPath =
-    process.env.HTTPS_KEY_PATH ??
-    (isProduction ? undefined : defaultDevKeyPath);
-  const httpsCertPath =
-    process.env.HTTPS_CERT_PATH ??
-    (isProduction ? undefined : defaultDevCertPath);
-
-  if (httpsKeyPath === undefined || httpsCertPath === undefined) {
-    throw new Error(
-      'HTTPS requires HTTPS_KEY_PATH and HTTPS_CERT_PATH in production.',
-    );
-  }
-
-  if (!existsSync(httpsKeyPath) || !existsSync(httpsCertPath)) {
-    throw new Error(
-      \`Missing TLS files: \${httpsKeyPath} and \${httpsCertPath}. Run npm install for local development or provide certificate paths via HTTPS_KEY_PATH and HTTPS_CERT_PATH.\`,
-    );
-  }
-
-  return {
-    key: readFileSync(httpsKeyPath),
-    cert: readFileSync(httpsCertPath),
-  };
-}
-
-server.register(async (instance) => {
-  await createServerPlatform(instance, {
-    project: ${options.projectConfigConstName},
-    plugins: [],
-  });
-});
-
-server.listen({ port, host }, (err) => {
-  if (err) {
-    server.log.error(err);
-    process.exit(1);
-  } else {
-    console.log(\`[ ready ] https://\${host}:\${String(port)}\`);
-  }
+void startProductServer({
+  productId: '${options.name}',
+  project: ${options.projectConfigConstName},
 });
 `;
 }
@@ -584,12 +537,19 @@ server.listen({ port, host }, (err) => {
 function createApiProductConfig(options: NormalizedOptions): string {
   return `import path from 'node:path';
 import type { ServerPlatformProjectConfig } from '@ksojecki/platform-server-platform';
+import {
+  getProductAuthDbPath,
+  getProductSeedInitialUser,
+  loadProductEnv,
+} from '@ksojecki/platform-shared';
+
+loadProductEnv('${options.name}');
 
 export const ${options.projectConfigConstName}: ServerPlatformProjectConfig = {
   projectId: '${options.name}',
   database: {
-    path: process.env.AUTH_DB_PATH ?? 'tmp/${options.name}/auth.sqlite',
-    seedInitialUser: process.env.AUTH_SEED_INITIAL_USER === 'true',
+    path: getProductAuthDbPath('${options.name}'),
+    seedInitialUser: getProductSeedInitialUser(),
   },
   ssr: {
     webRoot: path.resolve(process.cwd(), 'projects/${options.name}/apps/web'),
@@ -636,8 +596,6 @@ export default defineConfig(({ command }) => {
     command === 'build'
       ? 'production'
       : (process.env.NODE_ENV ?? 'development');
-
-  process.env.NODE_ENV = nodeEnv;
 
   return {
     root: import.meta.dirname,
@@ -1022,13 +980,16 @@ export function HomePage() {
 
 function createAccountPage(): string {
   return `import { useTranslation } from 'react-i18next';
-import { AccountShell, useAuth } from '@ksojecki/platform-web-platform';
-import { productAccountConfig } from './productAccountConfig';
+import {
+  AccountShell,
+  useAuth,
+  useDefaultAccountSections,
+} from '@ksojecki/platform-web-platform';
 
 export function AccountPage() {
   const { t } = useTranslation('account');
   const { user } = useAuth();
-  const sections = productAccountConfig.useSections();
+  const sections = useDefaultAccountSections();
 
   return (
     <AccountShell
@@ -1041,43 +1002,6 @@ export function AccountPage() {
       })}
     />
   );
-}
-`;
-}
-
-function createProductAccountConfig(): string {
-  return `import type { AccountSectionsHook } from '@ksojecki/platform-web-platform';
-import { useProductAccountSections } from './productAccountSections';
-
-export interface ProductAccountConfig {
-  useSections: AccountSectionsHook;
-}
-
-export const productAccountConfig: ProductAccountConfig = {
-  useSections: useProductAccountSections,
-};
-`;
-}
-
-function createProductAccountSections(options: NormalizedOptions): string {
-  return `import type { AccountSection } from '@ksojecki/platform-web-platform';
-
-export function useProductAccountSections(): AccountSection[] {
-  return [
-    {
-      id: 'starter-notes',
-      content: (
-        <div className="rounded-box border border-base-300 p-4">
-          <h2 className="text-lg font-medium">${options.displayName} starter notes</h2>
-          <p className="text-base-content/75">
-            Replace this section list with product-specific account content.
-            The surrounding account shell and auth mechanics stay shared in
-            libs/web-platform.
-          </p>
-        </div>
-      ),
-    },
-  ];
 }
 `;
 }
