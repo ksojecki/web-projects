@@ -18,6 +18,18 @@ type ApiProjectPackageJson = {
   };
 };
 
+type WebProjectPackageJson = {
+  nx: {
+    targets: Record<
+      string,
+      {
+        configurations?: Record<string, { command?: string }>;
+        options?: Record<string, string>;
+      }
+    >;
+  };
+};
+
 type TsConfigWithReferences = {
   references: Array<{ path: string }>;
 };
@@ -151,6 +163,12 @@ describe('projectTemplateGenerator', () => {
     expect(apiProjectPackageJson.nx.targets.dev.options?.command).toContain(
       'tools/launch/launch-product.mjs',
     );
+    expect(apiProjectPackageJson.nx.targets.build.options?.command).toContain(
+      'npx vite build',
+    );
+    expect(
+      apiProjectPackageJson.nx.targets.build.options?.command,
+    ).not.toContain('node_modules/vite');
 
     const routesSource = tree.read(
       'projects/recepturomat/apps/web/src/app/routes.tsx',
@@ -216,6 +234,23 @@ describe('projectTemplateGenerator', () => {
       "passwordSectionTitle: 'Create account with password'",
     );
 
+    const webProjectPackageJson = readWebProjectPackageJson(
+      tree,
+      'projects/recepturomat/apps/web/package.json',
+    );
+    expect(
+      webProjectPackageJson.nx.targets['build-client'].options?.command,
+    ).toContain('dist/projects/recepturomat/apps/web/client');
+    expect(
+      webProjectPackageJson.nx.targets['build-client'].options?.command,
+    ).not.toContain('sample-portal');
+    expect(
+      webProjectPackageJson.nx.targets['build-client'].options?.command,
+    ).toContain('npx vite build');
+    expect(
+      webProjectPackageJson.nx.targets['build-client'].options?.command,
+    ).not.toContain('node_modules/vite');
+
     const rootTsConfig = readTsConfigWithReferences(tree, 'tsconfig.json');
     expect(rootTsConfig.references).toEqual(
       expect.arrayContaining([
@@ -235,6 +270,21 @@ function readApiProjectPackageJson(
   if (!isApiProjectPackageJson(value)) {
     throw new Error(
       `Expected ${path} to contain Nx public dev target metadata.`,
+    );
+  }
+
+  return value;
+}
+
+function readWebProjectPackageJson(
+  tree: Tree,
+  path: string,
+): WebProjectPackageJson {
+  const value = readJson(tree, path);
+
+  if (!isWebProjectPackageJson(value)) {
+    throw new Error(
+      `Expected ${path} to contain Nx public build target metadata.`,
     );
   }
 
@@ -302,6 +352,18 @@ function hasJsonObjectProperty(
 function isApiProjectPackageJson(
   value: unknown,
 ): value is ApiProjectPackageJson {
+  if (!isJsonObject(value) || !hasJsonObjectProperty(value, 'nx')) {
+    return false;
+  }
+
+  const { nx } = value;
+
+  return hasJsonObjectProperty(nx, 'targets');
+}
+
+function isWebProjectPackageJson(
+  value: unknown,
+): value is WebProjectPackageJson {
   if (!isJsonObject(value) || !hasJsonObjectProperty(value, 'nx')) {
     return false;
   }

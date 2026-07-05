@@ -3,8 +3,11 @@ import { builtinModules } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 
+const workspaceRelativeRoot = '../../../../';
+const cacheDir = `${workspaceRelativeRoot}node_modules/.vite/projects/rod-manager/apps/api`;
+const outDir = `${workspaceRelativeRoot}dist/projects/rod-manager/apps/api`;
 const sharedSourcePath = fileURLToPath(
-  new URL('../../../../libs/shared/src/index.ts', import.meta.url),
+  new URL(`${workspaceRelativeRoot}libs/shared/src/index.ts`, import.meta.url),
 );
 
 const nodeBuiltins = new Set([
@@ -26,7 +29,7 @@ function isExternalImport(id: string) {
 
 export default defineConfig(({ mode }) => ({
   root: import.meta.dirname,
-  cacheDir: '../../../../node_modules/.vite/projects/rod-manager/apps/api',
+  cacheDir,
   resolve: {
     alias: {
       '@ksojecki/platform-shared': sharedSourcePath,
@@ -40,7 +43,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     ssr: 'src/main.ts',
-    outDir: '../../../../dist/projects/rod-manager/apps/api',
+    outDir,
     emptyOutDir: true,
     reportCompressedSize: false,
     sourcemap: mode !== 'production',

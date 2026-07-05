@@ -4,19 +4,30 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
+const workspaceRelativeRoot = '../../../../';
+const workspaceConfigUrl = new URL(
+  `${workspaceRelativeRoot}scripts/workspace-config.mjs`,
+  import.meta.url,
+);
+const cacheDir = `${workspaceRelativeRoot}node_modules/.vite/projects/rod-manager/apps/web`;
+const clientOutDir = `${workspaceRelativeRoot}dist/projects/rod-manager/apps/web/client`;
 const webPlatformSourcePath = fileURLToPath(
-  new URL('../../../../libs/web-platform/src/index.ts', import.meta.url),
+  new URL(
+    `${workspaceRelativeRoot}libs/web-platform/src/index.ts`,
+    import.meta.url,
+  ),
 );
 const pagesSharedSourcePath = fileURLToPath(
   new URL(
-    '../../../../projects/rod-manager/plugins/pages/shared/src/index.ts',
+    `${workspaceRelativeRoot}projects/rod-manager/plugins/pages/shared/src/index.ts`,
     import.meta.url,
   ),
 );
 
 export default defineConfig(async ({ command }) => {
-  const { getProductApiPort, getProductWebPort, loadProductEnv } =
-    await import('../../../../scripts/workspace-config.mjs');
+  const { getProductApiPort, getProductWebPort, loadProductEnv } = await import(
+    workspaceConfigUrl.href
+  );
 
   loadProductEnv('rod-manager');
 
@@ -29,7 +40,7 @@ export default defineConfig(async ({ command }) => {
 
   return {
     root: import.meta.dirname,
-    cacheDir: '../../../../node_modules/.vite/projects/rod-manager/apps/web',
+    cacheDir,
     server: {
       port: webPort,
       host: 'localhost',
@@ -66,7 +77,7 @@ export default defineConfig(async ({ command }) => {
     //  plugins: [],
     // },
     build: {
-      outDir: '../../../../dist/projects/rod-manager/apps/web/client',
+      outDir: clientOutDir,
       emptyOutDir: true,
       reportCompressedSize: true,
       commonjsOptions: {

@@ -12,14 +12,14 @@
         "defaultConfiguration": "production",
         "options": {
           "cwd": "projects/rod-manager/apps/api",
-          "command": "node ../../../../node_modules/vite/bin/vite.js build --config vite.config.mts --mode production"
+          "command": "npx vite build --config vite.config.mts --mode production"
         },
         "configurations": {
           "development": {
-            "command": "node ../../../../node_modules/vite/bin/vite.js build --config vite.config.mts --mode development"
+            "command": "npx vite build --config vite.config.mts --mode development"
           },
           "production": {
-            "command": "node ../../../../node_modules/vite/bin/vite.js build --config vite.config.mts --mode production"
+            "command": "npx vite build --config vite.config.mts --mode production"
           }
         }
       },
@@ -92,7 +92,7 @@
         "executor": "nx:run-commands",
         "options": {
           "cwd": "projects/rod-manager/apps/api",
-          "command": "node ../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json && node ../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.spec.json"
+          "command": "npx tsc --noEmit -p tsconfig.app.json && npx tsc --noEmit -p tsconfig.spec.json"
         }
       },
       "lint": {
@@ -105,14 +105,14 @@
         "executor": "nx:run-commands",
         "options": {
           "cwd": "projects/rod-manager/apps/api",
-          "command": "node ../../../../node_modules/vitest/vitest.mjs run --config vitest.config.mts"
+          "command": "npx vitest run --config vitest.config.mts"
         }
       },
       "format": {
         "executor": "nx:run-commands",
         "options": {
           "cwd": "projects/rod-manager/apps/api",
-          "command": "node ../../../../node_modules/prettier/bin/prettier.cjs --write ."
+          "command": "npx prettier --write ."
         }
       }
     }
