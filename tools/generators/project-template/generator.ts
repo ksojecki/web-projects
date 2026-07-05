@@ -13,7 +13,6 @@ export interface ProjectTemplateSchema {
 interface NormalizedOptions {
   apiPackageName: string;
   displayName: string;
-  envPrefix: string;
   name: string;
   projectConfigConstName: string;
   projectPropertyName: string;
@@ -44,7 +43,6 @@ function normalizeOptions(schema: ProjectTemplateSchema): NormalizedOptions {
   return {
     apiPackageName: `@ksojecki/${projectName}-api`,
     displayName: toDisplayName(projectName),
-    envPrefix: projectName.replace(/-/g, '_').toUpperCase(),
     name: projectName,
     projectConfigConstName: `${parsedName.propertyName}ProjectConfig`,
     projectPropertyName: parsedName.propertyName,
@@ -123,6 +121,14 @@ function writeApiApp(tree: Tree, options: NormalizedOptions): void {
             production: {
               buildTarget: `${options.apiPackageName}:build:production`,
             },
+          },
+        },
+        launch: {
+          continuous: true,
+          cache: false,
+          executor: 'nx:run-commands',
+          options: {
+            command: `node ./tools/launch/launch-product.mjs --project-id ${options.name} --serve-target ${options.apiPackageName}:serve --default-api-port 3000 --default-frontend-base-url https://localhost:3000 --default-chrome-debug-port 9222`,
           },
         },
         typecheck: {
@@ -582,8 +588,8 @@ import type { ServerPlatformProjectConfig } from '@ksojecki/platform-server-plat
 export const ${options.projectConfigConstName}: ServerPlatformProjectConfig = {
   projectId: '${options.name}',
   database: {
-    path: process.env.${options.envPrefix}_AUTH_DB_PATH ?? 'tmp/${options.name}/auth.sqlite',
-    seedInitialUser: process.env.${options.envPrefix}_AUTH_SEED_INITIAL_USER === 'true',
+    path: process.env.AUTH_DB_PATH ?? 'tmp/${options.name}/auth.sqlite',
+    seedInitialUser: process.env.AUTH_SEED_INITIAL_USER === 'true',
   },
   ssr: {
     webRoot: path.resolve(process.cwd(), 'projects/${options.name}/apps/web'),
@@ -1141,6 +1147,8 @@ function updateRootPackageScripts(
       const scripts = value.scripts ?? {};
       scripts[`dev:${options.name}`] =
         `node ./node_modules/nx/dist/bin/nx.js run ${options.apiPackageName}:serve --no-tui`;
+      scripts[`launch:${options.name}`] =
+        `node ./node_modules/nx/dist/bin/nx.js run ${options.apiPackageName}:launch --no-tui`;
       value.scripts = scripts;
       return value;
     },

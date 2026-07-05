@@ -30,6 +30,9 @@ npm run setup:certs
 
 ## Supported Commands
 
+- `npx nx run @ksojecki/rod-manager-api:launch --no-tui` - start Rod Manager and open Chrome for Testing on `https://localhost:3000/` with remote debugging on `127.0.0.1:9222`
+- `npx nx run @ksojecki/recepturomat-api:launch --no-tui` - start Recepturomat and open Chrome for Testing on `https://localhost:3100/` with remote debugging on `127.0.0.1:9333`
+- `npm run launch:rod-manager` / `npm run launch:recepturomat` - thin aliases to the Nx launch targets above
 - `npm run dev:rod-manager` - start the Rod Manager API host and SSR web app
 - `npm run dev:recepturomat` - start the Recepturomat API host and SSR web app
 - `npm run generate:project -- <name>` - scaffold a new product
@@ -39,16 +42,49 @@ npm run setup:certs
 
 ## Local Development
 
-Start the main development stack:
+Prefer the per-project launch workflow for browser-facing work:
 
 ```sh
-npm run dev:rod-manager
+npx nx run @ksojecki/rod-manager-api:launch --no-tui
 ```
 
-Smoke checks:
+`launch:<project>` loads env in this order:
 
-- `https://localhost:3000/` should be checked through an authenticated session and return SSR HTML
-- `https://localhost:3000/api` should be checked through the same authenticated session and return Fastify API JSON
+1. shell environment
+2. `.env`
+3. `.env.local`
+4. `projects/<project>/.env`
+5. `projects/<project>/.env.local`
+
+Later files override earlier files. Keep shared defaults such as
+`AUTH_SEED_INITIAL_USER`, `AUTH_INITIAL_USER_EMAIL`, and
+`AUTH_INITIAL_USER_PASSWORD` in the root env files. Use project-local files only
+for product-specific overrides such as:
+
+- `PORT=3000` or `PORT=3100`
+- `WEB_PORT=4200` or `WEB_PORT=4300`
+- `CHROME_DEBUG_PORT=9222` or `CHROME_DEBUG_PORT=9333`
+- `CHROME_USER_DATA_DIR=tmp/chrome/<project>`
+- `AUTH_DB_PATH=tmp/<project>/auth.sqlite`
+- `RECIPE_DB_PATH=tmp/recepturomat/recipes.sqlite`
+- `OAUTH_REDIRECT_BASE_URL=https://localhost:<product-port>`
+- `AUTH_SEED_INITIAL_USER=true`
+
+Smoke checks after launch:
+
+- `https://localhost:3000/` and `https://localhost:3000/api` for Rod Manager
+- `https://localhost:3100/` and `https://localhost:3100/api` for Recepturomat
+
+Use an authenticated session for both the page and `/api` checks.
+
+If you only need the server process without opening Chrome, use
+`npm run dev:<project>` instead. The Nx launch target uses Puppeteer's managed
+Chrome for Testing by default and opens the product URL automatically.
+
+For Codex-driven UI debugging after `npm run launch:<project>`, use the
+Chrome-backed browser path exposed by the bundled browser plugin and the
+existing `node_repl` backend. This repo does not define or require a standalone
+`[mcp_servers.chrome-devtools]` block.
 
 ## Naming Rules
 

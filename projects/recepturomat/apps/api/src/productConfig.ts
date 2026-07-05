@@ -1,5 +1,13 @@
 import path from 'node:path';
 import type { ServerPlatformProjectConfig } from '@ksojecki/platform-server-platform';
+import {
+  getProductAuthDbPath,
+  getProductRecipeDbPath,
+  getProductSeedInitialUser,
+  loadProductEnv,
+} from '@ksojecki/platform-shared';
+
+loadProductEnv('recepturomat');
 
 export interface RecepturomatRecipeStoreConfig {
   path: string;
@@ -13,16 +21,12 @@ export interface RecepturomatProjectConfig extends ServerPlatformProjectConfig {
 export const recepturomatProjectConfig: RecepturomatProjectConfig = {
   projectId: 'recepturomat',
   database: {
-    path:
-      process.env.RECEPTUROMAT_AUTH_DB_PATH ?? 'tmp/recepturomat/auth.sqlite',
-    seedInitialUser: process.env.RECEPTUROMAT_AUTH_SEED_INITIAL_USER === 'true',
+    path: getProductAuthDbPath('recepturomat'),
+    seedInitialUser: getProductSeedInitialUser(),
   },
   recipeStore: {
-    path:
-      process.env.RECEPTUROMAT_RECIPE_DB_PATH ??
-      'tmp/recepturomat/recipes.sqlite',
-    seedLegacyRecipes:
-      process.env.RECEPTUROMAT_RECIPE_SEED_LEGACY_RECIPES !== 'false',
+    path: getProductRecipeDbPath(),
+    seedLegacyRecipes: process.env.RECIPE_SEED_LEGACY_RECIPES !== 'false',
   },
   ssr: {
     webRoot: path.resolve(process.cwd(), 'projects/recepturomat/apps/web'),

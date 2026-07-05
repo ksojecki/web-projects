@@ -3,8 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "test": "node ./node_modules/nx/dist/bin/nx.js run-many -t test --no-tui",
     "dev:rod-manager": "node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:serve --no-tui",
     "dev:recepturomat": "node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:serve --no-tui",
+    "launch:rod-manager": "node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:launch --no-tui",
+    "launch:recepturomat": "node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:launch --no-tui",
     "generate:project": "npx nx g ./tools/generators.json:project-template",
     "lint": "node ./node_modules/nx/dist/bin/nx.js run-many -t lint --no-tui",
     "typecheck": "node ./node_modules/nx/dist/bin/nx.js run-many -t typecheck --no-tui",
@@ -54,6 +57,7 @@
     "oxlint": "1.70.0",
     "oxlint-tsgolint": "0.23.0",
     "prettier": "3.8.4",
+    "puppeteer": "25.3.0",
     "tslib": "2.8.1",
     "typescript": "6.0.3",
     "verdaccio": "6.7.4",
@@ -81,6 +85,12 @@
   "nx": {
     "includedScripts": [],
     "targets": {
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node node_modules/oxlint/bin/oxlint tools scripts --config .oxlintrc.json"
+        }
+      },
       "local-registry": {
         "executor": "@nx/js:verdaccio",
         "options": {

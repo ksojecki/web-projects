@@ -2,5 +2,15 @@
 command = "npx"
 args = ["nx", "mcp"]
 
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[mcp_servers.node_repl.env]
+# Chrome browser automation is provided through the existing node_repl-backed
+# browser plugin path on this machine. Do not add a fake standalone
+# chrome-devtools MCP server here.
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+
 [features]
+plugins = true
 multi_agent = true
