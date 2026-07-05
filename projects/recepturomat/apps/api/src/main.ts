@@ -3,7 +3,7 @@ import { recepturomatProjectConfig } from './productConfig';
 import { recepturomatRecipeApiPlugin } from './recipe-api';
 import { recipeStorePlugin } from './recipe-store';
 
-void startProductServer({
+startProductServer({
   productId: 'recepturomat',
   project: recepturomatProjectConfig,
   async registerFeaturePlugins(server) {
