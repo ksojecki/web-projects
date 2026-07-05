@@ -7,7 +7,7 @@
     "dev:rod-manager": "node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:dev --no-tui",
     "dev:recepturomat": "node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:dev --no-tui",
     "generate:project": "npx nx g ./tools/generators.json:project-template",
-    "lint": "node ./node_modules/nx/dist/bin/nx.js run-many -t lint --no-tui",
+    "lint": "node ./node_modules/nx/dist/bin/nx.js run-many -t lint --no-tui && node ./scripts/check-no-deep-src-mocks.mjs",
     "typecheck": "node ./node_modules/nx/dist/bin/nx.js run-many -t typecheck --no-tui",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

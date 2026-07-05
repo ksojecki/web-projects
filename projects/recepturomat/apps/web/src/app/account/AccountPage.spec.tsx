@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -17,8 +18,13 @@ interface AuthContextLike {
 
 interface OAuthInitiateResponse {
   authorizationUrl: string;
-  state: string;
   codeVerifier: string;
+  state: string;
+}
+
+interface AccountSectionLike {
+  content: ReactNode;
+  id: string;
 }
 
 const {
@@ -43,24 +49,70 @@ const {
 
 vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
   const actual = await importOriginal<typeof PlatformWebPlatform>();
+  const React = await import('react');
+  const { useCallback, useEffect, useState } = React;
+  const { useTranslation } = await import('react-i18next');
+
+  function useDefaultAccountSections(
+    extraSections: AccountSectionLike[] = [],
+  ): AccountSectionLike[] {
+    const { t } = useTranslation('account');
+    const [methods, setMethods] = useState<
+      AuthenticationMethodsResponseBody['methods']
+    >([]);
+
+    const refreshAuthenticationMethods = useCallback(async () => {
+      const response = await mockLoadAuthenticationMethods();
+      setMethods(response.methods);
+    }, []);
+
+    useEffect(() => {
+      void refreshAuthenticationMethods();
+    }, [refreshAuthenticationMethods]);
+
+    const passwordMethod =
+      methods.find((method) => method.type === 'password') ?? null;
+    const oauthMethods = methods.filter(
+      (
+        method,
+      ): method is Extract<(typeof methods)[number], { type: 'oauth' }> =>
+        method.type === 'oauth',
+    );
+
+    return [
+      {
+        id: 'language',
+        content: <h2>{t('layout:languageLabel')}</h2>,
+      },
+      {
+        id: 'authentication-methods',
+        content: (
+          <div>
+            <h2>{t('authentication.title')}</h2>
+            {passwordMethod !== null ? (
+              <p>{t('authentication.passwordLabel')}</p>
+            ) : null}
+            {oauthMethods.map((method) => (
+              <p key={method.provider}>{method.provider}</p>
+            ))}
+          </div>
+        ),
+      },
+      ...extraSections,
+    ];
+  }
 
   return {
     ...actual,
-    useAuth: mockUseAuth,
+    linkOAuthProvider: mockLinkOAuthProvider,
+    loadAuthenticationMethods: mockLoadAuthenticationMethods,
+    storeOAuthState: mockStoreOAuthState,
+    unlinkOAuthProvider: mockUnlinkOAuthProvider,
     updatePassword: mockUpdatePassword,
+    useAuth: mockUseAuth,
+    useDefaultAccountSections,
   };
 });
-
-vi.mock('../../../../../../../libs/web-platform/src/lib/auth/authApi', () => ({
-  linkOAuthProvider: mockLinkOAuthProvider,
-  loadAuthenticationMethods: mockLoadAuthenticationMethods,
-  unlinkOAuthProvider: mockUnlinkOAuthProvider,
-  updatePassword: mockUpdatePassword,
-}));
-
-vi.mock('../../../../../../../libs/web-platform/src/lib/auth/storage', () => ({
-  storeOAuthState: mockStoreOAuthState,
-}));
 
 describe('AccountPage', () => {
   beforeEach(async () => {
@@ -76,6 +128,11 @@ describe('AccountPage', () => {
         displayName: 'Test User',
         role: 'user',
       },
+    });
+    mockLinkOAuthProvider.mockResolvedValue({
+      authorizationUrl: 'https://example.com/oauth',
+      codeVerifier: 'code-verifier',
+      state: 'oauth-state',
     });
     mockLoadAuthenticationMethods.mockResolvedValue({
       methods: [
@@ -100,9 +157,12 @@ describe('AccountPage', () => {
         },
       ],
     });
+    mockStoreOAuthState.mockImplementation(() => {});
+    mockUnlinkOAuthProvider.mockResolvedValue(undefined);
+    mockUpdatePassword.mockResolvedValue(undefined);
   });
 
-  it('renders shared account defaults plus the product extra section', async () => {
+  it('renders shared account defaults through the platform package root', async () => {
     render(
       <I18nextProvider i18n={i18n}>
         <AccountPage />
@@ -110,8 +170,10 @@ describe('AccountPage', () => {
     );
 
     expect(
-      await screen.findByRole('heading', { name: 'Account' }),
+      screen.getByRole('heading', { name: 'Account' }),
     ).toBeInTheDocument();
+    expect(screen.getByText('Welcome back, Test User.')).toBeInTheDocument();
+    expect(screen.getByText('user@example.com')).toBeInTheDocument();
     expect(
       await screen.findByRole('heading', { name: 'Language' }),
     ).toBeInTheDocument();
