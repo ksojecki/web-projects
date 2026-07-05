@@ -4,8 +4,10 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { createServerPlatform } from '../../../../../../libs/server-platform/src';
-import type { ServerPlatformProjectConfig } from '../../../../../../libs/server-platform/src/lib/contracts/bootstrap.contract';
+import {
+  createServerPlatform,
+  type ServerPlatformProjectConfig,
+} from '@ksojecki/platform-server-platform';
 import { recipeStorePlugin } from '../recipe-store';
 import { recepturomatRecipeApiPlugin } from './plugin';
 

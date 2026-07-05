@@ -43,6 +43,21 @@
     "eslint/curly": "error",
     "eslint/eqeqeq": "error",
     "eslint/no-shadow": "error",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["**/libs/*/src", "**/libs/*/src/**"],
+            "message": "Import from the published package root instead of a deep libs/*/src path."
+          },
+          {
+            "group": ["**/projects/*/src", "**/projects/*/src/**"],
+            "message": "Do not import another project's source files directly."
+          }
+        ]
+      }
+    ],
     "eslint/no-underscore-dangle": "error",
     "eslint/no-unused-vars": [
       "error",

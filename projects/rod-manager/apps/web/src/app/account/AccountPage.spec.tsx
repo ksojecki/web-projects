@@ -1,3 +1,4 @@
+import type { FormEvent, ReactNode } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -18,8 +19,13 @@ interface AuthContextLike {
 
 interface OAuthInitiateResponse {
   authorizationUrl: string;
-  state: string;
   codeVerifier: string;
+  state: string;
+}
+
+interface AccountSectionLike {
+  content: ReactNode;
+  id: string;
 }
 
 const {
@@ -44,24 +50,172 @@ const {
 
 vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
   const actual = await importOriginal<typeof PlatformWebPlatform>();
+  const React = await import('react');
+  const { useCallback, useEffect, useState } = React;
+  const { useTranslation } = await import('react-i18next');
+
+  function useDefaultAccountSections(
+    extraSections: AccountSectionLike[] = [],
+  ): AccountSectionLike[] {
+    const { t } = useTranslation('account');
+    const [methods, setMethods] = useState<
+      AuthenticationMethodsResponseBody['methods']
+    >([]);
+    const [showPasswordForm, setShowPasswordForm] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const refreshAuthenticationMethods = useCallback(async () => {
+      const response = await mockLoadAuthenticationMethods();
+      setMethods(response.methods);
+    }, []);
+
+    useEffect(() => {
+      void refreshAuthenticationMethods();
+    }, [refreshAuthenticationMethods]);
+
+    async function handleConnectProvider(
+      provider: OAuthProviderType,
+    ): Promise<void> {
+      const { authorizationUrl, codeVerifier, state } =
+        await mockLinkOAuthProvider(provider);
+      mockStoreOAuthState(state, codeVerifier);
+      window.location.href = authorizationUrl;
+    }
+
+    async function handleDisconnectProvider(
+      provider: OAuthProviderType,
+    ): Promise<void> {
+      await mockUnlinkOAuthProvider(provider);
+      await refreshAuthenticationMethods();
+    }
+
+    async function handlePasswordSubmit(event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+
+      await mockUpdatePassword({
+        currentPassword: undefined,
+        newPassword,
+      });
+      setNewPassword('');
+      setConfirmPassword('');
+      setShowPasswordForm(false);
+      await refreshAuthenticationMethods();
+    }
+
+    const passwordMethod =
+      methods.find((method) => method.type === 'password') ?? null;
+    const oauthMethods = methods.filter(
+      (
+        method,
+      ): method is Extract<(typeof methods)[number], { type: 'oauth' }> =>
+        method.type === 'oauth',
+    );
+
+    return [
+      {
+        id: 'language',
+        content: <h2>Language</h2>,
+      },
+      {
+        id: 'authentication-methods',
+        content: (
+          <div>
+            <h2>{t('authentication.title')}</h2>
+            {passwordMethod !== null ? (
+              <div>
+                <p>{t('authentication.passwordLabel')}</p>
+                <button
+                  onClick={() => {
+                    setShowPasswordForm((current) => !current);
+                  }}
+                  type="button"
+                >
+                  {passwordMethod.connected
+                    ? t('authentication.changePasswordAction')
+                    : t('authentication.setPasswordAction')}
+                </button>
+              </div>
+            ) : null}
+            {showPasswordForm && passwordMethod !== null ? (
+              <form onSubmit={(event) => void handlePasswordSubmit(event)}>
+                <h3>
+                  {passwordMethod.connected
+                    ? t('authentication.changePasswordTitle')
+                    : t('authentication.setPasswordTitle')}
+                </h3>
+                <label>
+                  {t('authentication.newPasswordLabel')}
+                  <input
+                    onChange={(event) => {
+                      setNewPassword(event.target.value);
+                    }}
+                    type="password"
+                    value={newPassword}
+                  />
+                </label>
+                <label>
+                  {t('authentication.confirmPasswordLabel')}
+                  <input
+                    onChange={(event) => {
+                      setConfirmPassword(event.target.value);
+                    }}
+                    type="password"
+                    value={confirmPassword}
+                  />
+                </label>
+                <button type="submit">
+                  {passwordMethod.connected
+                    ? t('authentication.changePasswordAction')
+                    : t('authentication.setPasswordAction')}
+                </button>
+              </form>
+            ) : null}
+            {oauthMethods.map((method) => (
+              <div key={method.provider}>
+                <p>{method.provider}</p>
+                {method.connected ? (
+                  <button
+                    disabled={!method.canDisconnect}
+                    onClick={() => {
+                      void handleDisconnectProvider(method.provider);
+                    }}
+                    type="button"
+                  >
+                    {method.canDisconnect
+                      ? t('authentication.disconnectAction')
+                      : t('authentication.requiredAction')}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      void handleConnectProvider(method.provider);
+                    }}
+                    type="button"
+                  >
+                    {t('authentication.connectAction')}
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        ),
+      },
+      ...extraSections,
+    ];
+  }
 
   return {
     ...actual,
-    useAuth: mockUseAuth,
+    linkOAuthProvider: mockLinkOAuthProvider,
+    loadAuthenticationMethods: mockLoadAuthenticationMethods,
+    storeOAuthState: mockStoreOAuthState,
+    unlinkOAuthProvider: mockUnlinkOAuthProvider,
     updatePassword: mockUpdatePassword,
+    useAuth: mockUseAuth,
+    useDefaultAccountSections,
   };
 });
-
-vi.mock('../../../../../../../libs/web-platform/src/lib/auth/authApi', () => ({
-  linkOAuthProvider: mockLinkOAuthProvider,
-  loadAuthenticationMethods: mockLoadAuthenticationMethods,
-  unlinkOAuthProvider: mockUnlinkOAuthProvider,
-  updatePassword: mockUpdatePassword,
-}));
-
-vi.mock('../../../../../../../libs/web-platform/src/lib/auth/storage', () => ({
-  storeOAuthState: mockStoreOAuthState,
-}));
 
 describe('AccountPage', () => {
   beforeEach(async () => {
@@ -78,6 +232,12 @@ describe('AccountPage', () => {
         role: 'user',
       },
     });
+    mockLinkOAuthProvider.mockResolvedValue({
+      authorizationUrl: 'https://example.com/oauth',
+      codeVerifier: 'code-verifier',
+      state: 'oauth-state',
+    });
+    mockUnlinkOAuthProvider.mockResolvedValue(undefined);
   });
 
   it('renders password and OAuth authentication methods', async () => {
@@ -163,10 +323,8 @@ describe('AccountPage', () => {
     expect(
       await screen.findByRole('heading', { name: 'Set password' }),
     ).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('New password')).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText('Confirm new password'),
-    ).toBeInTheDocument();
+    expect(screen.getByLabelText('New password')).toBeInTheDocument();
+    expect(screen.getByLabelText('Confirm new password')).toBeInTheDocument();
   });
 
   it('refreshes authentication methods after setting a password', async () => {
@@ -229,9 +387,9 @@ describe('AccountPage', () => {
     await user.click(
       await screen.findByRole('button', { name: 'Set password' }),
     );
-    await user.type(screen.getByPlaceholderText('New password'), 'password123');
+    await user.type(screen.getByLabelText('New password'), 'password123');
     await user.type(
-      screen.getByPlaceholderText('Confirm new password'),
+      screen.getByLabelText('Confirm new password'),
       'password123',
     );
     await user.click(

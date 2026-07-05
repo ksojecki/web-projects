@@ -11,6 +11,7 @@ const typecheckAffectedFiles = (files) => {
 export default {
   '*': typecheckAffectedFiles,
   '*.{ts,tsx,js,jsx,mjs,cjs,mts,cts}': [
+    'node ./scripts/check-no-deep-src-mocks.mjs',
     'npx oxlint --fix --config .oxlintrc.json',
     'npx prettier --write',
   ],
