@@ -49,7 +49,7 @@ npm run setup:certs
 ## 3) Run Locally
 
 ```sh
-npx nx run @ksojecki/rod-manager-api:launch --no-tui
+npx nx run @ksojecki/rod-manager-api:dev --no-tui
 ```
 
 This starts the SSR app through the Fastify API server, waits for it to become
@@ -59,26 +59,27 @@ profile and remote debugging enabled.
 Choose the product explicitly:
 
 ```sh
-npx nx run @ksojecki/rod-manager-api:launch --no-tui
-npx nx run @ksojecki/recepturomat-api:launch --no-tui
+npx nx run @ksojecki/rod-manager-api:dev --no-tui
+npx nx run @ksojecki/recepturomat-api:dev --no-tui
 ```
 
-The root `npm run launch:<project>` commands are thin aliases to these Nx
+The root `npm run dev:<project>` commands are thin aliases to these Nx
 targets.
 
-Default launch endpoints:
+Default dev endpoints:
 
 - `rod-manager`: `https://localhost:3000/`, Chrome DevTools on `127.0.0.1:9222`
 - `recepturomat`: `https://localhost:3100/`, Chrome DevTools on `127.0.0.1:9333`
 
-If you only need the backend/SSR process without opening Chrome, use:
+If you only need the backend/SSR process without opening Chrome, use the
+underlying Nx `serve` target directly:
 
 ```sh
-npm run dev:rod-manager
-npm run dev:recepturomat
+npx nx run @ksojecki/rod-manager-api:serve --no-tui
+npx nx run @ksojecki/recepturomat-api:serve --no-tui
 ```
 
-Env precedence for launch and dev sessions is:
+Env precedence for `dev` and `serve` sessions is:
 
 1. shell environment
 2. `.env`
@@ -110,7 +111,7 @@ Reuse an existing matching dev server when possible. Only stop the process
 automatically if it is clearly a stale server from this repository; otherwise
 report the conflict and ask the user.
 
-For UI debugging after the Nx launch target or its npm alias, use Codex's Chrome-backed
+For UI debugging after the Nx `dev` target or its npm alias, use Codex's Chrome-backed
 browser path. On this machine that path comes from the bundled browser plugin
 using the existing `node_repl` backend; there is no separate
 `[mcp_servers.chrome-devtools]` block to configure or depend on.
