@@ -8,7 +8,7 @@ import {
   install,
   resolveBuildId,
 } from '@puppeteer/browsers';
-import { executablePath, launch } from 'puppeteer';
+import { executablePath, launch } from 'puppeteer-core';
 import { loadProductEnv } from '../../scripts/workspace-config.mjs';
 
 const SERVER_START_TIMEOUT_MS = 120000;

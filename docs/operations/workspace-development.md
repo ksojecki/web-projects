@@ -46,7 +46,7 @@ Prefer the per-project `dev` workflow for browser-facing work:
 npx nx run @ksojecki/rod-manager-api:dev --no-tui
 ```
 
-The public `dev` workflow loads env in this order:
+The public `dev` workflow reads env files in this order:
 
 1. shell environment
 2. `.env`
@@ -54,10 +54,13 @@ The public `dev` workflow loads env in this order:
 4. `projects/<project>/.env`
 5. `projects/<project>/.env.local`
 
-Later files override earlier files. Keep shared defaults such as
-`AUTH_SEED_INITIAL_USER`, `AUTH_INITIAL_USER_EMAIL`, and
-`AUTH_INITIAL_USER_PASSWORD` in the root env files. Use project-local files only
-for product-specific overrides such as:
+Later env files override earlier env files. Values already present in the shell
+environment still win because the loader does not overwrite existing
+`process.env` keys.
+
+Keep shared defaults such as `AUTH_SEED_INITIAL_USER`,
+`AUTH_INITIAL_USER_EMAIL`, and `AUTH_INITIAL_USER_PASSWORD` in the root env
+files. Use project-local files only for product-specific overrides such as:
 
 - `PORT=3000` or `PORT=3100`
 - `WEB_PORT=4200` or `WEB_PORT=4300`
