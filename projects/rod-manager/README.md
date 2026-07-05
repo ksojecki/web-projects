@@ -18,3 +18,11 @@ Rod Manager is a community portal for small groups that need a simple place to p
 - Agent instructions: [`AGENTS.md`](./AGENTS.md)
 
 Use the root [`README.md`](../../README.md), [`AGENTS.md`](../../AGENTS.md), and [`docs/agents/workflow.md`](../../docs/agents/workflow.md) for shared workspace rules.
+
+## Commands
+
+```sh
+npm run dev:rod-manager
+npm run lint
+npm run typecheck
+```

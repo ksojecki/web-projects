@@ -21,3 +21,11 @@ Recepturomat is a recipe and calculation app for small bakeries, restaurants, an
 - Legacy source inventory: [`docs/recepturomat-source-inventory.md`](./docs/recepturomat-source-inventory.md)
 
 Use the root [`README.md`](../../README.md), [`AGENTS.md`](../../AGENTS.md), and [`docs/agents/workflow.md`](../../docs/agents/workflow.md) for shared workspace rules.
+
+## Commands
+
+```sh
+npm run dev:recepturomat
+npm run lint
+npm run typecheck
+```

@@ -21,3 +21,15 @@ Nx workspace for web projects and shared libraries.
 - [Agent workflow](docs/agents/workflow.md)
 - [Architecture docs](docs/architecture/README.md)
 - [Operations docs](docs/operations/README.md)
+
+## Commands
+
+```sh
+npm ci
+npm run dev:rod-manager
+npm run dev:recepturomat
+npm run generate:project -- <name>
+npm run lint
+npm run typecheck
+npm run format:check
+```
