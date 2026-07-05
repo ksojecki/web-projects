@@ -73,6 +73,7 @@ When the task requires planning, do not start implementation until the plan is a
 - Do not override local package conventions unless necessary.
 - For API changes, keep alignment with `docs/architecture/`.
 - Keep generated code and comments in English.
+- When a step changes documentation or code comments, run a final `stop-slop` prose pass before handoff.
 - For new plugins, use a folder-based structure with `index.ts` as a thin entrypoint and focused modules (types + implementation files), matching the `database` plugin style.
 - For larger modules in general, split by responsibility once complexity grows (avoid monolithic files).
 - For browser-facing debugging, prefer `nx run <api-project>:launch --no-tui`
@@ -86,6 +87,7 @@ When the task requires planning, do not start implementation until the plan is a
 - Keep Nx CLI commands as the validation contract even when Nx MCP is available. Use `npx nx show ...`, `npx nx sync:check --no-tui`, and task-running commands such as `npx nx run-many ... --no-tui` for executable verification.
 - Avoid low-signal parent-session validation commands. Add coverage or extra reporting runs only when the output is decision-relevant for the current step or final review.
 - Before a PR, verify whether documentation updates are required.
+- For documentation and comment changes, validate both correctness and writing quality: direct wording, active voice, specific language, and no filler.
 - For UI debugging after `npm run launch:<project>`, use the Chrome-backed
   browser path exposed through Codex's bundled browser plugin and the existing
   `node_repl` backend. Do not document or depend on a fake standalone

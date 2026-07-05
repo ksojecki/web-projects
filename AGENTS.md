@@ -12,6 +12,16 @@
 - All documentation must be written in English.
 - All generated code must use English for identifiers, comments, and user-facing messages.
 
+## Writing Quality
+
+- When a task includes writing or reviewing documentation, ADRs, README content, or code comments, use the `stop-slop` skill before handoff.
+- Install the skill during agent onboarding by cloning `https://github.com/hardikpandya/stop-slop` into the Codex skills folder so it is available as a global skill.
+- Apply `stop-slop` as a review pass. Do not use it as a reason to add commentary that the code or docs do not need.
+- Prefer direct statements, active voice, plain language, and specific nouns in docs and comments.
+- Cut filler phrases, business jargon, rhetorical setups, and meta-explanations about what the text "will" do.
+- Keep code comments rare. Write them only when they explain intent, constraints, or a non-obvious tradeoff that the code cannot show on its own.
+- Do not use `stop-slop` to rewrite user-facing product copy unless the task asks for copy changes.
+
 ## Big Picture Architecture
 
 - Monorepo orchestration is defined in `nx.json`; project tasks are expected to be inferred by Nx.
