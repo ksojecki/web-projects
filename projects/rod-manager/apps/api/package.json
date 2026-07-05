@@ -77,7 +77,7 @@
           }
         }
       },
-      "launch": {
+      "dev": {
         "continuous": true,
         "cache": false,
         "executor": "nx:run-commands",

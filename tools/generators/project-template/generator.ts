@@ -123,7 +123,7 @@ function writeApiApp(tree: Tree, options: NormalizedOptions): void {
             },
           },
         },
-        launch: {
+        dev: {
           continuous: true,
           cache: false,
           executor: 'nx:run-commands',
@@ -1146,9 +1146,8 @@ function updateRootPackageScripts(
     (value: { scripts?: Record<string, string>; [key: string]: unknown }) => {
       const scripts = value.scripts ?? {};
       scripts[`dev:${options.name}`] =
-        `node ./node_modules/nx/dist/bin/nx.js run ${options.apiPackageName}:serve --no-tui`;
-      scripts[`launch:${options.name}`] =
-        `node ./node_modules/nx/dist/bin/nx.js run ${options.apiPackageName}:launch --no-tui`;
+        `node ./node_modules/nx/dist/bin/nx.js run ${options.apiPackageName}:dev --no-tui`;
+      delete scripts[`launch:${options.name}`];
       value.scripts = scripts;
       return value;
     },

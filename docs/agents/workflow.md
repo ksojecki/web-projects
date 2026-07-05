@@ -76,10 +76,11 @@ When the task requires planning, do not start implementation until the plan is a
 - When a step changes documentation or code comments, run a final `stop-slop` prose pass before handoff.
 - For new plugins, use a folder-based structure with `index.ts` as a thin entrypoint and focused modules (types + implementation files), matching the `database` plugin style.
 - For larger modules in general, split by responsibility once complexity grows (avoid monolithic files).
-- For browser-facing debugging, prefer `nx run <api-project>:launch --no-tui`
-  or its thin `npm run launch:<project>` alias over a raw `dev:<project>`
-  session so the browser comes up on the product's expected port with a
-  dedicated Chrome profile and remote debugging port.
+- For browser-facing debugging, prefer `nx run <api-project>:dev --no-tui`
+  or its thin `npm run dev:<project>` alias so the browser comes up on the
+  product's expected port with a dedicated Chrome profile and remote debugging
+  port. Use the underlying `serve` target directly only when you explicitly
+  need the server process without Chrome.
 
 ## 5) Validation
 
@@ -88,7 +89,7 @@ When the task requires planning, do not start implementation until the plan is a
 - Avoid low-signal parent-session validation commands. Add coverage or extra reporting runs only when the output is decision-relevant for the current step or final review.
 - Before a PR, verify whether documentation updates are required.
 - For documentation and comment changes, validate both correctness and writing quality: direct wording, active voice, specific language, and no filler.
-- For UI debugging after `npm run launch:<project>`, use the Chrome-backed
+- For UI debugging after `npm run dev:<project>`, use the Chrome-backed
   browser path exposed through Codex's bundled browser plugin and the existing
   `node_repl` backend. Do not document or depend on a fake standalone
   `chrome-devtools` MCP server for this repo.

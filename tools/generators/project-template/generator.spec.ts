@@ -37,9 +37,7 @@ describe('projectTemplateGenerator', () => {
           private: true,
           scripts: {
             'dev:rod-manager':
-              'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:serve --no-tui',
-            'launch:rod-manager':
-              'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:launch --no-tui',
+              'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:dev --no-tui',
           },
         },
         null,
@@ -115,14 +113,14 @@ describe('projectTemplateGenerator', () => {
     expect(rootPackageJson.scripts).toEqual(
       expect.objectContaining({
         'dev:rod-manager':
-          'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:serve --no-tui',
+          'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/rod-manager-api:dev --no-tui',
         'dev:recepturomat':
-          'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:serve --no-tui',
-        'launch:recepturomat':
-          'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:launch --no-tui',
+          'node ./node_modules/nx/dist/bin/nx.js run @ksojecki/recepturomat-api:dev --no-tui',
       }),
     );
     expect(rootPackageJson.scripts).not.toHaveProperty('dev');
+    expect(rootPackageJson.scripts).not.toHaveProperty('launch:rod-manager');
+    expect(rootPackageJson.scripts).not.toHaveProperty('launch:recepturomat');
 
     const productConfig = tree.read(
       'projects/recepturomat/apps/api/src/productConfig.ts',
@@ -138,7 +136,7 @@ describe('projectTemplateGenerator', () => {
       tree,
       'projects/recepturomat/apps/api/package.json',
     );
-    expect(apiProjectPackageJson.nx.targets.launch.options?.command).toContain(
+    expect(apiProjectPackageJson.nx.targets.dev.options?.command).toContain(
       'tools/launch/launch-product.mjs',
     );
 
@@ -206,7 +204,9 @@ function readApiProjectPackageJson(
   const value = readJson(tree, path);
 
   if (!isApiProjectPackageJson(value)) {
-    throw new Error(`Expected ${path} to contain Nx launch target metadata.`);
+    throw new Error(
+      `Expected ${path} to contain Nx public dev target metadata.`,
+    );
   }
 
   return value;
