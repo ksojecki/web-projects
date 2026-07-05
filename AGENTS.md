@@ -22,6 +22,15 @@
 - Keep code comments rare. Write them only when they explain intent, constraints, or a non-obvious tradeoff that the code cannot show on its own.
 - Do not use `stop-slop` to rewrite user-facing product copy unless the task asks for copy changes.
 
+## Documentation Ownership
+
+- Keep root `README.md` short: workspace overview, product links, library links, and common commands.
+- Keep root `docs/` for workspace-wide approach, tooling, architecture, operations, and agent workflow.
+- Put product-specific docs and instructions under `projects/<product>/`.
+- Put library-specific docs and instructions under `libs/<library>/`.
+- Each project and library must have a local `README.md` and `AGENTS.md`.
+- Link project and library README files from the root `README.md`.
+
 ## Big Picture Architecture
 
 - Monorepo orchestration is defined in `nx.json`; project tasks are expected to be inferred by Nx.
@@ -45,7 +54,7 @@
 - Default delivery mechanism for non-trivial work: use the Agent Workflow in `docs/agents/workflow.md`.
 - For Nx-specific questions and read-only workspace exploration, prefer the Nx MCP server first when it is available in the current session. Use it for docs lookups, graph inspection, and running-task introspection, then use the Nx CLI for repo-contract commands and validation.
 - Track task progress in GitHub issues. Always start by finding the relevant GitHub issue; if the work has no issue yet, create one before implementation. Use repository docs for durable guidance, ADRs, and implementation plans, not as the live status tracker for active work.
-- When a workflow step needs GitHub network access through `gh` or equivalent remote issue/PR inspection, request elevated access automatically instead of waiting for a sandbox failure first.
+- When a workflow step needs GitHub network access through `gh` or equivalent remote issue/PR inspection, request elevated access up front.
 - For features, bug fixes, and error remediation, first agree on a plan when the task calls for planning, then execute that accepted plan through the delivery loop in `.agents/skills/agent-delivery-loop/SKILL.md`.
 - In that delivery loop, divide the plan into small, easy-to-implement steps before execution.
 - In that delivery loop, always use one `gpt-5.4-mini` implementer subagent, then one `gpt-5.4-mini` tester subagent for the same accepted current step.
@@ -62,7 +71,7 @@
 - The underlying `serve` target remains the internal server-only path used by the public `dev` workflow.
 - Runtime env resolution is: shell env first, then `.env`, `.env.local`, `projects/<project>/.env`, and `projects/<project>/.env.local`. Later files override earlier files; project-local files are the intended place for per-product overrides such as `PORT`, `WEB_PORT`, `AUTH_DB_PATH`, `AUTH_SEED_INITIAL_USER`, `OAUTH_REDIRECT_BASE_URL`, `CHROME_USER_DATA_DIR`, and `CHROME_DEBUG_PORT`.
 - When validating auth seeding, treat `AUTH_SEED_INITIAL_USER`, `AUTH_INITIAL_USER_EMAIL`, and `AUTH_INITIAL_USER_PASSWORD` as shared defaults. A project-local `AUTH_SEED_INITIAL_USER` override applies only to that product.
-- If a product's default API port is already in use, inspect the listener with `lsof -nP -iTCP:<port> -sTCP:LISTEN` and reuse an existing matching dev server when possible. Only stop the process automatically if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
+- If a product's default API port is already in use, inspect the listener with `lsof -nP -iTCP:<port> -sTCP:LISTEN` and reuse an existing matching dev server when possible. Stop the process only if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
 - Run lint via npm script: `npm run lint` (delegates to Nx `lint` targets).
 - Run formatting checks: `npm run format:check`; auto-fix formatting: `npm run format`.
 - Run CI-equivalent checks locally: `npx nx run-many -t lint test build typecheck --no-tui`.
@@ -135,10 +144,10 @@
 
 Provider credentials must be configured via environment variables:
 
-- `OAUTH_GOOGLE_CLIENT_ID` / `OAUTH_GOOGLE_CLIENT_SECRET` — Google OAuth 2.0 app credentials.
-- `OAUTH_APPLE_CLIENT_ID` / `OAUTH_APPLE_CLIENT_SECRET` / `OAUTH_APPLE_TEAM_ID` — Apple Sign In credentials.
-- `OAUTH_FACEBOOK_CLIENT_ID` / `OAUTH_FACEBOOK_CLIENT_SECRET` — Facebook app credentials.
-- `OAUTH_REDIRECT_BASE_URL` — Base URL for OAuth callbacks; in local launch/dev sessions it falls back to the selected product's default localhost URL when unset, and it must match the provider redirect URI config.
+- `OAUTH_GOOGLE_CLIENT_ID` / `OAUTH_GOOGLE_CLIENT_SECRET`: Google OAuth 2.0 app credentials.
+- `OAUTH_APPLE_CLIENT_ID` / `OAUTH_APPLE_CLIENT_SECRET` / `OAUTH_APPLE_TEAM_ID`: Apple Sign In credentials.
+- `OAUTH_FACEBOOK_CLIENT_ID` / `OAUTH_FACEBOOK_CLIENT_SECRET`: Facebook app credentials.
+- `OAUTH_REDIRECT_BASE_URL`: Base URL for OAuth callbacks. In local dev sessions it falls back to the selected product's default localhost URL when unset, and it must match the provider redirect URI config.
 
 ### Adding a New OAuth Provider
 
@@ -161,7 +170,7 @@ Provider credentials must be configured via environment variables:
 
 - PKCE (Proof Key for Code Exchange) used for all OAuth flows; code verifier generated per authorization and validated at callback.
 - OAuth state stored in browser `sessionStorage` with 10-minute expiration; validated on callback.
-- Access tokens NOT returned to frontend; stored server-side in database, refreshed as needed.
+- Access tokens stay server-side in the database and do not return to frontend code.
 - Email auto-verified on OAuth login (implicit account linking if email matches); explicit confirmation recommended for production.
 
 ## Plugin and Module Structure Policy

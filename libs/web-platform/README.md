@@ -1,12 +1,14 @@
-# @ksojecki/platform-shared
+# @ksojecki/platform-web-platform
 
-Shared types and runtime helpers used by both product layers.
+Shared web platform code for auth, account, and shell behavior.
 
 ## Key paths
 
-- `src/lib/auth.dto.ts`
-- `src/lib/user-settings.dto.ts`
-- `src/lib/workspaceConfig.ts`
+- `src/lib/auth/`
+- `src/lib/account/`
+- `src/lib/shell/`
+- `src/lib/auth/OAuthCallbackPage.tsx`
+- `src/lib/shell/PlatformNavbar.tsx`
 - `src/index.ts`
 
 ## Related docs

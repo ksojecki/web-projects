@@ -13,7 +13,7 @@ When the task requires planning, do not start implementation until the plan is a
   package ids: use `projects/<product>/apps/*` for files and
   `@ksojecki/<product>-api` or `@ksojecki/<product>-web` for Nx/package ids.
 - When the task touches runtime behavior, choose the target product up front and
-  anchor the session to its launch contract: `rod-manager` defaults to
+  anchor the session to its dev contract: `rod-manager` defaults to
   `https://localhost:3000/` with Chrome DevTools on `127.0.0.1:9222`,
   `recepturomat` defaults to `https://localhost:3100/` with Chrome DevTools on
   `127.0.0.1:9333`.
@@ -31,11 +31,11 @@ When the task requires planning, do not start implementation until the plan is a
   guidance.
 - When a step depends on GitHub network access through `gh` such as issue lookup,
   issue creation, push-adjacent PR inspection, or PR creation, request elevated
-  access automatically instead of waiting for a sandbox failure first.
+  access up front.
 - Follow root-level defaults (TS, Oxlint, Prettier).
 - Treat plan acceptance as the gate to start delivery work.
 - When using this repository workflow, treat plan acceptance as the point where the delivery loop begins spawning step-scoped subagents.
-- When launch or auth behavior matters, account for env precedence explicitly:
+- When dev or auth behavior matters, account for env precedence explicitly:
   shell env wins, then `.env`, `.env.local`, `projects/<product>/.env`, and
   `projects/<product>/.env.local`, with later files overriding earlier ones.
 - In project-local env files, use the same plain keys as root env files
@@ -74,6 +74,8 @@ When the task requires planning, do not start implementation until the plan is a
 - For API changes, keep alignment with `docs/architecture/`.
 - Keep generated code and comments in English.
 - When a step changes documentation or code comments, run a final `stop-slop` prose pass before handoff.
+- Keep root docs workspace-wide. Move project detail to `projects/<product>/` and library detail to `libs/<library>/`.
+- Add or update the local `README.md` and `AGENTS.md` when a change alters how a project or library works.
 - For new plugins, use a folder-based structure with `index.ts` as a thin entrypoint and focused modules (types + implementation files), matching the `database` plugin style.
 - For larger modules in general, split by responsibility once complexity grows (avoid monolithic files).
 - For browser-facing debugging, prefer `nx run <api-project>:dev --no-tui`
@@ -93,7 +95,7 @@ When the task requires planning, do not start implementation until the plan is a
   browser path exposed through Codex's bundled browser plugin and the existing
   `node_repl` backend. Do not document or depend on a fake standalone
   `chrome-devtools` MCP server for this repo.
-- Authenticate the launched localhost session before evaluating SSR, hydrated UI
+- Authenticate the local dev session before evaluating SSR, hydrated UI
   state, or `/api` behavior. If Chrome-backed browser access is unavailable in
   the current environment, fall back to authenticated `curl` plus rendered HTML
   inspection and say so explicitly.

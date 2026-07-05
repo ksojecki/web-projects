@@ -2,7 +2,7 @@
 
 ## Tracking Note
 
-This document is architecture context for the project-template refactor.
+Use this file as architecture context for the project-template refactor.
 
 - Track active work, progress updates, and sequencing in GitHub issues.
 - Keep ADRs and roadmap updates in the repository when the durable architecture or implementation plan changes.

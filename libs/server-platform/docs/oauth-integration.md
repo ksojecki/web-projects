@@ -1,14 +1,15 @@
 # OAuth 2.0 Integration Guide
 
-This document describes the OAuth 2.0 authentication implementation for Google, Apple, and Facebook Sign In.
+The server platform supports OAuth 2.0 sign-in for Google, Apple, and Facebook.
 
 ## Overview
 
-The system implements a complete OAuth 2.0 flow with PKCE (Proof Key for Code Exchange) for secure authentication across multiple third-party providers.
+The OAuth flow uses PKCE for provider authentication and then creates the normal
+platform session cookie.
 
 ### Architecture
 
-- **Backend (Fastify)**: OAuth plugin entrypoint (`projects/rod-manager/apps/api/src/app/plugins/oauth/index.ts`) with modular implementation in `projects/rod-manager/apps/api/src/app/plugins/oauth/`
+- **Backend (Fastify)**: OAuth plugin entrypoint (`libs/server-platform/src/lib/plugins/oauth/index.ts`) with implementation files in `libs/server-platform/src/lib/plugins/oauth/`
 - **Database**: SQLite `oauth_providers` table stores provider credentials per user
 - **Frontend (React)**: OAuth initiation on login page with callback handler
 - **Session Management**: Standard session cookie created after OAuth callback
@@ -94,7 +95,7 @@ POST /api/auth/oauth/authorize/:provider
 GET /api/auth/oauth/callback/:provider?code=auth_code&state=state_value
 ```
 
-The backend automatically:
+The backend:
 
 1. Validates the state and code
 2. Exchanges the code for an access token
@@ -182,8 +183,8 @@ CREATE TABLE oauth_providers (
    - Validated on callback to prevent CSRF
 
 3. **Token Storage**
-   - Access tokens stored securely in database
-   - NOT returned to frontend
+   - Access tokens stored in the database
+   - Not returned to frontend code
    - Refresh tokens supported for long-lived sessions
 
 4. **Email Verification**
@@ -206,7 +207,7 @@ export type OAuthProviderType =
 
 ### 2. Update OAuth Plugin Modules
 
-Add provider configuration in `projects/rod-manager/apps/api/src/app/plugins/oauth/oauthConfigs.ts` and update OAuth service logic in `projects/rod-manager/apps/api/src/app/plugins/oauth/service.ts`:
+Add provider configuration in `libs/server-platform/src/lib/plugins/oauth/oauthConfigs.ts` and update OAuth service logic in `libs/server-platform/src/lib/plugins/oauth/service.ts`:
 
 ```typescript
 const newProviderClientId = process.env.OAUTH_NEW_PROVIDER_CLIENT_ID;
@@ -225,7 +226,7 @@ if (newProviderClientId && newProviderClientSecret) {
 }
 ```
 
-Implement provider-specific user info parsing in `projects/rod-manager/apps/api/src/app/plugins/oauth/userInfo.ts` and service wiring in `projects/rod-manager/apps/api/src/app/plugins/oauth/service.ts`.
+Implement provider-specific user info parsing in `libs/server-platform/src/lib/plugins/oauth/userInfo.ts` and service wiring in `libs/server-platform/src/lib/plugins/oauth/service.ts`.
 
 ### 3. Update Login Page
 

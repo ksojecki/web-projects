@@ -1,58 +1,35 @@
-# Product Workspace
+# Web Projects
 
-This repository is an Nx monorepo for multiple web products that share one
-platform codebase and one project generator.
+Nx workspace for product apps and shared platform libraries.
 
 ## Products
 
-### Rod Manager
+- [Rod Manager](projects/rod-manager/README.md) - reference product with a React SSR app, Fastify API, and product page plugins.
+- [Recepturomat](projects/recepturomat/README.md) - recipe-management product migrated into the shared workspace model.
 
-- Main reference product in the workspace.
-- Owns a React SSR web app, a Fastify API app, and product-local pages plugins.
-- Lives under `projects/rod-manager/`.
+## Libraries
 
-### Recepturomat
+- [Server platform](libs/server-platform/README.md) - shared Fastify runtime, auth, sessions, database, OAuth, and SSR support.
+- [Web platform](libs/web-platform/README.md) - shared React auth, account, layout, and shell behavior.
+- [Shared contracts](libs/shared/README.md) - DTOs and workspace configuration helpers.
+- [UI primitives](libs/ui/README.md) - reusable React presentation components.
 
-- Generated second product used to prove the template and isolation model.
-- Owns a React SSR web app and a Fastify API app.
-- Lives under `projects/recepturomat/`.
+## Root Docs
 
-## Shared Platform
+- [Workspace docs](docs/README.md) - shared approach, tooling, architecture, and operations.
+- [Agent guide](AGENTS.md) - root rules for coding agents.
+- [Agent workflow](docs/agents/workflow.md) - delivery loop and validation rules.
+- [Architecture docs](docs/architecture/README.md) - ADRs and workspace-level design notes.
+- [Operations docs](docs/operations/README.md) - commands and local development.
 
-- `libs/server-platform` - shared Fastify, SSR, database, session, and OAuth
-  platform code.
-- `libs/web-platform` - shared auth, account, layout, and shell UI for product
-  apps.
-- `libs/shared` - shared DTOs and cross-project contracts.
-- `libs/ui` - shared UI primitives.
-
-## Create a New Product
-
-Use the supported generator wrapper:
+## Commands
 
 ```sh
+npm ci
+npm run dev:rod-manager
+npm run dev:recepturomat
 npm run generate:project -- my-product
+npm run lint
+npm run typecheck
+npm run format:check
 ```
-
-This creates:
-
-- `projects/my-product/apps/api`
-- `projects/my-product/apps/web`
-- flat package ids `@ksojecki/my-product-api` and
-  `@ksojecki/my-product-web`
-- a root `dev:my-product` script
-
-New product files live in nested `projects/<product>/apps/*` paths, but package
-names and Nx project ids stay flat in the npm-compatible form
-`@ksojecki/<product>-api` and `@ksojecki/<product>-web`.
-
-## Technical Docs
-
-- [docs/operations/workspace-development.md](/Users/kamilsojecki/Projekty/rod-manager/docs/operations/workspace-development.md) -
-  setup, commands, naming rules, and local development flow.
-- [CONTRIBUTING.md](/Users/kamilsojecki/Projekty/rod-manager/CONTRIBUTING.md) -
-  contributor validation, production build, and release commands.
-- [docs/architecture/README.md](/Users/kamilsojecki/Projekty/rod-manager/docs/architecture/README.md) -
-  architecture decisions, roadmap, and ADRs.
-- [AGENTS.md](/Users/kamilsojecki/Projekty/rod-manager/AGENTS.md) -
-  coding-agent workflow and repository conventions.

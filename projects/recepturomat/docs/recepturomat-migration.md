@@ -3,8 +3,7 @@
 ## Context
 
 Recepturomat currently lives outside this workspace at
-`/Users/kamilsojecki/Projekty/recepturomat`. The source application is an Nx 22
-workspace with:
+`/Users/kamilsojecki/Projekty/recepturomat`. The source app uses Nx 22 and has:
 
 - `apps/ui` for the React Router frontend.
 - `apps/backend` for an Express API.
@@ -12,9 +11,9 @@ workspace with:
 - MongoDB collections for users, settings, and recipes.
 - Custom JWT authentication and bearer-token frontend state.
 
-For the concrete legacy file inventory, route map, and bootstrap details, start
-with [`recepturomat-source-inventory.md`](./recepturomat-source-inventory.md).
-This document stays at the migration strategy level.
+Read [`recepturomat-source-inventory.md`](./recepturomat-source-inventory.md)
+for legacy files, routes, and bootstrap details. Keep this file focused on
+migration strategy.
 
 The target workspace is the Nx 23 product-template structure in this repository.
 Recepturomat should enter the workspace through the supported generator:
@@ -23,14 +22,12 @@ Recepturomat should enter the workspace through the supported generator:
 npm run generate:project -- recepturomat
 ```
 
-The generated product should then be adapted incrementally under
-`projects/recepturomat/` instead of copying the old repository layout.
+Adapt the generated product under `projects/recepturomat/`. Do not copy the old
+repository layout.
 
 ## Architecture Decision
 
 Use product-local SQLite for the migrated Recepturomat runtime.
-
-Reasons:
 
 - The application targets small companies, so operational simplicity matters more
   than horizontal scaling.
@@ -40,7 +37,7 @@ Reasons:
   session storage through `ServerPlatformProjectConfig`.
 - Keeping MongoDB would add a second runtime database and deployment dependency
   for one product.
-- A generic storage adapter would add abstraction cost before there is a second
+- A storage adapter would add abstraction cost before there is a second
   runtime storage backend to support.
 
 MongoDB may remain useful as a legacy import source, but it should not be part of
@@ -62,12 +59,11 @@ For the first SQL model, store recipes in a product-local table with stable
 `recipeId`, `name`, `defaultWeight`, and JSON-encoded ingredients. This preserves
 the current document-shaped recipe behavior cheaply while still removing the
 MongoDB runtime dependency. Normalize ingredients later only if reporting,
-inventory, or query requirements justify the extra schema complexity.
+inventory, or query requirements justify the schema cost.
 
 ## Migration Tickets
 
-Active progress belongs in GitHub issues. This document is architecture context,
-not the live status tracker.
+Track active progress in GitHub issues. Use this file as architecture context.
 
 - [#30](https://github.com/ksojecki/rod-manager/issues/30) - Move
   Recepturomat into this repository.

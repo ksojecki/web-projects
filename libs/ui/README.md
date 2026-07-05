@@ -1,35 +1,20 @@
 # @ksojecki/platform-ui
 
-Shared React UI components for reuse across applications in this workspace.
+Shared React components for both products.
 
-Component names should stay free of the `Ui` prefix. Prefer names like `Button`, `Card`, and `TextInput`.
+## Key paths
 
-## Available components
+- `src/lib/Button.tsx`
+- `src/lib/Card.tsx`
+- `src/lib/PageHeader.tsx`
+- `src/lib/Section.tsx`
+- `src/lib/Typography/`
+- `src/lib/ModalWindow/`
+- `src/lib/Page/`
 
-- `Button`
-- `Card`
-- `PageHeader`
-- `Paragraph`
-- `Section`
+## Related docs
 
-## Example
-
-```tsx
-import { Button, Card } from '@ksojecki/platform-ui';
-
-export function ExamplePanel() {
-  return (
-    <Card actions={<Button tone="primary">Save</Button>} title="Reusable panel">
-      Shared content goes here.
-    </Card>
-  );
-}
-```
-
-## Verification
-
-```sh
-npx nx test @ksojecki/platform-ui --no-tui
-npx nx build @ksojecki/platform-ui --no-tui
-npx nx typecheck @ksojecki/platform-ui --no-tui
-```
+- [Library agents](./AGENTS.md)
+- [Root AGENTS](../../AGENTS.md)
+- [Agent workflow](../../docs/agents/workflow.md)
+- [Workspace development](../../docs/operations/workspace-development.md)

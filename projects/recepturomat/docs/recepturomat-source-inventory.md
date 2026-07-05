@@ -2,13 +2,12 @@
 
 ## Scope
 
-This document records the legacy Recepturomat application shape from
-`/Users/kamilsojecki/Projekty/recepturomat` so the migration issues can reuse
-one concrete reference instead of re-discovering the source app piecemeal.
+This file records the legacy Recepturomat app shape from
+`/Users/kamilsojecki/Projekty/recepturomat`. Migration issues can use it as the
+shared source reference.
 
-It is intentionally descriptive, not prescriptive. Use
-[`recepturomat-migration.md`](./recepturomat-migration.md) for the target
-architecture decision and issue breakdown.
+Use [`recepturomat-migration.md`](./recepturomat-migration.md) for the target
+architecture and issue breakdown.
 
 ## Source Workspace Snapshot
 
@@ -19,7 +18,7 @@ architecture decision and issue breakdown.
 - App manifests exposed these targets:
   - `apps/ui`: `build`, `serve`, `preview`, `test`, `typecheck`.
   - `apps/backend`: `serve`, `test`.
-- Workspace plugins in `nx.json` also infer common `build`, `lint`, and
+- Workspace plugins in `nx.json` infer common `build`, `lint`, and
   `typecheck` targets where the project configuration supports them.
 - Source dependencies show the application stack was Express + React Router +
   React Query + MongoDB + JWT + Zod.
@@ -60,7 +59,7 @@ Major UI behavior:
   `AuthenticationProvider`, then renders the dashboard layout.
 - Locale state is client-side and persisted in localStorage under
   `recepturomat-locale`; the UI supports `en` and `pl`.
-- Authentication state is also client-side and persisted in localStorage under
+- Authentication state is client-side and persisted in localStorage under
   `authInfo`.
 - `RecipesListPage.tsx` loads recipes, sorts them by name, and filters by a
   client-side substring search.

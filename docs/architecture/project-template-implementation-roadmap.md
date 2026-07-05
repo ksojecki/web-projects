@@ -4,7 +4,7 @@
 
 This roadmap turns the high-level refactoring context into an execution plan with concrete file targets.
 
-Active progress for this refactor belongs in GitHub issues. This document is a durable implementation guide, not the live status tracker.
+Track active progress for this refactor in GitHub issues. Use this file as the durable implementation guide.
 
 The target remains:
 
@@ -12,7 +12,7 @@ The target remains:
 - reusable platform mechanics move into shared libraries
 - each future project gets its own `api` app, `web` app, database, and user base
 
-This document is implementation-oriented and should be used as the delivery sequence for the refactor. Several steps below already reflect repository state; keep this document aligned with the supported workflow instead of treating completed work as hypothetical.
+Use this file as the delivery sequence for the refactor. Several steps already reflect repository state; keep it aligned with the supported workflow instead of treating completed work as hypothetical.
 
 ## Success Definition
 

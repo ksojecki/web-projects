@@ -1,7 +1,7 @@
 # Workspace Development
 
-This page holds the technical workspace details that do not need to live in the
-root README.
+Use this page for technical workspace details that do not belong in the root
+README.
 
 ## Stack
 
@@ -76,8 +76,8 @@ Smoke checks after startup:
 Use an authenticated session for both the page and `/api` checks.
 
 If you only need the raw server process without opening Chrome, use the
-underlying Nx `serve` target directly. The Nx `dev` target uses Puppeteer's
-managed Chrome for Testing by default and opens the product URL automatically.
+underlying Nx `serve` target directly. The public Nx `dev` target uses
+Puppeteer's managed Chrome for Testing by default and opens the product URL.
 
 For Codex-driven UI debugging after `npm run dev:<project>`, use the
 Chrome-backed browser path exposed by the bundled browser plugin and the
