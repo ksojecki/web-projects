@@ -527,7 +527,7 @@ function createApiMain(options: NormalizedOptions): string {
   return `import { startProductServer } from '@ksojecki/platform-server-platform';
 import { ${options.projectConfigConstName} } from './productConfig';
 
-void startProductServer({
+startProductServer({
   productId: '${options.name}',
   project: ${options.projectConfigConstName},
 });

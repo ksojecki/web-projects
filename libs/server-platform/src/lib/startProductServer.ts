@@ -16,12 +16,12 @@ export interface StartProductServerOptions {
   registerFeaturePlugins?: (server: FastifyInstance) => Promise<void> | void;
 }
 
-export async function startProductServer({
+export function startProductServer({
   productId,
   project,
   plugins = [],
   registerFeaturePlugins,
-}: StartProductServerOptions): Promise<void> {
+}: StartProductServerOptions): void {
   loadProductEnv(productId);
   applyProductRuntimeDefaults(productId);
 
