@@ -1,6 +1,15 @@
 # @ksojecki/platform-web-platform
 
-Shared web platform code for auth, account, and shell behavior.
+Shared React library for cross-project web flows.
+
+It contains the account, auth, and shell pieces that projects compose into their own routes and branding.
+
+## Responsibilities
+
+- Provide auth pages, hooks, and client-side auth state
+- Provide shared account page composition
+- Provide shared shell and navigation building blocks
+- Keep common frontend flows aligned across projects
 
 ## Key paths
 
@@ -11,7 +20,7 @@ Shared web platform code for auth, account, and shell behavior.
 - `src/lib/shell/PlatformNavbar.tsx`
 - `src/index.ts`
 
-## Related docs
+## Related Docs
 
 - [Library agents](./AGENTS.md)
 - [Root AGENTS](../../AGENTS.md)

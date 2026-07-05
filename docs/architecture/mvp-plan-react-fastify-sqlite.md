@@ -1,6 +1,6 @@
 # MVP Architecture Plan (React + Fastify + SQLite)
 
-## Product goal
+## Project goal
 
 Build a community app with:
 

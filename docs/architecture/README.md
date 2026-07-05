@@ -1,6 +1,6 @@
 # Architecture Docs
 
-Root architecture docs cover workspace-wide decisions. Product migration notes live under the owning project.
+Root architecture docs cover workspace-wide decisions. Project migration notes live under the owning project.
 
 ## Workspace Decisions
 
@@ -20,4 +20,4 @@ Root architecture docs cover workspace-wide decisions. Product migration notes l
 
 ## Principle
 
-Build the simple product path first. Add shared abstractions after a second product proves the reuse point.
+Build the simple project path first. Add shared abstractions after a second project proves the reuse point.

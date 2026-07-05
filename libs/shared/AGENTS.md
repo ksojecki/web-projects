@@ -1,12 +1,12 @@
 # `libs/shared`
 
-This library owns shared DTOs and workspace configuration helpers. Keep product-specific code out of it.
+This library owns shared DTOs and workspace configuration helpers. Keep project-specific code out of it.
 
 ## Ownership
 
-- Treat this folder as platform code for both products.
+- Treat this folder as platform code for both projects.
 - Keep exports stable. Changes here can affect backend and frontend code at once.
-- Move product-only logic to `projects/*` or a product library.
+- Move project-only logic to `projects/*` or a project library.
 
 ## Validation
 

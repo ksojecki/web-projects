@@ -8,7 +8,7 @@ Track active progress for this refactor in GitHub issues. Use this file as the d
 
 The target remains:
 
-- `rod-manager` stays as a working reference product
+- `rod-manager` stays as a working reference project
 - reusable platform mechanics move into shared libraries
 - each future project gets its own `api` app, `web` app, database, and user base
 
@@ -21,7 +21,7 @@ The refactor is complete when:
 - `projects/rod-manager` still works
 - auth, session, OAuth, and account mechanics are reusable without copy-paste
 - a new project can be scaffolded with isolated auth data
-- product-specific CMS logic remains under `projects/rod-manager`
+- project-specific CMS logic remains under `projects/rod-manager`
 
 ## Tracking
 
@@ -32,10 +32,10 @@ The refactor is complete when:
 
 The repository already supports the following template workflow:
 
-- scaffold a product with `npm run generate:project -- <name>`
-- use `projects/<product>/apps/api/src/productConfig.ts` for product-scoped backend bootstrap
-- use `projects/<product>/apps/web/src/app/productConfig.ts` for product-scoped frontend composition
-- use `projects/recepturomat` as the generated second product that proves the scaffold works without `rod-manager` app dependencies
+- scaffold a project with `npm run generate:project -- <name>`
+- use `projects/<project>/apps/api/src/productConfig.ts` for project-scoped backend bootstrap
+- use `projects/<project>/apps/web/src/app/productConfig.ts` for project-scoped frontend composition
+- use `projects/recepturomat` as the generated second project that proves the scaffold works without `rod-manager` app dependencies
 
 The remaining roadmap work should preserve and validate that supported surface.
 
@@ -61,7 +61,7 @@ Keep the core decision current when the template strategy changes.
 - `rod-manager` is a reference implementation, not a shared authenticated portal
 - future projects use separate databases and user bases
 - reuse happens through `libs/` and generators
-- product features live in `projects/<product>/plugins/`
+- project features live in `projects/<project>/plugins/`
 
 ### Validation
 
@@ -71,7 +71,7 @@ Keep the core decision current when the template strategy changes.
 
 ### Goal
 
-Classify current files into reusable platform code, product code, and mixed code.
+Classify current files into reusable platform code, project code, and mixed code.
 
 ### Files to Audit
 
@@ -127,7 +127,7 @@ Likely mixed:
 - `Navbar.tsx`
 - `routes.tsx`
 
-Likely product-specific:
+Likely project-specific:
 
 - `projects/rod-manager/apps/web/src/app/content-management/*`
 - `projects/rod-manager/plugins/pages/**/*`
@@ -208,9 +208,9 @@ Split before moving:
 - `projects/rod-manager/apps/web/src/app/account/AccountPage.tsx`
 - `projects/rod-manager/apps/web/src/app/layout/components/Navbar.tsx`
 
-Keep product-local:
+Keep project-local:
 
-- product text/layout choices tightly coupled to `rod-manager`
+- project text/layout choices tightly coupled to `rod-manager`
 - content management navigation items
 
 ### Required Refactors
@@ -234,7 +234,7 @@ Keep product-local:
 - protected routes still redirect correctly
 - OAuth callback page still resolves
 
-## Step 4: Split Platform Account Shell from Product Account Content
+## Step 4: Split Platform Account Shell from Project Account Content
 
 ### Goal
 
@@ -257,7 +257,7 @@ Turn the current account page into a reusable shell with extension points.
 - `libs/web-platform/src/lib/account/passwordSchema.ts`
 - `libs/web-platform/src/lib/account/types.ts`
 
-### New Product-Local Files
+### New Project-Local Files
 
 - `projects/rod-manager/apps/web/src/app/account/RodManagerAccountPage.tsx`
 - `projects/rod-manager/apps/web/src/app/account/rodManagerAccountSections.tsx`
@@ -267,11 +267,11 @@ Turn the current account page into a reusable shell with extension points.
 1. Extract a generic account shell that accepts:
    - current user
    - standard platform sections
-   - product-provided extra sections
+   - project-provided extra sections
 2. Keep password and OAuth connection management in shared code.
-3. Decide whether `LanguageSelector.tsx` is platform-level or product-level.
+3. Decide whether `LanguageSelector.tsx` is platform-level or project-level.
    It can stay shared if language preferences remain generic.
-4. Replace the current monolithic `AccountPage.tsx` with a small product composition file.
+4. Replace the current monolithic `AccountPage.tsx` with a small project composition file.
 
 ### Files to Update
 
@@ -288,7 +288,7 @@ Turn the current account page into a reusable shell with extension points.
 
 ### Goal
 
-Ensure the backend runtime is clearly configured per product.
+Ensure the backend runtime is clearly configured per project.
 
 ### Current Files
 
@@ -313,13 +313,13 @@ Ensure the backend runtime is clearly configured per product.
 ### Required Refactors
 
 1. Introduce a `projectConfig` or `bootstrap` object for `createServerPlatform`.
-2. Move database-path resolution behind explicit product configuration.
+2. Move database-path resolution behind explicit project configuration.
 3. Replace implicit environment-only database assumptions in `getDatabasePath()` with a contract like:
-   - product id
+   - project id
    - database path
    - seed options
-4. Keep one database per product app.
-5. Ensure auth/session/oauth tables are created in the active product database only.
+4. Keep one database per project app.
+5. Ensure auth/session/oauth tables are created in the active project database only.
 
 ### Recommended Contract Shape
 
@@ -354,25 +354,25 @@ Keep only truly reusable contracts in shared libraries.
 
 ### Required Changes
 
-1. Keep auth and user-settings DTOs in `libs/shared` if they remain common to all products.
+1. Keep auth and user-settings DTOs in `libs/shared` if they remain common to all projects.
 2. Move `page.dto.ts` out of `libs/shared` if it is only relevant to `rod-manager`.
-3. If moved, create a product-local DTO location such as:
+3. If moved, create a project-local DTO location such as:
    - `projects/rod-manager/plugins/pages/shared/`
    - or `projects/rod-manager/libs/shared-pages/`
-4. Update exports in `libs/shared/src/index.ts` to remove product-only contracts.
+4. Update exports in `libs/shared/src/index.ts` to remove project-only contracts.
 
 ### Validation
 
 - shared package exports only generic contracts
 - `rod-manager` imports still resolve after DTO relocation
 
-## Step 7: Keep Product Features Strictly Local
+## Step 7: Keep Project Features Strictly Local
 
 ### Goal
 
-Preserve a clean boundary between template code and product features.
+Preserve a clean boundary between template code and project features.
 
-### Files to Preserve as Product-Local
+### Files to Preserve as Project-Local
 
 - `projects/rod-manager/plugins/pages/server/src/lib/plugin.ts`
 - `projects/rod-manager/plugins/pages/server/src/lib/routes.ts`
@@ -390,15 +390,15 @@ Preserve a clean boundary between template code and product features.
 
 ### Validation
 
-- CMS still works, but clearly as a product feature
+- CMS still works, but clearly as a project feature
 
-## Step 8: Introduce Product Composition Files
+## Step 8: Introduce Project Composition Files
 
 ### Goal
 
-Make each product app a thin composition layer over shared libraries.
+Make each project app a thin composition layer over shared libraries.
 
-### New Product-Level Files to Add
+### New Project-Level Files to Add
 
 Backend:
 
@@ -420,7 +420,7 @@ Frontend:
 
 Backend composition should declare:
 
-- product id
+- project id
 - database configuration
 - enabled plugins
 - SSR paths
@@ -435,7 +435,7 @@ Frontend composition should declare:
 
 ### Validation
 
-- product-specific behavior is declared in small composition files
+- project-specific behavior is declared in small composition files
 - shared code no longer contains `rod-manager` assumptions
 
 ## Step 9: Maintain the Generator for New Projects
@@ -543,9 +543,9 @@ Make the new workflow discoverable.
 
 - how to add a new project
 - what belongs in `libs/`
-- what belongs in `projects/<product>/`
+- what belongs in `projects/<project>/`
 - how auth/user isolation is preserved
-- how product-scoped registration is configured
+- how project-scoped registration is configured
 
 ## Suggested Implementation Order for Actual Delivery
 
@@ -555,7 +555,7 @@ Make the new workflow discoverable.
 4. extract account shell
 5. introduce backend project bootstrap contract
 6. clean shared DTO ownership
-7. add product composition files to `rod-manager`
+7. add project composition files to `rod-manager`
 8. land and maintain the project generator
 9. keep the sample second project validated
 10. update tests
@@ -577,5 +577,5 @@ Because this is a large refactor, split work into small PRs:
 
 - Do not move `pages` or other CMS features into shared libraries.
 - Do not introduce shared user tables across projects.
-- Prefer composition files over hardcoded product assumptions.
-- If an abstraction is only used by `rod-manager`, keep it product-local until the sample second project proves reuse.
+- Prefer composition files over hardcoded project assumptions.
+- If an abstraction is only used by `rod-manager`, keep it project-local until the sample second project proves reuse.

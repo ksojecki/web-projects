@@ -336,7 +336,7 @@ describe('AppRoutes', () => {
     expect(screen.getByText('Język')).toBeInTheDocument();
   });
 
-  it('renders account sections in product-defined order', async () => {
+  it('renders account sections in project-defined order', async () => {
     mockAuthenticatedAccountSession();
 
     render(

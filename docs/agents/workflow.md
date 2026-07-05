@@ -9,10 +9,10 @@ When the task requires planning, do not start implementation until the plan is a
 - Check `README.md`, `AGENTS.md`, and `docs/README.md`.
 - Confirm the current Nx workspace state (`nx.json`, `package.json`).
 - If Nx MCP is available in the session, use it first for Nx-specific documentation questions and read-only workspace exploration such as graph inspection or running-task introspection.
-- When commands target generated product apps, distinguish filesystem paths from
-  package ids: use `projects/<product>/apps/*` for files and
-  `@ksojecki/<product>-api` or `@ksojecki/<product>-web` for Nx/package ids.
-- When the task touches runtime behavior, choose the target product up front and
+- When commands target generated project apps, distinguish filesystem paths from
+  package ids: use `projects/<project>/apps/*` for files and
+  `@ksojecki/<project>-api` or `@ksojecki/<project>-web` for Nx/package ids.
+- When the task touches runtime behavior, choose the target project up front and
   anchor the session to its dev contract: `rod-manager` defaults to
   `https://localhost:3000/` with Chrome DevTools on `127.0.0.1:9222`,
   `recepturomat` defaults to `https://localhost:3100/` with Chrome DevTools on
@@ -36,12 +36,12 @@ When the task requires planning, do not start implementation until the plan is a
 - Treat plan acceptance as the gate to start delivery work.
 - When using this repository workflow, treat plan acceptance as the point where the delivery loop begins spawning step-scoped subagents.
 - When dev or auth behavior matters, account for env precedence explicitly:
-  shell env wins, then `.env`, `.env.local`, `projects/<product>/.env`, and
-  `projects/<product>/.env.local`, with later files overriding earlier ones.
+  shell env wins, then `.env`, `.env.local`, `projects/<project>/.env`, and
+  `projects/<project>/.env.local`, with later files overriding earlier ones.
 - In project-local env files, use the same plain keys as root env files
   (`PORT`, `WEB_PORT`, `AUTH_DB_PATH`, `AUTH_SEED_INITIAL_USER`,
   `OAUTH_REDIRECT_BASE_URL`, `CHROME_USER_DATA_DIR`, `CHROME_DEBUG_PORT`).
-  Product identity comes from the selected project and code defaults, not from
+  Project identity comes from the selected project and code defaults, not from
   env key prefixes.
 
 ## 3) Delivery Loop
@@ -74,13 +74,13 @@ When the task requires planning, do not start implementation until the plan is a
 - For API changes, keep alignment with `docs/architecture/`.
 - Keep generated code and comments in English.
 - When a step changes documentation or code comments, run a final `stop-slop` prose pass before handoff.
-- Keep root docs workspace-wide. Move project detail to `projects/<product>/` and library detail to `libs/<library>/`.
+- Keep root docs workspace-wide. Move project detail to `projects/<project>/` and library detail to `libs/<library>/`.
 - Add or update the local `README.md` and `AGENTS.md` when a change alters how a project or library works.
 - For new plugins, use a folder-based structure with `index.ts` as a thin entrypoint and focused modules (types + implementation files), matching the `database` plugin style.
 - For larger modules in general, split by responsibility once complexity grows (avoid monolithic files).
 - For browser-facing debugging, prefer `nx run <api-project>:dev --no-tui`
   or its thin `npm run dev:<project>` alias so the browser comes up on the
-  product's expected port with a dedicated Chrome profile and remote debugging
+  project's expected port with a dedicated Chrome profile and remote debugging
   port. Use the underlying `serve` target directly only when you explicitly
   need the server process without Chrome.
 

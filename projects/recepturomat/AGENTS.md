@@ -5,4 +5,4 @@
 - Dev command: `npm run dev:recepturomat`
 - Local URL: `https://localhost:3100/`
 - Chrome debug port: `9333`
-- Put product-local feature code under `projects/recepturomat/apps/api/src/` and `projects/recepturomat/apps/web/src/app/`.
+- Put project-local feature code under `projects/recepturomat/apps/api/src/` and `projects/recepturomat/apps/web/src/app/`.

@@ -98,7 +98,7 @@ describe('createServerPlatform', () => {
     await fastify.close();
   });
 
-  it('registers the SSR route with explicit product configuration', async () => {
+  it('registers the SSR route with explicit project configuration', async () => {
     const fastify = Fastify();
     const register = vi
       .spyOn(fastify, 'register')

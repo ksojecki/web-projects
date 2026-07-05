@@ -125,8 +125,8 @@ describe('useDefaultAccountSections', () => {
         <DefaultAccountSectionsHarness
           extraSections={[
             {
-              content: <div>Product extra section</div>,
-              id: 'product-extra',
+              content: <div>Project extra section</div>,
+              id: 'project-extra',
             },
           ]}
         />
@@ -137,6 +137,6 @@ describe('useDefaultAccountSections', () => {
     expect(
       screen.getByRole('heading', { name: 'Authentication methods' }),
     ).toBeTruthy();
-    expect(screen.getByText('Product extra section')).toBeTruthy();
+    expect(screen.getByText('Project extra section')).toBeTruthy();
   });
 });

@@ -1,13 +1,13 @@
 # `libs/server-platform`
 
-This library owns the shared Fastify runtime and platform plugins. Keep product routes and product config out of it.
+This library owns the shared Fastify runtime and platform plugins. Keep project routes and project config out of it.
 
 ## Ownership
 
 - Treat this folder as backend platform code.
 - Keep plugin entrypoints thin. Put business logic in the nearby domain file.
 - Keep Fastify decorators and registration in `index.ts` files.
-- Move product-specific behavior to `projects/*` or to product-scoped config.
+- Move project-specific behavior to `projects/*` or to project-scoped config.
 
 ## Validation
 

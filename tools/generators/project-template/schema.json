@@ -6,12 +6,12 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Product name used for filesystem paths, package names, and project ids.",
+      "description": "Project name used for filesystem paths, package names, and project ids.",
       "$default": {
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "Product name"
+      "x-prompt": "Project name"
     }
   },
   "required": ["name"],
