@@ -2,8 +2,8 @@
 
 ## Repo Snapshot
 
-- This is an Nx 23 workspace (`nx`, `@nx/js` in `package.json`) organized around product directories under `projects/` and shared libraries under `libs/`.
-- Product applications live in `projects/<product>/apps/` (`projects/rod-manager/apps/api`, `projects/rod-manager/apps/web`), and reusable code lives in `libs/` (`libs/shared`, `libs/ui`).
+- This is an Nx 23 workspace (`nx`, `@nx/js` in `package.json`) organized around project directories under `projects/` and shared libraries under `libs/`.
+- Project applications live in `projects/<project>/apps/` (`projects/rod-manager/apps/api`, `projects/rod-manager/apps/web`), and reusable code lives in `libs/` (`libs/shared`, `libs/ui`).
 - Treat root config as source of truth unless a project-level config overrides it intentionally.
 - Extended docs for agents and architecture are in `docs/` (`docs/agents/`, `docs/architecture/`, `docs/operations/`).
 
@@ -20,13 +20,13 @@
 - Prefer direct statements, active voice, plain language, and specific nouns in docs and comments.
 - Cut filler phrases, business jargon, rhetorical setups, and meta-explanations about what the text "will" do.
 - Keep code comments rare. Write them only when they explain intent, constraints, or a non-obvious tradeoff that the code cannot show on its own.
-- Do not use `stop-slop` to rewrite user-facing product copy unless the task asks for copy changes.
+- Do not use `stop-slop` to rewrite user-facing app copy unless the task asks for copy changes.
 
 ## Documentation Ownership
 
-- Keep root `README.md` short: workspace overview, product links, library links, and common commands.
+- Keep root `README.md` short: workspace overview, project links, library links, and common commands.
 - Keep root `docs/` for workspace-wide approach, tooling, architecture, operations, and agent workflow.
-- Put product-specific docs and instructions under `projects/<product>/`.
+- Put project-specific docs and instructions under `projects/<project>/`.
 - Put library-specific docs and instructions under `libs/<library>/`.
 - Each project and library must have a local `README.md` and `AGENTS.md`.
 - Link project and library README files from the root `README.md`.
@@ -36,7 +36,7 @@
 - Monorepo orchestration is defined in `nx.json`; project tasks are expected to be inferred by Nx.
 - `@nx/js/typescript` plugin wires common targets: `build` and `typecheck` (see `nx.json` plugin options).
 - Shared cache inputs include `.github/workflows/ci.yml` via `namedInputs.sharedGlobals`; CI changes can invalidate task cache.
-- Product-specific feature plugins can live under `projects/<product>/plugins/`, while shared platform libraries remain under `libs/`.
+- Project-specific feature plugins can live under `projects/<project>/plugins/`, while shared platform libraries remain under `libs/`.
 - TypeScript baseline lives in `tsconfig.base.json` with strict + composite settings and NodeNext module system.
 
 ## Terminal Command Handling
@@ -69,9 +69,9 @@
 - Install deps: `npm ci` (used in CI).
 - Prefer `nx run <api-project>:dev --no-tui` for local UI work and browser debugging. Today that means `npx nx run @ksojecki/rod-manager-api:dev --no-tui` on `https://localhost:3000/` with Chrome DevTools on `127.0.0.1:9222`, or `npx nx run @ksojecki/recepturomat-api:dev --no-tui` on `https://localhost:3100/` with Chrome DevTools on `127.0.0.1:9333`. The root `npm run dev:<project>` commands are thin aliases to those Nx targets.
 - The underlying `serve` target remains the internal server-only path used by the public `dev` workflow.
-- Runtime env resolution is: shell env first, then `.env`, `.env.local`, `projects/<project>/.env`, and `projects/<project>/.env.local`. Later files override earlier files; project-local files are the intended place for per-product overrides such as `PORT`, `WEB_PORT`, `AUTH_DB_PATH`, `AUTH_SEED_INITIAL_USER`, `OAUTH_REDIRECT_BASE_URL`, `CHROME_USER_DATA_DIR`, and `CHROME_DEBUG_PORT`.
-- When validating auth seeding, treat `AUTH_SEED_INITIAL_USER`, `AUTH_INITIAL_USER_EMAIL`, and `AUTH_INITIAL_USER_PASSWORD` as shared defaults. A project-local `AUTH_SEED_INITIAL_USER` override applies only to that product.
-- If a product's default API port is already in use, inspect the listener with `lsof -nP -iTCP:<port> -sTCP:LISTEN` and reuse an existing matching dev server when possible. Stop the process only if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
+- Runtime env resolution is: shell env first, then `.env`, `.env.local`, `projects/<project>/.env`, and `projects/<project>/.env.local`. Later files override earlier files; project-local files are the intended place for per-project overrides such as `PORT`, `WEB_PORT`, `AUTH_DB_PATH`, `AUTH_SEED_INITIAL_USER`, `OAUTH_REDIRECT_BASE_URL`, `CHROME_USER_DATA_DIR`, and `CHROME_DEBUG_PORT`.
+- When validating auth seeding, treat `AUTH_SEED_INITIAL_USER`, `AUTH_INITIAL_USER_EMAIL`, and `AUTH_INITIAL_USER_PASSWORD` as shared defaults. A project-local `AUTH_SEED_INITIAL_USER` override applies only to that project.
+- If a project's default API port is already in use, inspect the listener with `lsof -nP -iTCP:<port> -sTCP:LISTEN` and reuse an existing matching dev server when possible. Stop the process only if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
 - Run lint via npm script: `npm run lint` (delegates to Nx `lint` targets).
 - Run formatting checks: `npm run format:check`; auto-fix formatting: `npm run format`.
 - Run CI-equivalent checks locally: `npx nx run-many -t lint test build typecheck --no-tui`.
@@ -117,16 +117,16 @@
 
 ## Project Template Workflow
 
-- Use the supported root wrapper to scaffold a product: `npm run generate:project -- <name>`.
+- Use the supported root wrapper to scaffold a project: `npm run generate:project -- <name>`.
 - The underlying generator entrypoint is `./tools/generators.json:project-template`, and its required input is `name`.
 - The generator creates `projects/<name>/apps/api` and `projects/<name>/apps/web`, adds a root `dev:<name>` script, and updates root TS references.
 - Generated package names and Nx project ids stay flat and npm-compatible:
   `@ksojecki/<name>-api` and `@ksojecki/<name>-web`.
-- The current generated product in this workspace is `projects/recepturomat`.
-- Keep reusable platform code in `libs/`, product apps in `projects/<product>/apps/`, and product-specific features in `projects/<product>/plugins/`.
-- Treat registration as a product-scoped capability configured by the product frontend, not a workspace-wide default.
-- For backend bootstrap, use `projects/<product>/apps/api/src/productConfig.ts` as the product-scoped contract for project id, database path, seed behavior, and SSR paths.
-- For frontend composition, use `projects/<product>/apps/web/src/app/productConfig.ts` as the product-scoped contract for routes, redirects, login prompt behavior, and registration enablement.
+- The current generated project in this workspace is `projects/recepturomat`.
+- Keep reusable platform code in `libs/`, project apps in `projects/<project>/apps/`, and project-specific features in `projects/<project>/plugins/`.
+- Treat registration as a project-scoped capability configured by the project frontend, not a workspace-wide default.
+- For backend bootstrap, use `projects/<project>/apps/api/src/productConfig.ts` as the project-scoped contract for project id, database path, seed behavior, and SSR paths.
+- For frontend composition, use `projects/<project>/apps/web/src/app/productConfig.ts` as the project-scoped contract for routes, redirects, login prompt behavior, and registration enablement.
 - Do not introduce path-like package names such as `@ksojecki/<name>/api`; use
   the nested `projects/<name>/apps/*` paths for filesystem structure and the
   flat package ids in commands, imports, and `package.json`.
@@ -147,7 +147,7 @@ Provider credentials must be configured via environment variables:
 - `OAUTH_GOOGLE_CLIENT_ID` / `OAUTH_GOOGLE_CLIENT_SECRET`: Google OAuth 2.0 app credentials.
 - `OAUTH_APPLE_CLIENT_ID` / `OAUTH_APPLE_CLIENT_SECRET` / `OAUTH_APPLE_TEAM_ID`: Apple Sign In credentials.
 - `OAUTH_FACEBOOK_CLIENT_ID` / `OAUTH_FACEBOOK_CLIENT_SECRET`: Facebook app credentials.
-- `OAUTH_REDIRECT_BASE_URL`: Base URL for OAuth callbacks. In local dev sessions it falls back to the selected product's default localhost URL when unset, and it must match the provider redirect URI config.
+- `OAUTH_REDIRECT_BASE_URL`: Base URL for OAuth callbacks. In local dev sessions it falls back to the selected project's default localhost URL when unset, and it must match the provider redirect URI config.
 
 ### Adding a New OAuth Provider
 
@@ -195,6 +195,6 @@ Provider credentials must be configured via environment variables:
 - Validate the generated apps with `npx nx show project @ksojecki/<name>-api --json` and `npx nx show project @ksojecki/<name>-web --json` when needed.
 - Keep command examples on the flat ids above even though the generated files
   live under `projects/<name>/apps/api` and `projects/<name>/apps/web`.
-- Check the generated product contracts in `projects/<name>/apps/api/src/productConfig.ts` and `projects/<name>/apps/web/src/app/productConfig.ts`.
+- Check the generated project contracts in `projects/<name>/apps/api/src/productConfig.ts` and `projects/<name>/apps/web/src/app/productConfig.ts`.
 - Run at least `npm run typecheck` after generation, and use `npx nx run-many -t lint test build typecheck --no-tui` for CI-equivalent validation when the change is broader.
 - Keep new package configs aligned with root TS/Nx conventions instead of overriding defaults unless necessary.

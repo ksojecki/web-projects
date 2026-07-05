@@ -173,17 +173,17 @@ recipes as a graph rather than a flat list.
 
 ## Legacy To Target Mapping
 
-Use this mapping to split the migration work between product-local code and
+Use this mapping to split the migration work between project-local code and
 shared platform reuse candidates.
 
 | Legacy source area                                                               | Target in this repo                                                                                          | Migration note                                                                                                                |
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `apps/ui` routes, pages, forms, hooks, and i18n                                  | `projects/recepturomat/apps/web`                                                                             | Product-local frontend composition. Keep route layout, recipe pages, and localization behavior here first.                    |
-| `apps/backend` Express API, auth route, recipe routes, bootstrap, and seed logic | `projects/recepturomat/apps/api`                                                                             | Product-local backend composition. Port the behavior into the generated Fastify app shape.                                    |
-| `libs/data-model` recipe/auth/response types                                     | Product-local contracts under `projects/recepturomat/` first; reuse only if a repo-wide shape already exists | Do not force a shared library before the product shape is stable.                                                             |
-| `libs/app-toolkit` env extraction and Express middleware helpers                 | Replace with existing workspace platform/config utilities unless a product-local helper is still needed      | Treat this as migration glue, not as a new shared target by default.                                                          |
+| `apps/ui` routes, pages, forms, hooks, and i18n                                  | `projects/recepturomat/apps/web`                                                                             | Project-local frontend composition. Keep route layout, recipe pages, and localization behavior here first.                    |
+| `apps/backend` Express API, auth route, recipe routes, bootstrap, and seed logic | `projects/recepturomat/apps/api`                                                                             | Project-local backend composition. Port the behavior into the generated Fastify app shape.                                    |
+| `libs/data-model` recipe/auth/response types                                     | Project-local contracts under `projects/recepturomat/` first; reuse only if a repo-wide shape already exists | Do not force a shared library before the project shape is stable.                                                             |
+| `libs/app-toolkit` env extraction and Express middleware helpers                 | Replace with existing workspace platform/config utilities unless a project-local helper is still needed      | Treat this as migration glue, not as a new shared target by default.                                                          |
 | Auth context, query helper, and app shell wrappers                               | Shared platform usage where it already matches the workspace pattern                                         | Reuse `libs/web-platform` and `libs/server-platform` only for generic auth/session/shell primitives, not for recipe behavior. |
-| Mongo bootstrap and recipe seed data                                             | Product-local initialization and import path                                                                 | The first wave should own this inside the product API.                                                                        |
+| Mongo bootstrap and recipe seed data                                             | Project-local initialization and import path                                                                 | The first wave should own this inside the project API.                                                                        |
 
 ## First-Wave Postponed Or Unsupported Items
 
@@ -199,7 +199,7 @@ These items are not part of the first migration wave:
 - Printing is not supported as a verified backend feature in the sampled source
   files; the UI button exists, but the migration should not treat it as shipped
   functionality.
-- No cross-product sharing of recipe UI, recipe types, or recipe stores.
+- No cross-project sharing of recipe UI, recipe types, or recipe stores.
 - No attempt to normalize nested ingredient references into a separate model on
   day one.
 - No new locale expansion beyond the observed `en` and `pl` behavior.

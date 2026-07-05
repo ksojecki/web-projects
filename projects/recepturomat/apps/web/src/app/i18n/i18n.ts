@@ -71,7 +71,7 @@ void installI18nextPlugin(initReactI18next).init({
         badge: 'Generated project',
         title: 'Recepturomat',
         description:
-          'This starter product wires the shared backend and frontend platform libraries into a minimal product-local shell. Extend routes, branding, and sections here without copying auth shell code.',
+          'This starter project wires the shared backend and frontend platform libraries into a minimal project-local shell. Extend routes, branding, and sections here without copying auth shell code.',
         signedInCta: 'Open account',
         signedOutCta: 'Log in',
         registerCta: 'Register',

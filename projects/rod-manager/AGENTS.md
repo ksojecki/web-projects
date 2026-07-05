@@ -5,4 +5,4 @@
 - Dev command: `npm run dev:rod-manager`
 - Local URL: `https://localhost:3000/`
 - Chrome debug port: `9222`
-- Put product-local feature code under `projects/rod-manager/plugins/`, split by `server`, `shared`, and `ui` when needed.
+- Put project-local feature code under `projects/rod-manager/plugins/`, split by `server`, `shared`, and `ui` when needed.

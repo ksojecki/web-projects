@@ -1,6 +1,15 @@
 # @ksojecki/platform-shared
 
-Shared types and runtime helpers used by both product layers.
+Shared TypeScript contracts and helpers used by API and web projects.
+
+Use this library for DTOs, shared auth payloads, and workspace-level helpers that need one source of truth.
+
+## Responsibilities
+
+- Define shared auth DTOs
+- Define shared user settings contracts
+- Expose workspace configuration helpers
+- Keep API and web layers aligned on shared types
 
 ## Key paths
 
@@ -9,7 +18,7 @@ Shared types and runtime helpers used by both product layers.
 - `src/lib/workspaceConfig.ts`
 - `src/index.ts`
 
-## Related docs
+## Related Docs
 
 - [Library agents](./AGENTS.md)
 - [Root AGENTS](../../AGENTS.md)

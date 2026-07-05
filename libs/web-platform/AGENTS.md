@@ -1,12 +1,12 @@
 # `libs/web-platform`
 
-This library owns shared React behavior for auth, account, and shell UI. Keep product-specific routes and copy in the product app.
+This library owns shared React behavior for auth, account, and shell UI. Keep project-specific routes and copy in the project app.
 
 ## Ownership
 
 - Treat this folder as shared frontend platform code.
-- Keep auth and account flows reusable across products.
-- Keep product-specific labels, routes, and feature toggles outside the library.
+- Keep auth and account flows reusable across projects.
+- Keep project-specific labels, routes, and feature toggles outside the library.
 
 ## Validation
 
@@ -21,4 +21,4 @@ This library owns shared React behavior for auth, account, and shell UI. Keep pr
 - Keep hook and component names specific to their domain.
 - Keep auth, account, and shell code in separate folders.
 - Reuse existing form and route patterns before adding new ones.
-- Keep copy short and product-neutral.
+- Keep copy short and project-neutral.

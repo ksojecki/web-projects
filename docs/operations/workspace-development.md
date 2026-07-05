@@ -8,7 +8,7 @@ README.
 - Nx 23 workspace
 - React Router SSR frontend apps
 - Fastify backend apps
-- SQLite product-local storage
+- SQLite project-local storage
 - Vitest, Oxlint, and Prettier
 
 ## Prerequisites
@@ -33,7 +33,7 @@ npm run setup:certs
 - `npx nx run @ksojecki/rod-manager-api:dev --no-tui` - start Rod Manager and open Chrome for Testing on `https://localhost:3000/` with remote debugging on `127.0.0.1:9222`
 - `npx nx run @ksojecki/recepturomat-api:dev --no-tui` - start Recepturomat and open Chrome for Testing on `https://localhost:3100/` with remote debugging on `127.0.0.1:9333`
 - `npm run dev:rod-manager` / `npm run dev:recepturomat` - thin aliases to the Nx `dev` targets above
-- `npm run generate:project -- <name>` - scaffold a new product
+- `npm run generate:project -- <name>` - scaffold a new project
 - `npm run lint` - run Nx lint targets
 - `npm run typecheck` - run Nx typecheck targets
 - `npm run format:check` - run Prettier checks
@@ -60,7 +60,7 @@ environment still win because the loader does not overwrite existing
 
 Keep shared defaults such as `AUTH_SEED_INITIAL_USER`,
 `AUTH_INITIAL_USER_EMAIL`, and `AUTH_INITIAL_USER_PASSWORD` in the root env
-files. Use project-local files only for product-specific overrides such as:
+files. Use project-local files only for project-specific overrides such as:
 
 - `PORT=3000` or `PORT=3100`
 - `WEB_PORT=4200` or `WEB_PORT=4300`
@@ -68,7 +68,7 @@ files. Use project-local files only for product-specific overrides such as:
 - `CHROME_USER_DATA_DIR=tmp/chrome/<project>`
 - `AUTH_DB_PATH=tmp/<project>/auth.sqlite`
 - `RECIPE_DB_PATH=tmp/recepturomat/recipes.sqlite`
-- `OAUTH_REDIRECT_BASE_URL=https://localhost:<product-port>`
+- `OAUTH_REDIRECT_BASE_URL=https://localhost:<project-port>`
 - `AUTH_SEED_INITIAL_USER=true`
 
 Smoke checks after startup:
@@ -80,7 +80,7 @@ Use an authenticated session for both the page and `/api` checks.
 
 If you only need the raw server process without opening Chrome, use the
 underlying Nx `serve` target directly. The public Nx `dev` target uses
-Puppeteer's managed Chrome for Testing by default and opens the product URL.
+Puppeteer's managed Chrome for Testing by default and opens the project URL.
 
 For Codex-driven UI debugging after `npm run dev:<project>`, use the
 Chrome-backed browser path exposed by the bundled browser plugin and the
@@ -89,21 +89,21 @@ existing `node_repl` backend. This repo does not define or require a standalone
 
 ## Naming Rules
 
-- Filesystem layout uses nested paths such as `projects/<product>/apps/api` and
-  `projects/<product>/apps/web`.
+- Filesystem layout uses nested paths such as `projects/<project>/apps/api` and
+  `projects/<project>/apps/web`.
 - Package names and Nx project ids stay flat:
-  `@ksojecki/<product>-api` and `@ksojecki/<product>-web`.
-- Do not use path-like package names such as `@ksojecki/<product>/api`.
+  `@ksojecki/<project>-api` and `@ksojecki/<project>-web`.
+- Do not use path-like package names such as `@ksojecki/<project>/api`.
 - The root workspace package identity is `@ksojecki/platform-source`.
 
-## Product Boundaries
+## Project Boundaries
 
 - Reusable platform code belongs in `libs/`.
-- Product apps belong in `projects/<product>/apps/`.
-- Product-specific features belong in `projects/<product>/plugins/`.
-- Each product keeps isolated database, users, sessions, OAuth records, and
-  product data.
+- Project apps belong in `projects/<project>/apps/`.
+- Project-specific features belong in `projects/<project>/plugins/`.
+- Each project keeps isolated database, users, sessions, OAuth records, and
+  project data.
 - Backend composition contract:
-  `projects/<product>/apps/api/src/productConfig.ts`
+  `projects/<project>/apps/api/src/productConfig.ts`
 - Frontend composition contract:
-  `projects/<product>/apps/web/src/app/productConfig.ts`
+  `projects/<project>/apps/web/src/app/productConfig.ts`

@@ -56,7 +56,7 @@ This starts the SSR app through the Fastify API server, waits for it to become
 reachable, then opens Puppeteer's managed Chrome for Testing with a repo-local
 profile and remote debugging enabled.
 
-Choose the product explicitly:
+Choose the project explicitly:
 
 ```sh
 npx nx run @ksojecki/rod-manager-api:dev --no-tui
@@ -84,11 +84,11 @@ Env precedence for `dev` and `serve` sessions is:
 1. shell environment
 2. `.env`
 3. `.env.local`
-4. `projects/<product>/.env`
-5. `projects/<product>/.env.local`
+4. `projects/<project>/.env`
+5. `projects/<project>/.env.local`
 
 Later files override earlier files. Use the root files for shared defaults and
-the project-local files for per-product overrides such as ports, DB paths, auth
+the project-local files for per-project overrides such as ports, DB paths, auth
 seed flags, OAuth redirect URLs, Chrome debug ports, and Chrome user-data
 directories.
 
@@ -98,13 +98,13 @@ file sets `AUTH_SEED_INITIAL_USER`, that override applies only to that project.
 
 Smoke checks:
 
-- `https://localhost:<product-port>/` should be verified through an authenticated session and return SSR HTML.
-- `https://localhost:<product-port>/api` should be verified through the same authenticated session and return API JSON.
+- `https://localhost:<project-port>/` should be verified through an authenticated session and return SSR HTML.
+- `https://localhost:<project-port>/api` should be verified through the same authenticated session and return API JSON.
 
-If a product's default port is already in use, inspect the listener with:
+If a project's default port is already in use, inspect the listener with:
 
 ```sh
-lsof -nP -iTCP:<product-port> -sTCP:LISTEN
+lsof -nP -iTCP:<project-port> -sTCP:LISTEN
 ```
 
 Reuse an existing matching dev server when possible. Stop the process only if it

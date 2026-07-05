@@ -1,6 +1,6 @@
 # Workspace Docs
 
-Use root docs for rules that apply across the workspace. Put product and library details next to the code that owns them.
+Use root docs for rules that apply across the workspace. Put project and library details next to the code that owns them.
 
 ## Root Scope
 

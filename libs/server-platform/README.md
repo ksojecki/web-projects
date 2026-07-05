@@ -1,6 +1,15 @@
 # @ksojecki/platform-server-platform
 
-Shared server runtime for auth, sessions, database access, and SSR routes.
+Shared Fastify server library for workspace APIs.
+
+It provides the runtime pieces that projects reuse instead of rebuilding auth, session, database, OAuth, and SSR wiring in each app.
+
+## Responsibilities
+
+- Create the shared Fastify platform runtime
+- Register auth, session, database, and OAuth plugins
+- Expose shared HTTP routes and runtime contracts
+- Support SSR delivery for web apps
 
 ## Key paths
 
@@ -11,7 +20,7 @@ Shared server runtime for auth, sessions, database access, and SSR routes.
 - `src/lib/runtime/context.ts`
 - `src/index.ts`
 
-## Related docs
+## Related Docs
 
 - [Library agents](./AGENTS.md)
 - [OAuth integration](./docs/oauth-integration.md)
