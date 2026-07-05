@@ -6,6 +6,13 @@ Use this page to prepare a coding-agent session for this repository.
 
 - Read `README.md`, `AGENTS.md`, and `docs/README.md`.
 - During Codex initialization for this repository, always load `.agents/skills/agent-delivery-loop/SKILL.md`.
+- Install the global `stop-slop` skill during agent onboarding when it is not present locally:
+
+```sh
+git clone https://github.com/hardikpandya/stop-slop ~/.codex/skills/stop-slop
+```
+
+- If the task includes drafting or reviewing documentation or code comments, also load the global `stop-slop` skill before editing prose.
 - If Nx MCP is available in the session, use it first for Nx docs, graph inspection, and running-task introspection before falling back to broader file reads.
 - Check current worktree state with `git --no-pager status --short`.
 - If you need GitHub issue or PR access through `gh`, request elevated access up
