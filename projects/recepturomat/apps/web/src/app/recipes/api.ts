@@ -1,8 +1,9 @@
+import {
+  JSON_HEADERS,
+  requestJson,
+  requestNoContent,
+} from '@ksojecki/platform-web-platform';
 import type { Recipe, RecipeListEntry } from './types';
-
-const JSON_HEADERS = {
-  'Content-Type': 'application/json',
-};
 
 export async function listRecipes(): Promise<RecipeListEntry[]> {
   return requestJson<RecipeListEntry[]>('/api/recipes', {
@@ -36,51 +37,7 @@ export async function updateRecipe(
 }
 
 export async function deleteRecipe(recipeId: string): Promise<void> {
-  const response = await fetch(`/api/recipes/${encodeURIComponent(recipeId)}`, {
-    credentials: 'include',
+  await requestNoContent(`/api/recipes/${encodeURIComponent(recipeId)}`, {
     method: 'DELETE',
   });
-
-  if (!response.ok && response.status !== 204) {
-    throw new Error(await parseErrorMessage(response));
-  }
-}
-
-async function requestJson<T>(url: string, init: RequestInit): Promise<T> {
-  const response = await fetch(url, {
-    credentials: 'include',
-    ...init,
-  });
-
-  if (!response.ok) {
-    throw new Error(await parseErrorMessage(response));
-  }
-
-  return await response.json();
-}
-
-async function parseErrorMessage(response: Response): Promise<string> {
-  try {
-    const payload = await response.json();
-
-    if (hasMessage(payload)) {
-      return payload.message;
-    }
-  } catch {
-    return 'Unexpected server error.';
-  }
-
-  return 'Unexpected server error.';
-}
-
-function hasMessage(value: unknown): value is { message: string } {
-  if (!isRecord(value)) {
-    return false;
-  }
-
-  return typeof value.message === 'string' && value.message.length > 0;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
 }

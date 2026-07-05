@@ -99,7 +99,7 @@
 ## Low-Token Navigation Workflow
 
 - Start with task-local context before broad repo reads: issue/PR text, `git --no-pager status --short`, then `rg -n` in the likely area.
-- Prefer `rg` and `rg --files` over opening full files. Read only the matching sections with `sed -n` or `rg -n -C`.
+- Prefer `rg` and `rg --files` over opening full files. Exclude ignored cache and dependency trees with `--glob '!**/node_modules/**'` and `--glob '!**/.nx/**'` when searching broad repo paths.
 - If Nx MCP is available, use it first for read-only Nx help: docs, graph views, and running-task inspection.
 - Use `npx nx show projects --json` to list workspace projects without opening the graph.
 - Use `npx nx show project <project-name> --json` to inspect one project's resolved root, targets, and metadata.

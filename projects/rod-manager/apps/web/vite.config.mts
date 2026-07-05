@@ -27,8 +27,6 @@ export default defineConfig(async ({ command }) => {
   const apiPort = getProductApiPort('rod-manager');
   const webPort = getProductWebPort('rod-manager');
 
-  process.env.NODE_ENV = nodeEnv;
-
   return {
     root: import.meta.dirname,
     cacheDir: '../../../../node_modules/.vite/projects/rod-manager/apps/web',

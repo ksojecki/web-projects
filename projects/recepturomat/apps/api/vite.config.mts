@@ -1,6 +1,11 @@
 /// <reference types="vitest" />
 import { builtinModules } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
+
+const sharedSourcePath = fileURLToPath(
+  new URL('../../../../libs/shared/src/index.ts', import.meta.url),
+);
 
 const nodeBuiltins = new Set([
   ...builtinModules,
@@ -23,6 +28,9 @@ export default defineConfig(({ mode }) => ({
   root: import.meta.dirname,
   cacheDir: '../../../../node_modules/.vite/projects/recepturomat/apps/api',
   resolve: {
+    alias: {
+      '@ksojecki/platform-shared': sharedSourcePath,
+    },
     conditions: ['@ksojecki/platform-source'],
   },
   ssr: {

@@ -4,13 +4,11 @@ import {
   useAuth,
   useDefaultAccountSections,
 } from '@ksojecki/platform-web-platform';
-import { productAccountConfig } from './productAccountConfig';
 
 export function AccountPage() {
   const { t } = useTranslation('account');
   const { user } = useAuth();
-  const extraSections = productAccountConfig.useExtraSections();
-  const sections = useDefaultAccountSections(extraSections);
+  const sections = useDefaultAccountSections();
 
   return (
     <AccountShell

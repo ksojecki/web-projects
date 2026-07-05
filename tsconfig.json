@@ -32,9 +32,6 @@
     },
     {
       "path": "./projects/rod-manager/plugins/pages/shared"
-    },
-    {
-      "path": "./projects/rod-manager/plugins/pages/ui"
     }
   ]
 }

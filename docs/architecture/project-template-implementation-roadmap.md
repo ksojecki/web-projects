@@ -378,7 +378,6 @@ Preserve a clean boundary between template code and product features.
 - `projects/rod-manager/plugins/pages/server/src/lib/routes.ts`
 - `projects/rod-manager/plugins/pages/server/src/lib/store.ts`
 - `projects/rod-manager/plugins/pages/server/src/lib/migrations.ts`
-- `projects/rod-manager/plugins/pages/ui/src/lib/plugin.ts`
 - `projects/rod-manager/apps/web/src/app/content-management/ContentManagementPage.tsx`
 - `projects/rod-manager/apps/web/src/app/content-management/ContentPage.tsx`
 - `projects/rod-manager/apps/web/src/app/content-management/pagesApi.ts`
