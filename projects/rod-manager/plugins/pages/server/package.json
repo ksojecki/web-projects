@@ -27,7 +27,7 @@
         "executor": "nx:run-commands",
         "options": {
           "cwd": "projects/rod-manager/plugins/pages/server",
-          "command": "node ../../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.lib.json && node ../../../../../node_modules/typescript/bin/tsc --noEmit -p tsconfig.spec.json"
+          "command": "npx tsc --noEmit -p tsconfig.lib.json && npx tsc --noEmit -p tsconfig.spec.json"
         }
       },
       "lint": {
@@ -43,14 +43,14 @@
         ],
         "options": {
           "cwd": "projects/rod-manager/plugins/pages/server",
-          "command": "node ../../../../../node_modules/typescript/bin/tsc --build tsconfig.lib.json"
+          "command": "npx tsc --build tsconfig.lib.json"
         }
       },
       "test": {
         "executor": "nx:run-commands",
         "options": {
           "cwd": "projects/rod-manager/plugins/pages/server",
-          "command": "node ../../../../../node_modules/vitest/vitest.mjs run --config vitest.config.mts"
+          "command": "npx vitest run --config vitest.config.mts"
         }
       }
     }

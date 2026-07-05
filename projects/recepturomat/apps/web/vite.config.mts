@@ -3,9 +3,18 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
+const workspaceRelativeRoot = '../../../../';
+const workspaceConfigUrl = new URL(
+  `${workspaceRelativeRoot}scripts/workspace-config.mjs`,
+  import.meta.url,
+);
+const cacheDir = `${workspaceRelativeRoot}node_modules/.vite/projects/recepturomat/apps/web`;
+const clientOutDir = `${workspaceRelativeRoot}dist/projects/recepturomat/apps/web/client`;
+
 export default defineConfig(async ({ command }) => {
-  const { getProductApiPort, getProductWebPort, loadProductEnv } =
-    await import('../../../../scripts/workspace-config.mjs');
+  const { getProductApiPort, getProductWebPort, loadProductEnv } = await import(
+    workspaceConfigUrl.href
+  );
 
   loadProductEnv('recepturomat');
 
@@ -18,7 +27,7 @@ export default defineConfig(async ({ command }) => {
 
   return {
     root: import.meta.dirname,
-    cacheDir: '../../../../node_modules/.vite/projects/recepturomat/apps/web',
+    cacheDir,
     server: {
       port: webPort,
       host: 'localhost',
@@ -47,7 +56,7 @@ export default defineConfig(async ({ command }) => {
       },
     },
     build: {
-      outDir: '../../../../dist/projects/recepturomat/apps/web/client',
+      outDir: clientOutDir,
       emptyOutDir: true,
       reportCompressedSize: true,
       commonjsOptions: {

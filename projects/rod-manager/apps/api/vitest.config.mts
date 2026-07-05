@@ -1,8 +1,9 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
+const workspaceRelativeRoot = '../../../../';
 const sharedSourcePath = fileURLToPath(
-  new URL('../../../../libs/shared/src/index.ts', import.meta.url),
+  new URL(`${workspaceRelativeRoot}libs/shared/src/index.ts`, import.meta.url),
 );
 
 export default defineConfig({
