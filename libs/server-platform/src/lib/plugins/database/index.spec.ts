@@ -5,6 +5,9 @@ import Fastify from 'fastify';
 import { afterEach, describe, expect, it } from 'vitest';
 import databasePlugin from './index';
 
+const DATABASE_PLUGIN_ERROR =
+  'databasePlugin requires opts.project with database.path and database.seedInitialUser.';
+
 describe('database plugin', () => {
   afterEach(async () => {
     delete process.env.AUTH_INITIAL_USER_EMAIL;
@@ -14,25 +17,27 @@ describe('database plugin', () => {
   it('throws an actionable error when project config is missing', async () => {
     const fastify = Fastify();
 
-    // @ts-expect-error This test intentionally verifies the plugin's missing-options runtime guard.
-    await expect(fastify.register(databasePlugin, {})).rejects.toThrowError(
-      'databasePlugin requires opts.project with database.path and database.seedInitialUser.',
-    );
-
-    await fastify.close();
+    try {
+      expect(() => {
+        // @ts-expect-error Negative-path test passes intentionally invalid options.
+        databasePlugin(fastify, {});
+      }).toThrowError(DATABASE_PLUGIN_ERROR);
+    } finally {
+      await fastify.close();
+    }
   });
 
   it('throws the same actionable error when options are undefined', async () => {
     const fastify = Fastify();
 
-    await expect(
-      // @ts-expect-error This test intentionally verifies the plugin's missing-options runtime guard.
-      fastify.register(databasePlugin, undefined),
-    ).rejects.toThrowError(
-      'databasePlugin requires opts.project with database.path and database.seedInitialUser.',
-    );
-
-    await fastify.close();
+    try {
+      expect(() => {
+        // @ts-expect-error Negative-path test passes intentionally invalid options.
+        databasePlugin(fastify, undefined);
+      }).toThrowError(DATABASE_PLUGIN_ERROR);
+    } finally {
+      await fastify.close();
+    }
   });
 
   it('keeps seeded and created users isolated across sqlite files', async () => {
