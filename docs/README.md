@@ -1,54 +1,33 @@
-# Docs Index
+# Workspace Docs
 
-This directory is the operational knowledge base for contributors and AI agents.
+Use root docs for rules that apply across the workspace. Put product and library details next to the code that owns them.
 
-## Language Policy
+## Root Scope
 
-- All documentation in this repository must be written in English.
-- All generated code must use English for identifiers, comments, and user-facing messages.
+- [Agent docs](agents/README.md) - agent setup, workflow, and checklist.
+- [Architecture docs](architecture/README.md) - workspace decisions, ADRs, and template strategy.
+- [Operations docs](operations/README.md) - local commands and maintenance notes.
 
-## Structure
+## Project Docs
 
-- `docs/agents/` - agent setup, workflow, guardrails, and checklists.
-- `docs/architecture/` - template strategy, implementation roadmap, and ADRs.
-- `docs/operations/` - maintenance and execution notes.
+- [Rod Manager](../projects/rod-manager/README.md)
+- [Recepturomat](../projects/recepturomat/README.md)
+- [Recepturomat migration](../projects/recepturomat/docs/recepturomat-migration.md)
+- [Recepturomat source inventory](../projects/recepturomat/docs/recepturomat-source-inventory.md)
 
-## Sources of truth in this repository
+## Library Docs
 
-- `AGENTS.md` - quick onboarding for coding agents.
-- `nx.json` - Nx orchestration and inferred targets.
-- `tsconfig.base.json` - global TypeScript baseline.
-- `.oxlintrc.json` - linting rules for TS/React/Node/JSX.
-- `.prettierrc` - formatting rules (2 spaces, single quotes).
-- `package.json` - root script surface, including `dev:<product>` and `generate:project`.
-- `tools/generators.json` - workspace generator entrypoints.
-- GitHub issues - active task tracking and progress updates.
+- [Server platform](../libs/server-platform/README.md)
+- [Server platform OAuth](../libs/server-platform/docs/oauth-integration.md)
+- [Web platform](../libs/web-platform/README.md)
+- [Shared contracts](../libs/shared/README.md)
+- [UI primitives](../libs/ui/README.md)
 
-## Template Workflow Pointers
+## Sources Of Truth
 
-- `README.md` - contributor-facing overview of the supported project-template workflow.
-- `docs/operations/workspace-development.md` - technical workspace setup,
-  command surface, naming rules, and local development guidance.
-- `README.md` also defines the naming split: nested `projects/<product>/apps/*`
-  paths for filesystem structure, flat `@ksojecki/<product>-api` and
-  `@ksojecki/<product>-web` ids for commands and package metadata.
-- `docs/architecture/adr/0002-project-template-strategy.md` - durable decision for template reuse and per-project isolation.
-- `docs/architecture/project-template-refactor-ticket.md` - repository architecture state and product-boundary rules.
-- `docs/architecture/project-template-implementation-roadmap.md` - delivery sequence and remaining follow-up work.
-- `docs/architecture/recepturomat-source-inventory.md` - concrete legacy source snapshot for the Recepturomat migration stream.
-- `docs/architecture/recepturomat-migration.md` - Recepturomat migration architecture and ticket breakdown.
-- `package.json` and `tools/generators.json` - supported scaffold entrypoints for new products.
-- `docs/agents/setup.md` - cheapest-first session start and low-token command workflow for agents.
-
-## How to use
-
-1. Start with `AGENTS.md`.
-2. Read `README.md` for the root command surface and template workflow.
-3. For architecture decisions and ADRs, continue in `docs/architecture/`.
-4. Use the documented root wrapper `npm run generate:project -- <name>`; it dispatches to `tools/generators.json:project-template`.
-5. Prepare local agent sessions with `docs/agents/setup.md`.
-6. Before larger changes, run a quick check with `docs/agents/checklist.md`.
-7. Start task work from the relevant GitHub issue. If one does not exist, create
-   it before implementation.
-8. Record active task progress in GitHub instead of duplicating status updates
-   in local docs.
+- `AGENTS.md` sets root coding-agent rules.
+- `README.md` links the workspace map.
+- `package.json` defines root scripts.
+- `nx.json` defines Nx orchestration.
+- `tsconfig.base.json`, `.oxlintrc.json`, and `.prettierrc` set shared TypeScript, lint, and formatting rules.
+- GitHub issues track active task progress.

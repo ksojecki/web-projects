@@ -38,7 +38,7 @@ Out of scope:
 
 - Backend platform name: `ServerPlatform`.
 - Frontend platform name: `WebPlatform`.
-- This document focuses on backend extraction and plugin contracts, but naming is aligned across both sides.
+- This plan focuses on backend extraction and plugin contracts, but naming stays aligned across both sides.
 
 ## Workspace Shape (Monorepo)
 

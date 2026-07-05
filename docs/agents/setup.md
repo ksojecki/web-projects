@@ -16,7 +16,7 @@ git clone https://github.com/hardikpandya/stop-slop ~/.codex/skills/stop-slop
 - If Nx MCP is available in the session, use it first for Nx docs, graph inspection, and running-task introspection before falling back to broader file reads.
 - Check current worktree state with `git --no-pager status --short`.
 - If you need GitHub issue or PR access through `gh`, request elevated access up
-  front instead of waiting for the command to fail on sandboxed network access.
+  front.
 - Inspect `package.json`, `nx.json`, and the touched project package/config files before changing code.
 - Inspect `.husky/pre-commit` and `.lintstagedrc.mjs` before changing staged-file validation behavior.
 - Use `rg`/`rg --files` for searches; avoid opening generated output in `dist`, `coverage`, `.nx`, and `node_modules`.
@@ -107,13 +107,13 @@ If a product's default port is already in use, inspect the listener with:
 lsof -nP -iTCP:<product-port> -sTCP:LISTEN
 ```
 
-Reuse an existing matching dev server when possible. Only stop the process
-automatically if it is clearly a stale server from this repository; otherwise
-report the conflict and ask the user.
+Reuse an existing matching dev server when possible. Stop the process only if it
+is clearly a stale server from this repository; otherwise report the conflict and
+ask the user.
 
-For UI debugging after the Nx `dev` target or its npm alias, use Codex's Chrome-backed
-browser path. On this machine that path comes from the bundled browser plugin
-using the existing `node_repl` backend; there is no separate
+For UI debugging after the Nx `dev` target or its npm alias, use Codex's
+Chrome-backed browser path. On this machine that path comes from the bundled
+browser plugin using the existing `node_repl` backend; there is no separate
 `[mcp_servers.chrome-devtools]` block to configure or depend on.
 
 ## 4) Validate Changes

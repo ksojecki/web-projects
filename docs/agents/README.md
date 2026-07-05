@@ -1,31 +1,23 @@
-# Agent Playbook
+# Agent Docs
 
-This directory extends `AGENTS.md`.
+Start with root `AGENTS.md`, then read the owner-level `AGENTS.md` for the project or library you touch.
 
-## Language Rule
+## Root Files
 
-- Write documentation in English only.
-- Generate code in English only (identifiers, comments, and user-facing text).
+- [Setup](setup.md) - session start, commands, and local checks.
+- [Workflow](workflow.md) - delivery loop and validation rules.
+- [Checklist](checklist.md) - review prompts before handoff.
+- [Delivery loop skill](../../.agents/skills/agent-delivery-loop/SKILL.md)
 
-## Purpose
+## Owner Files
 
-- Keep decisions consistent across agents and humans.
-- Reduce onboarding time for new contributors.
-- Prevent regressions with clear change boundaries.
+- [Rod Manager agents](../../projects/rod-manager/AGENTS.md)
+- [Recepturomat agents](../../projects/recepturomat/AGENTS.md)
+- [Server platform agents](../../libs/server-platform/AGENTS.md)
+- [Web platform agents](../../libs/web-platform/AGENTS.md)
+- [Shared contracts agents](../../libs/shared/AGENTS.md)
+- [UI agents](../../libs/ui/AGENTS.md)
 
-## Working Standard
+## Writing Rule
 
-- Treat `AGENTS.md` as the entrypoint and this directory as the detailed guide.
-- Use the Agent Workflow as the default delivery mechanism for non-trivial features, bug fixes, and error remediation.
-- Document architecture decisions as ADRs in `docs/architecture/adr/`.
-- For cross-cutting changes, also update operations documentation.
-- Prefer small, reversible steps and validate after each meaningful change.
-
-## Quick links
-
-- Workflow: `docs/agents/workflow.md`
-- Delivery loop skill: `.agents/skills/agent-delivery-loop/SKILL.md`
-- Pre-commit staged-file checks: `.husky/pre-commit` and `.lintstagedrc.mjs`
-- Checklist: `docs/agents/checklist.md`
-- Setup: `docs/agents/setup.md`
-- Plan MVP: `docs/architecture/mvp-plan-react-fastify-sqlite.md`
+Use `stop-slop` for documentation and code-comment edits. Keep prose direct, active, specific, and short.
