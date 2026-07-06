@@ -41,7 +41,7 @@
     "husky": "9.1.7",
     "i18next": "26.3.1",
     "jsdom": "29.1.1",
-    "lint-staged": "17.0.7",
+    "lint-staged": "17.0.8",
     "mkcert-cli": "1.5.0",
     "nx": "23.0.1",
     "oxlint": "1.70.0",
