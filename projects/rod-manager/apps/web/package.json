@@ -50,7 +50,7 @@
     "@hookform/resolvers": "^5.4.0",
     "@ksojecki/rod-manager-pages-shared": "0.0.1",
     "@ksojecki/platform-web-platform": "0.0.1",
-    "react-hook-form": "^7.80.0",
+    "react-hook-form": "^7.81.0",
     "zod": "^4.4.3"
   }
 }
