@@ -1,32 +1,20 @@
-import type { FormEvent, ReactNode } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type {
-  AuthUser,
   AuthenticationMethodsResponseBody,
   OAuthProviderType,
   UpdatePasswordRequestBody,
 } from '@ksojecki/platform-shared';
 import type * as PlatformWebPlatform from '@ksojecki/platform-web-platform';
 import i18n from '../i18n/i18n';
+import {
+  createMockPlatformModule,
+  type AuthContextLike,
+  type OAuthInitiateResponse,
+} from './AccountPage.spec.helpers';
 import { AccountPage } from './AccountPage';
-
-interface AuthContextLike {
-  user: AuthUser;
-}
-
-interface OAuthInitiateResponse {
-  authorizationUrl: string;
-  codeVerifier: string;
-  state: string;
-}
-
-interface AccountSectionLike {
-  content: ReactNode;
-  id: string;
-}
 
 const {
   mockUseAuth,
@@ -46,161 +34,15 @@ const {
 
 vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
   const actual = await importOriginal<typeof PlatformWebPlatform>();
-  const React = await import('react');
-  const { useCallback, useEffect, useState } = React;
-  const { useTranslation } = await import('react-i18next');
 
-  function useDefaultAccountSections(
-    extraSections: AccountSectionLike[] = [],
-  ): AccountSectionLike[] {
-    const { t } = useTranslation('account');
-    const [methods, setMethods] = useState<AuthenticationMethodsResponseBody['methods']>([]);
-    const [showPasswordForm, setShowPasswordForm] = useState(false);
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-
-    const refreshAuthenticationMethods = useCallback(async () => {
-      const response = await mockLoadAuthenticationMethods();
-      setMethods(response.methods);
-    }, []);
-
-    useEffect(() => {
-      void refreshAuthenticationMethods();
-    }, [refreshAuthenticationMethods]);
-
-    async function handleConnectProvider(provider: OAuthProviderType): Promise<void> {
-      const { authorizationUrl, codeVerifier, state } = await mockLinkOAuthProvider(provider);
-      mockStoreOAuthState(state, codeVerifier);
-      window.location.href = authorizationUrl;
-    }
-
-    async function handleDisconnectProvider(provider: OAuthProviderType): Promise<void> {
-      await mockUnlinkOAuthProvider(provider);
-      await refreshAuthenticationMethods();
-    }
-
-    async function handlePasswordSubmit(event: FormEvent<HTMLFormElement>) {
-      event.preventDefault();
-
-      await mockUpdatePassword({
-        currentPassword: undefined,
-        newPassword,
-      });
-      setNewPassword('');
-      setConfirmPassword('');
-      setShowPasswordForm(false);
-      await refreshAuthenticationMethods();
-    }
-
-    const passwordMethod = methods.find((method) => method.type === 'password') ?? null;
-    const oauthMethods = methods.filter(
-      (method): method is Extract<(typeof methods)[number], { type: 'oauth' }> =>
-        method.type === 'oauth',
-    );
-
-    return [
-      {
-        id: 'language',
-        content: <h2>Language</h2>,
-      },
-      {
-        id: 'authentication-methods',
-        content: (
-          <div>
-            <h2>{t('authentication.title')}</h2>
-            {passwordMethod !== null ? (
-              <div>
-                <p>{t('authentication.passwordLabel')}</p>
-                <button
-                  onClick={() => {
-                    setShowPasswordForm((current) => !current);
-                  }}
-                  type="button"
-                >
-                  {passwordMethod.connected
-                    ? t('authentication.changePasswordAction')
-                    : t('authentication.setPasswordAction')}
-                </button>
-              </div>
-            ) : null}
-            {showPasswordForm && passwordMethod !== null ? (
-              <form onSubmit={(event) => void handlePasswordSubmit(event)}>
-                <h3>
-                  {passwordMethod.connected
-                    ? t('authentication.changePasswordTitle')
-                    : t('authentication.setPasswordTitle')}
-                </h3>
-                <label>
-                  {t('authentication.newPasswordLabel')}
-                  <input
-                    onChange={(event) => {
-                      setNewPassword(event.target.value);
-                    }}
-                    type="password"
-                    value={newPassword}
-                  />
-                </label>
-                <label>
-                  {t('authentication.confirmPasswordLabel')}
-                  <input
-                    onChange={(event) => {
-                      setConfirmPassword(event.target.value);
-                    }}
-                    type="password"
-                    value={confirmPassword}
-                  />
-                </label>
-                <button type="submit">
-                  {passwordMethod.connected
-                    ? t('authentication.changePasswordAction')
-                    : t('authentication.setPasswordAction')}
-                </button>
-              </form>
-            ) : null}
-            {oauthMethods.map((method) => (
-              <div key={method.provider}>
-                <p>{method.provider}</p>
-                {method.connected ? (
-                  <button
-                    disabled={!method.canDisconnect}
-                    onClick={() => {
-                      void handleDisconnectProvider(method.provider);
-                    }}
-                    type="button"
-                  >
-                    {method.canDisconnect
-                      ? t('authentication.disconnectAction')
-                      : t('authentication.requiredAction')}
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      void handleConnectProvider(method.provider);
-                    }}
-                    type="button"
-                  >
-                    {t('authentication.connectAction')}
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-        ),
-      },
-      ...extraSections,
-    ];
-  }
-
-  return {
-    ...actual,
-    linkOAuthProvider: mockLinkOAuthProvider,
-    loadAuthenticationMethods: mockLoadAuthenticationMethods,
-    storeOAuthState: mockStoreOAuthState,
-    unlinkOAuthProvider: mockUnlinkOAuthProvider,
-    updatePassword: mockUpdatePassword,
-    useAuth: mockUseAuth,
-    useDefaultAccountSections,
-  };
+  return createMockPlatformModule(actual, {
+    mockLinkOAuthProvider,
+    mockLoadAuthenticationMethods,
+    mockStoreOAuthState,
+    mockUnlinkOAuthProvider,
+    mockUpdatePassword,
+    mockUseAuth,
+  });
 });
 
 describe('AccountPage', () => {
@@ -230,24 +72,9 @@ describe('AccountPage', () => {
     mockLoadAuthenticationMethods.mockResolvedValue({
       methods: [
         { type: 'password', connected: false, canDisconnect: false },
-        {
-          type: 'oauth',
-          provider: 'google',
-          connected: true,
-          canDisconnect: false,
-        },
-        {
-          type: 'oauth',
-          provider: 'apple',
-          connected: false,
-          canDisconnect: false,
-        },
-        {
-          type: 'oauth',
-          provider: 'facebook',
-          connected: false,
-          canDisconnect: false,
-        },
+        { type: 'oauth', provider: 'google', connected: true, canDisconnect: false },
+        { type: 'oauth', provider: 'apple', connected: false, canDisconnect: false },
+        { type: 'oauth', provider: 'facebook', connected: false, canDisconnect: false },
       ],
     });
 
@@ -271,24 +98,9 @@ describe('AccountPage', () => {
     mockLoadAuthenticationMethods.mockResolvedValue({
       methods: [
         { type: 'password', connected: false, canDisconnect: false },
-        {
-          type: 'oauth',
-          provider: 'google',
-          connected: true,
-          canDisconnect: true,
-        },
-        {
-          type: 'oauth',
-          provider: 'apple',
-          connected: false,
-          canDisconnect: false,
-        },
-        {
-          type: 'oauth',
-          provider: 'facebook',
-          connected: false,
-          canDisconnect: false,
-        },
+        { type: 'oauth', provider: 'google', connected: true, canDisconnect: true },
+        { type: 'oauth', provider: 'apple', connected: false, canDisconnect: false },
+        { type: 'oauth', provider: 'facebook', connected: false, canDisconnect: false },
       ],
     });
 
@@ -312,47 +124,17 @@ describe('AccountPage', () => {
       .mockResolvedValueOnce({
         methods: [
           { type: 'password', connected: false, canDisconnect: false },
-          {
-            type: 'oauth',
-            provider: 'google',
-            connected: true,
-            canDisconnect: true,
-          },
-          {
-            type: 'oauth',
-            provider: 'apple',
-            connected: false,
-            canDisconnect: false,
-          },
-          {
-            type: 'oauth',
-            provider: 'facebook',
-            connected: false,
-            canDisconnect: false,
-          },
+          { type: 'oauth', provider: 'google', connected: true, canDisconnect: true },
+          { type: 'oauth', provider: 'apple', connected: false, canDisconnect: false },
+          { type: 'oauth', provider: 'facebook', connected: false, canDisconnect: false },
         ],
       })
       .mockResolvedValueOnce({
         methods: [
           { type: 'password', connected: true, canDisconnect: false },
-          {
-            type: 'oauth',
-            provider: 'google',
-            connected: true,
-            canDisconnect: true,
-          },
-          {
-            type: 'oauth',
-            provider: 'apple',
-            connected: false,
-            canDisconnect: false,
-          },
-          {
-            type: 'oauth',
-            provider: 'facebook',
-            connected: false,
-            canDisconnect: false,
-          },
+          { type: 'oauth', provider: 'google', connected: true, canDisconnect: true },
+          { type: 'oauth', provider: 'apple', connected: false, canDisconnect: false },
+          { type: 'oauth', provider: 'facebook', connected: false, canDisconnect: false },
         ],
       });
 
