@@ -230,6 +230,25 @@ export function RecipePage() {
           ))}
         </ul>
       </Section>
+
+      {recalculatedRecipe.instructions.length > 0 ? (
+        <Section description={t('detail.instructionsDescription')} title={t('detail.instructions')}>
+          <ol className="grid gap-4">
+            {recalculatedRecipe.instructions.map((instruction, index) => (
+              <li key={`${instruction}-${index}`}>
+                <Card className="border border-base-200 bg-linear-to-br from-base-100 to-base-200/40 shadow-none">
+                  <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-base-300 bg-base-200 text-sm font-semibold">
+                      {index + 1}
+                    </div>
+                    <Paragraph>{instruction}</Paragraph>
+                  </div>
+                </Card>
+              </li>
+            ))}
+          </ol>
+        </Section>
+      ) : null}
     </div>
   );
 }

@@ -12,6 +12,7 @@ export const legacyRecipeSeedData = [
       { name: 'Mąka ziemniaczana', amount: 20, unit: 'g' },
       { name: 'Laska wanilii', amount: 1, unit: 'pcs' },
     ],
+    instructions: [],
   },
   {
     name: 'Krem czekoladowy bazowy',
@@ -23,6 +24,7 @@ export const legacyRecipeSeedData = [
       { name: 'Czekolada 70%', amount: 150, unit: 'g' },
       { name: 'Cukier', amount: 60, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Biszkopt bazowy',
@@ -34,6 +36,7 @@ export const legacyRecipeSeedData = [
       { name: 'Mąka pszenna', amount: 180, unit: 'g' },
       { name: 'Mąka ziemniaczana', amount: 40, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Ganache czekoladowy',
@@ -43,6 +46,7 @@ export const legacyRecipeSeedData = [
       { name: 'Czekolada 60–70%', amount: 200, unit: 'g' },
       { name: 'Śmietanka 30%', amount: 200, unit: 'ml' },
     ],
+    instructions: [],
   },
   {
     name: 'Kruche ciasto bazowe',
@@ -54,6 +58,7 @@ export const legacyRecipeSeedData = [
       { name: 'Cukier puder', amount: 80, unit: 'g' },
       { name: 'Jajko', amount: 1, unit: 'pcs' },
     ],
+    instructions: [],
   },
   {
     name: 'Tarta cytrynowa',
@@ -71,6 +76,7 @@ export const legacyRecipeSeedData = [
       { name: 'Sok z cytryn', amount: 150, unit: 'ml' },
       { name: 'Jajka', amount: 120, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Monoporcja czekoladowa z ganache',
@@ -87,6 +93,7 @@ export const legacyRecipeSeedData = [
       { name: 'Czekolada 70%', amount: 20, unit: 'g' },
       { name: 'Śmietanka 30%', amount: 60, unit: 'ml' },
     ],
+    instructions: [],
   },
   {
     name: 'Sernik klasyczny',
@@ -99,6 +106,7 @@ export const legacyRecipeSeedData = [
       { name: 'Masło', amount: 80, unit: 'g' },
       { name: 'Mąka pszenna', amount: 30, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Brownie czekoladowe',
@@ -111,6 +119,7 @@ export const legacyRecipeSeedData = [
       { name: 'Mąka pszenna', amount: 100, unit: 'g' },
       { name: 'Jajka', amount: 150, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Tiramisu',
@@ -123,6 +132,7 @@ export const legacyRecipeSeedData = [
       { name: 'Biszkopty podłużne', amount: 150, unit: 'g' },
       { name: 'Kawa espresso', amount: 80, unit: 'ml' },
     ],
+    instructions: [],
   },
   {
     name: 'Panna cotta malinowa',
@@ -134,6 +144,7 @@ export const legacyRecipeSeedData = [
       { name: 'Żelatyna', amount: 6, unit: 'g' },
       { name: 'Maliny', amount: 80, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Beza pavlova mini',
@@ -145,6 +156,7 @@ export const legacyRecipeSeedData = [
       { name: 'Śmietanka 30%', amount: 40, unit: 'ml' },
       { name: 'Owoce świeże', amount: 40, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Tarta czekoladowa',
@@ -165,6 +177,7 @@ export const legacyRecipeSeedData = [
       },
       { name: 'Czekolada 70%', amount: 50, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Tarta owocowa',
@@ -185,6 +198,7 @@ export const legacyRecipeSeedData = [
       },
       { name: 'Owoce świeże', amount: 250, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Kremówka',
@@ -199,6 +213,7 @@ export const legacyRecipeSeedData = [
         recipeId: 'basecreamvanilla',
       },
     ],
+    instructions: [],
   },
   {
     name: 'Ciasto marchewkowe',
@@ -211,6 +226,7 @@ export const legacyRecipeSeedData = [
       { name: 'Olej', amount: 120, unit: 'ml' },
       { name: 'Jajka', amount: 150, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Makaronik waniliowy',
@@ -227,6 +243,7 @@ export const legacyRecipeSeedData = [
         recipeId: 'basecreamvanilla',
       },
     ],
+    instructions: [],
   },
   {
     name: 'Suflet czekoladowy',
@@ -238,6 +255,7 @@ export const legacyRecipeSeedData = [
       { name: 'Jajka', amount: 100, unit: 'g' },
       { name: 'Cukier', amount: 20, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Tarta słona karmelowa',
@@ -255,6 +273,7 @@ export const legacyRecipeSeedData = [
       { name: 'Masło', amount: 60, unit: 'g' },
       { name: 'Sól', amount: 2, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Babeczki waniliowe',
@@ -272,6 +291,7 @@ export const legacyRecipeSeedData = [
         recipeId: 'basecreamvanilla',
       },
     ],
+    instructions: [],
   },
   {
     name: 'Tarta pistacjowa',
@@ -289,6 +309,7 @@ export const legacyRecipeSeedData = [
       { name: 'Cukier', amount: 80, unit: 'g' },
       { name: 'Masło', amount: 40, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Monoporcja malinowa',
@@ -304,6 +325,7 @@ export const legacyRecipeSeedData = [
         recipeId: 'basecreamvanilla',
       },
     ],
+    instructions: [],
   },
   {
     name: 'Ciasto jogurtowe',
@@ -316,6 +338,7 @@ export const legacyRecipeSeedData = [
       { name: 'Olej', amount: 120, unit: 'ml' },
       { name: 'Jajka', amount: 150, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Czekoladowa rolada',
@@ -331,6 +354,7 @@ export const legacyRecipeSeedData = [
       },
       { name: 'Dżem malinowy', amount: 100, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Mus czekoladowy',
@@ -341,6 +365,7 @@ export const legacyRecipeSeedData = [
       { name: 'Śmietanka 30%', amount: 150, unit: 'ml' },
       { name: 'Jajka', amount: 100, unit: 'g' },
     ],
+    instructions: [],
   },
   {
     name: 'Tarta mango',
@@ -358,5 +383,6 @@ export const legacyRecipeSeedData = [
       { name: 'Cukier', amount: 80, unit: 'g' },
       { name: 'Żelatyna', amount: 6, unit: 'g' },
     ],
+    instructions: [],
   },
 ] satisfies Recipe[];

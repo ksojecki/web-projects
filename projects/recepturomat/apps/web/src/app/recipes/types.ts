@@ -12,6 +12,7 @@ export interface RecipeIngredient {
 export interface Recipe {
   defaultWeight: number;
   ingredients: RecipeIngredient[];
+  instructions: string[];
   name: string;
   recipeId: string;
 }

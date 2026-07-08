@@ -47,8 +47,13 @@ describe('recipe database bootstrap', () => {
           name: string;
           default_weight: number;
           ingredients_json: string;
+          instructions_json: string;
         }
-      >(`SELECT recipe_id, name, default_weight, ingredients_json FROM recipes WHERE recipe_id = ?`)
+      >(
+        `SELECT recipe_id, name, default_weight, ingredients_json, instructions_json
+          FROM recipes
+          WHERE recipe_id = ?`,
+      )
       .get('dessertlemontart');
 
     expect(seededRecipe).toEqual({
@@ -67,7 +72,35 @@ describe('recipe database bootstrap', () => {
         { name: 'Sok z cytryn', amount: 150, unit: 'ml' },
         { name: 'Jajka', amount: 120, unit: 'g' },
       ]),
+      instructions_json: '[]',
     });
+  });
+
+  it('adds the instructions column for older recipe databases', () => {
+    const db = createTestDatabase();
+
+    db.exec(`
+      CREATE TABLE recipes (
+        recipe_id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        default_weight INTEGER NOT NULL,
+        ingredients_json TEXT NOT NULL,
+        created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+        updated_at INTEGER NOT NULL DEFAULT (unixepoch())
+      )
+    `);
+
+    bootstrapRecipeDatabase(db, { seedLegacyRecipes: false });
+
+    const instructionsColumn = db
+      .prepare<[], { count: number }>(
+        `SELECT COUNT(*) AS count
+          FROM pragma_table_info('recipes')
+          WHERE name = 'instructions_json'`,
+      )
+      .get();
+
+    expect(instructionsColumn?.count).toBe(1);
   });
 
   it('resolves relative sqlite paths under the workspace root', () => {
