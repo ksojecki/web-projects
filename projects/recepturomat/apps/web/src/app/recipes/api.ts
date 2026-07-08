@@ -63,7 +63,7 @@ async function requestRecipeMutation(url: string, init: RequestInit): Promise<Re
   });
 
   if (response.status === 422) {
-    const errorResponse = await parseJson(response);
+    const errorResponse = await parseJson(response.clone());
 
     if (isRecipeInstructionDraftsResponseBody(errorResponse)) {
       throw new RecipeInstructionDraftsError(errorResponse.message, errorResponse.draftIngredients);
