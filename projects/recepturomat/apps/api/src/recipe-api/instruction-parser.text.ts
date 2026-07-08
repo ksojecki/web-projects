@@ -25,7 +25,6 @@ const inflectionSuffixes = [
   'ych',
   'ich',
   'cie',
-  'cie',
   'em',
   'om',
   'ie',
