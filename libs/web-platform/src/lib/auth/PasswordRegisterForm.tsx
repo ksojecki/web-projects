@@ -6,10 +6,7 @@ import { Button, FormField } from '@ksojecki/platform-ui';
 import { useAuth } from './AuthProvider';
 import { register as registerRequest } from './authApi';
 import { useAuthForm } from './hooks/useAuthForm';
-import {
-  registerSchema,
-  type RegisterFormValues,
-} from './schemas/registerSchema';
+import { registerSchema, type RegisterFormValues } from './schemas/registerSchema';
 
 export interface PasswordRegisterFormProps {
   redirectTo: string;
@@ -18,9 +15,7 @@ export interface PasswordRegisterFormProps {
 /**
  * Shared registration form for creating an account with email and password.
  */
-export function PasswordRegisterForm({
-  redirectTo,
-}: PasswordRegisterFormProps) {
+export function PasswordRegisterForm({ redirectTo }: PasswordRegisterFormProps) {
   const { t } = useTranslation('auth');
   const { refreshSession } = useAuth();
   const navigate = useNavigate();
@@ -47,9 +42,7 @@ export function PasswordRegisterForm({
     >
       <FormField
         errorMessage={
-          errors.name !== undefined
-            ? t(getNameErrorKey(errors.name.message))
-            : undefined
+          errors.name !== undefined ? t(getNameErrorKey(errors.name.message)) : undefined
         }
         label={t('register.nameLabel')}
         registration={register('name')}
@@ -58,9 +51,7 @@ export function PasswordRegisterForm({
 
       <FormField
         errorMessage={
-          errors.surname !== undefined
-            ? t(getSurnameErrorKey(errors.surname.message))
-            : undefined
+          errors.surname !== undefined ? t(getSurnameErrorKey(errors.surname.message)) : undefined
         }
         label={t('register.surnameLabel')}
         registration={register('surname')}
@@ -69,9 +60,7 @@ export function PasswordRegisterForm({
 
       <FormField
         errorMessage={
-          errors.email !== undefined
-            ? t(getRegisterEmailErrorKey(errors.email.message))
-            : undefined
+          errors.email !== undefined ? t(getRegisterEmailErrorKey(errors.email.message)) : undefined
         }
         label={t('register.emailLabel')}
         registration={register('email')}
@@ -102,14 +91,10 @@ export function PasswordRegisterForm({
 }
 
 function getNameErrorKey(message: string | undefined): 'register.nameRequired' {
-  return message === 'register.nameRequired'
-    ? 'register.nameRequired'
-    : 'register.nameRequired';
+  return message === 'register.nameRequired' ? 'register.nameRequired' : 'register.nameRequired';
 }
 
-function getSurnameErrorKey(
-  message: string | undefined,
-): 'register.surnameRequired' {
+function getSurnameErrorKey(message: string | undefined): 'register.surnameRequired' {
   return message === 'register.surnameRequired'
     ? 'register.surnameRequired'
     : 'register.surnameRequired';
@@ -118,14 +103,10 @@ function getSurnameErrorKey(
 function getRegisterEmailErrorKey(
   message: string | undefined,
 ): 'register.emailInvalid' | 'register.emailRequired' {
-  return message === 'register.emailInvalid'
-    ? 'register.emailInvalid'
-    : 'register.emailRequired';
+  return message === 'register.emailInvalid' ? 'register.emailInvalid' : 'register.emailRequired';
 }
 
-function getRegisterPasswordErrorKey(
-  message: string | undefined,
-): 'register.passwordMinLength' {
+function getRegisterPasswordErrorKey(message: string | undefined): 'register.passwordMinLength' {
   return message === 'register.passwordMinLength'
     ? 'register.passwordMinLength'
     : 'register.passwordMinLength';

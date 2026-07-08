@@ -12,11 +12,7 @@ type WithNavigationProps = ActionButtonProps & {
 };
 
 export const ActionButton = ({ to, ...props }: ActionButtonProps) => {
-  return to ? (
-    <ButtonWithNavigation {...props} to={to} />
-  ) : (
-    <Button {...props} type={'submit'} />
-  );
+  return to ? <ButtonWithNavigation {...props} to={to} /> : <Button {...props} type={'submit'} />;
 };
 
 const ButtonWithNavigation = ({ to, ...props }: WithNavigationProps) => {

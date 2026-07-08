@@ -26,9 +26,7 @@ export const ContentPage = ({ forcedSlug }: ContentPageProps) => {
         setErrorMessage(null);
       } catch (error) {
         setPage(null);
-        setErrorMessage(
-          error instanceof Error ? error.message : t('loadErrorDefault'),
-        );
+        setErrorMessage(error instanceof Error ? error.message : t('loadErrorDefault'));
       }
     })();
   }, [slug, t]);

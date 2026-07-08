@@ -37,15 +37,11 @@ const {
   mockUpdatePassword,
 } = vi.hoisted(() => ({
   mockUseAuth: vi.fn<() => AuthContextLike>(),
-  mockLinkOAuthProvider:
-    vi.fn<(provider: OAuthProviderType) => Promise<OAuthInitiateResponse>>(),
-  mockLoadAuthenticationMethods:
-    vi.fn<() => Promise<AuthenticationMethodsResponseBody>>(),
+  mockLinkOAuthProvider: vi.fn<(provider: OAuthProviderType) => Promise<OAuthInitiateResponse>>(),
+  mockLoadAuthenticationMethods: vi.fn<() => Promise<AuthenticationMethodsResponseBody>>(),
   mockStoreOAuthState: vi.fn<(state: string, codeVerifier: string) => void>(),
-  mockUnlinkOAuthProvider:
-    vi.fn<(provider: OAuthProviderType) => Promise<void>>(),
-  mockUpdatePassword:
-    vi.fn<(input: UpdatePasswordRequestBody) => Promise<void>>(),
+  mockUnlinkOAuthProvider: vi.fn<(provider: OAuthProviderType) => Promise<void>>(),
+  mockUpdatePassword: vi.fn<(input: UpdatePasswordRequestBody) => Promise<void>>(),
 }));
 
 vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
@@ -58,9 +54,7 @@ vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
     extraSections: AccountSectionLike[] = [],
   ): AccountSectionLike[] {
     const { t } = useTranslation('account');
-    const [methods, setMethods] = useState<
-      AuthenticationMethodsResponseBody['methods']
-    >([]);
+    const [methods, setMethods] = useState<AuthenticationMethodsResponseBody['methods']>([]);
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -74,18 +68,13 @@ vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
       void refreshAuthenticationMethods();
     }, [refreshAuthenticationMethods]);
 
-    async function handleConnectProvider(
-      provider: OAuthProviderType,
-    ): Promise<void> {
-      const { authorizationUrl, codeVerifier, state } =
-        await mockLinkOAuthProvider(provider);
+    async function handleConnectProvider(provider: OAuthProviderType): Promise<void> {
+      const { authorizationUrl, codeVerifier, state } = await mockLinkOAuthProvider(provider);
       mockStoreOAuthState(state, codeVerifier);
       window.location.href = authorizationUrl;
     }
 
-    async function handleDisconnectProvider(
-      provider: OAuthProviderType,
-    ): Promise<void> {
+    async function handleDisconnectProvider(provider: OAuthProviderType): Promise<void> {
       await mockUnlinkOAuthProvider(provider);
       await refreshAuthenticationMethods();
     }
@@ -103,12 +92,9 @@ vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
       await refreshAuthenticationMethods();
     }
 
-    const passwordMethod =
-      methods.find((method) => method.type === 'password') ?? null;
+    const passwordMethod = methods.find((method) => method.type === 'password') ?? null;
     const oauthMethods = methods.filter(
-      (
-        method,
-      ): method is Extract<(typeof methods)[number], { type: 'oauth' }> =>
+      (method): method is Extract<(typeof methods)[number], { type: 'oauth' }> =>
         method.type === 'oauth',
     );
 
@@ -271,16 +257,12 @@ describe('AccountPage', () => {
       </I18nextProvider>,
     );
 
-    expect(
-      await screen.findByRole('heading', { name: 'Language' }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Language' })).toBeInTheDocument();
     expect(
       await screen.findByRole('heading', { name: 'Authentication methods' }),
     ).toBeInTheDocument();
     expect(await screen.findByText('Password')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Set password' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Set password' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Required' })).toBeDisabled();
   });
 
@@ -316,13 +298,9 @@ describe('AccountPage', () => {
       </I18nextProvider>,
     );
 
-    await user.click(
-      await screen.findByRole('button', { name: 'Set password' }),
-    );
+    await user.click(await screen.findByRole('button', { name: 'Set password' }));
 
-    expect(
-      await screen.findByRole('heading', { name: 'Set password' }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Set password' })).toBeInTheDocument();
     expect(screen.getByLabelText('New password')).toBeInTheDocument();
     expect(screen.getByLabelText('Confirm new password')).toBeInTheDocument();
   });
@@ -384,17 +362,10 @@ describe('AccountPage', () => {
       </I18nextProvider>,
     );
 
-    await user.click(
-      await screen.findByRole('button', { name: 'Set password' }),
-    );
+    await user.click(await screen.findByRole('button', { name: 'Set password' }));
     await user.type(screen.getByLabelText('New password'), 'password123');
-    await user.type(
-      screen.getByLabelText('Confirm new password'),
-      'password123',
-    );
-    await user.click(
-      screen.getAllByRole('button', { name: 'Set password' })[1],
-    );
+    await user.type(screen.getByLabelText('Confirm new password'), 'password123');
+    await user.click(screen.getAllByRole('button', { name: 'Set password' })[1]);
 
     await waitFor(() => {
       expect(mockLoadAuthenticationMethods).toHaveBeenCalledTimes(2);

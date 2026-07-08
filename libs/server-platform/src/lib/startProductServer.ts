@@ -46,23 +46,19 @@ export function startProductServer({
       process.exit(1);
     }
 
-    console.log(`[ ready ] https://${host}:${String(port)}`);
+    server.log.info({ host, port }, 'Server ready');
   });
 }
 
 function getHttpsOptions() {
   const isProduction = process.env.NODE_ENV === 'production';
   const httpsKeyPath =
-    process.env.HTTPS_KEY_PATH ??
-    (isProduction ? undefined : '.cert/localhost-key.pem');
+    process.env.HTTPS_KEY_PATH ?? (isProduction ? undefined : '.cert/localhost-key.pem');
   const httpsCertPath =
-    process.env.HTTPS_CERT_PATH ??
-    (isProduction ? undefined : '.cert/localhost-cert.pem');
+    process.env.HTTPS_CERT_PATH ?? (isProduction ? undefined : '.cert/localhost-cert.pem');
 
   if (httpsKeyPath === undefined || httpsCertPath === undefined) {
-    throw new Error(
-      'HTTPS requires HTTPS_KEY_PATH and HTTPS_CERT_PATH in production.',
-    );
+    throw new Error('HTTPS requires HTTPS_KEY_PATH and HTTPS_CERT_PATH in production.');
   }
 
   if (!existsSync(httpsKeyPath) || !existsSync(httpsCertPath)) {

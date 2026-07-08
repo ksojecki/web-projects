@@ -1,10 +1,7 @@
 import Database from 'better-sqlite3';
 import Fastify from 'fastify';
 import { afterEach, describe, expect, it } from 'vitest';
-import {
-  pagesSchemaMigration,
-  pagesValidationRulesMigration,
-} from './migrations';
+import { pagesSchemaMigration, pagesValidationRulesMigration } from './migrations';
 import type { ServerPlatformPluginContext } from '@ksojecki/platform-server-platform';
 
 const databases: Database.Database[] = [];
@@ -59,10 +56,7 @@ describe('pages migrations', () => {
     const { db } = createTestContext();
 
     expect(() => {
-      db.prepare(`INSERT INTO pages (slug, content_md) VALUES (?, ?)`).run(
-        '   ',
-        '# Empty slug',
-      );
+      db.prepare(`INSERT INTO pages (slug, content_md) VALUES (?, ?)`).run('   ', '# Empty slug');
     }).toThrow('Page slug cannot be empty.');
   });
 
@@ -75,10 +69,9 @@ describe('pages migrations', () => {
     );
 
     const row = db
-      .prepare<
-        [string],
-        { slug: string; content_md: string }
-      >(`SELECT slug, content_md FROM pages WHERE slug = ?`)
+      .prepare<[string], { slug: string; content_md: string }>(
+        `SELECT slug, content_md FROM pages WHERE slug = ?`,
+      )
       .get('community-news');
 
     expect(row).toEqual({
@@ -88,9 +81,7 @@ describe('pages migrations', () => {
   });
 });
 
-function createDbClient(
-  db: Database.Database,
-): ServerPlatformPluginContext['services']['db'] {
+function createDbClient(db: Database.Database): ServerPlatformPluginContext['services']['db'] {
   return {
     prepare(sql) {
       return db.prepare(sql);

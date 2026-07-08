@@ -21,10 +21,7 @@ interface RenderModule {
   render: RenderFunction;
 }
 
-export default async function (
-  fastify: FastifyInstance,
-  options: ServerPlatformSsrOptions,
-) {
+export default async function (fastify: FastifyInstance, options: ServerPlatformSsrOptions) {
   const webRoot = path.resolve(options.webRoot);
   const isProduction = process.env.NODE_ENV === 'production';
 
@@ -108,11 +105,7 @@ export default async function (
         throw new Error('SSR module does not export a render function.');
       }
 
-      const html = await renderPage(
-        url,
-        transformedTemplate,
-        serverModule.render,
-      );
+      const html = await renderPage(url, transformedTemplate, serverModule.render);
 
       await reply.type('text/html').send(html);
       return;
@@ -131,11 +124,7 @@ function isApiRequest(url: string): boolean {
   return url === '/api' || url.startsWith('/api/');
 }
 
-async function renderPage(
-  url: string,
-  template: string,
-  render: RenderFunction,
-): Promise<string> {
+async function renderPage(url: string, template: string, render: RenderFunction): Promise<string> {
   const appHtml = await render(url);
   return template.replace('<!--ssr-outlet-->', appHtml);
 }

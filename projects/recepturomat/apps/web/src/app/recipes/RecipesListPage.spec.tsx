@@ -7,8 +7,7 @@ import { RecipesListPage } from './RecipesListPage';
 
 const { mockUseAuth, mockListRecipes } = vi.hoisted(() => ({
   mockUseAuth: vi.fn<() => { status: string }>(),
-  mockListRecipes:
-    vi.fn<() => Promise<Array<{ name: string; recipeId: string }>>>(),
+  mockListRecipes: vi.fn<() => Promise<Array<{ name: string; recipeId: string }>>>(),
 }));
 
 vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
@@ -52,14 +51,10 @@ describe('RecipesListPage', () => {
       </MemoryRouter>,
     );
 
-    expect(
-      await screen.findByRole('heading', { name: 'Recipes' }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Recipes' })).toBeInTheDocument();
     expect(screen.getByText('Vanilla cupcakes')).toBeInTheDocument();
     expect(screen.getByText('Chocolate frosting')).toBeInTheDocument();
-    expect(
-      screen.queryByText('dessertvanillacupcakes'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('dessertvanillacupcakes')).not.toBeInTheDocument();
     expect(screen.queryByText('frostingchocolate')).not.toBeInTheDocument();
 
     fireEvent.change(screen.getByRole('searchbox'), {
@@ -67,9 +62,7 @@ describe('RecipesListPage', () => {
     });
 
     expect(mockListRecipes).toHaveBeenCalledTimes(1);
-    expect(
-      screen.queryByRole('heading', { name: 'Loading...' }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Loading...' })).not.toBeInTheDocument();
     expect(screen.getByText('Vanilla cupcakes')).toBeInTheDocument();
     expect(screen.queryByText('Chocolate frosting')).not.toBeInTheDocument();
   });

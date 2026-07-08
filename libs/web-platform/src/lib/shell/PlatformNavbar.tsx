@@ -2,11 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useAuth } from '../auth/AuthProvider';
 import { LoginModal } from '../auth/LoginModal';
-import {
-  clearLoginPrompt,
-  isLoginPromptRequested,
-  type LoginPromptConfig,
-} from './loginPrompt';
+import { clearLoginPrompt, isLoginPromptRequested, type LoginPromptConfig } from './loginPrompt';
 import type { PlatformNavigationItem } from './types';
 
 export interface PlatformNavbarProps {
@@ -50,8 +46,7 @@ export function PlatformNavbar({
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    const shouldOpenLogin =
-      status === 'guest' && isLoginPromptRequested(searchParams, loginPrompt);
+    const shouldOpenLogin = status === 'guest' && isLoginPromptRequested(searchParams, loginPrompt);
 
     if (!shouldOpenLogin) {
       return;
@@ -96,11 +91,7 @@ export function PlatformNavbar({
               </button>
             ) : status === 'authenticated' ? (
               <div className="dropdown dropdown-end">
-                <button
-                  className="btn btn-outline btn-sm"
-                  type="button"
-                  tabIndex={0}
-                >
+                <button className="btn btn-outline btn-sm" type="button" tabIndex={0}>
                   {user?.displayName}
                 </button>
                 <ul

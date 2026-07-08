@@ -1,20 +1,11 @@
-import type {
-  OAuthProviderType,
-  OAuthUserInfo,
-} from '@ksojecki/platform-shared';
+import type { OAuthProviderType, OAuthUserInfo } from '@ksojecki/platform-shared';
 import type { OAuthConfig, OAuthService, ProviderTokenResponse } from './types';
-import {
-  buildOAuthUserInfo,
-  decodeJwtPayload,
-  normalizeValue,
-} from './userInfo';
+import { buildOAuthUserInfo, decodeJwtPayload, normalizeValue } from './userInfo';
 
 /**
  * Create OAuth service instance backed by provider configurations.
  */
-export function createOAuthService(
-  configs: Map<OAuthProviderType, OAuthConfig>,
-): OAuthService {
+export function createOAuthService(configs: Map<OAuthProviderType, OAuthConfig>): OAuthService {
   return {
     generateAuthorizationUrl(provider, state, codeChallenge) {
       const config = getProviderConfig(configs, provider);
@@ -239,9 +230,7 @@ function getFacebookPictureUrl(data: Record<string, unknown>): unknown {
   return pictureData.url;
 }
 
-async function parseProviderTokenResponse(
-  response: Response,
-): Promise<ProviderTokenResponse> {
+async function parseProviderTokenResponse(response: Response): Promise<ProviderTokenResponse> {
   const value = await response.json();
 
   if (!isProviderTokenResponse(value)) {
@@ -251,17 +240,14 @@ async function parseProviderTokenResponse(
   return value;
 }
 
-function isProviderTokenResponse(
-  value: unknown,
-): value is ProviderTokenResponse {
+function isProviderTokenResponse(value: unknown): value is ProviderTokenResponse {
   if (!isRecord(value)) {
     return false;
   }
 
   return (
     typeof value.access_token === 'string' &&
-    (value.refresh_token === undefined ||
-      typeof value.refresh_token === 'string') &&
+    (value.refresh_token === undefined || typeof value.refresh_token === 'string') &&
     (value.expires_in === undefined || typeof value.expires_in === 'number') &&
     (value.id_token === undefined || typeof value.id_token === 'string')
   );

@@ -21,17 +21,11 @@ export const PRODUCT_CONFIG = {
 const loadedProjects = new Set();
 
 export function getChromeUserDataDir(projectId) {
-  return resolve(
-    process.cwd(),
-    process.env.CHROME_USER_DATA_DIR ?? `tmp/chrome/${projectId}`,
-  );
+  return resolve(process.cwd(), process.env.CHROME_USER_DATA_DIR ?? `tmp/chrome/${projectId}`);
 }
 
 export function getProductApiPort(projectId) {
-  return readIntegerFromEnv(
-    process.env.PORT,
-    PRODUCT_CONFIG[projectId].apiPort,
-  );
+  return readIntegerFromEnv(process.env.PORT, PRODUCT_CONFIG[projectId].apiPort);
 }
 
 export function getProductChromeDebugPort(projectId) {
@@ -42,17 +36,11 @@ export function getProductChromeDebugPort(projectId) {
 }
 
 export function getProductFrontendBaseUrl(projectId) {
-  return (
-    process.env.OAUTH_REDIRECT_BASE_URL ??
-    PRODUCT_CONFIG[projectId].frontendBaseUrl
-  );
+  return process.env.OAUTH_REDIRECT_BASE_URL ?? PRODUCT_CONFIG[projectId].frontendBaseUrl;
 }
 
 export function getProductWebPort(projectId) {
-  return readIntegerFromEnv(
-    process.env.WEB_PORT,
-    PRODUCT_CONFIG[projectId].webPort,
-  );
+  return readIntegerFromEnv(process.env.WEB_PORT, PRODUCT_CONFIG[projectId].webPort);
 }
 
 export function loadProductEnv(projectId) {

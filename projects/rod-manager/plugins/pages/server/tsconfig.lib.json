@@ -13,9 +13,7 @@
       "@ksojecki/rod-manager-pages-shared": [
         "../../../../../projects/rod-manager/plugins/pages/shared/src/index.ts"
       ],
-      "@ksojecki/platform-server-platform": [
-        "../../../../../libs/server-platform/src/index.ts"
-      ],
+      "@ksojecki/platform-server-platform": ["../../../../../libs/server-platform/src/index.ts"],
       "@ksojecki/platform-shared": ["../../../../../libs/shared/src/index.ts"]
     }
   },

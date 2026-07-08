@@ -1,6 +1,10 @@
 {
   "name": "@ksojecki/platform-shared",
   "version": "0.0.1",
+  "files": [
+    "../../dist/libs/shared",
+    "!**/*.tsbuildinfo"
+  ],
   "type": "module",
   "main": "../../dist/libs/shared/index.js",
   "module": "../../dist/libs/shared/index.js",
@@ -14,10 +18,6 @@
       "default": "../../dist/libs/shared/index.js"
     }
   },
-  "files": [
-    "../../dist/libs/shared",
-    "!**/*.tsbuildinfo"
-  ],
   "dependencies": {
     "dotenv": "^17.4.2"
   },
@@ -57,7 +57,7 @@
         "executor": "nx:run-commands",
         "options": {
           "cwd": "libs/shared",
-          "command": "node ../../node_modules/prettier/bin/prettier.cjs --write ."
+          "command": "node ../../node_modules/oxfmt/bin/oxfmt --write ."
         }
       }
     }

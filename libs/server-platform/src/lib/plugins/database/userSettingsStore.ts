@@ -2,9 +2,7 @@ import type { UserLanguage } from '@ksojecki/platform-shared';
 import type Database from 'better-sqlite3';
 import type { UserSettingsStore } from './types';
 
-export function createUserSettingsStore(
-  db: Database.Database,
-): UserSettingsStore {
+export function createUserSettingsStore(db: Database.Database): UserSettingsStore {
   const getUserPreferredLanguageStatement = db.prepare<
     [string],
     { preferred_language: UserLanguage }

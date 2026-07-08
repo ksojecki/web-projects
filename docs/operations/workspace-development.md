@@ -9,7 +9,7 @@ README.
 - React Router SSR frontend apps
 - Fastify backend apps
 - SQLite project-local storage
-- Vitest, Oxlint, and Prettier
+- Vitest, Oxlint, and Oxfmt
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ npm run setup:certs
 - `npm run generate:project -- <name>` - scaffold a new project
 - `npm run lint` - run Nx lint targets
 - `npm run typecheck` - run Nx typecheck targets
-- `npm run format:check` - run Prettier checks
+- `npm run format:check` - run Oxfmt checks
 
 ## Local Development
 

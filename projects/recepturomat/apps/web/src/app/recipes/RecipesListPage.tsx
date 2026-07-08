@@ -1,12 +1,6 @@
 import { useState, type ChangeEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Card,
-  Link,
-  PageHeader,
-  Paragraph,
-  Section,
-} from '@ksojecki/platform-ui';
+import { Card, Link, PageHeader, Paragraph, Section } from '@ksojecki/platform-ui';
 import { useAuth } from '@ksojecki/platform-web-platform';
 import { buildRecipeDetailPath, frontendProductConfig } from '../productConfig';
 import { RecipeAccessPrompt } from './RecipeAccessPrompt';
@@ -123,18 +117,13 @@ export function RecipesListPage() {
       ) : (
         <section className="grid gap-3">
           {recipes.map((recipe) => (
-            <Card
-              className="border border-base-200 bg-base-100 shadow-none"
-              key={recipe.recipeId}
-            >
+            <Card className="border border-base-200 bg-base-100 shadow-none" key={recipe.recipeId}>
               <Link
                 className="flex items-start gap-3 no-underline"
                 to={buildRecipeDetailPath(recipe.recipeId)}
               >
                 <div className="flex flex-col gap-1">
-                  <span className="text-lg font-semibold text-base-content">
-                    {recipe.name}
-                  </span>
+                  <span className="text-lg font-semibold text-base-content">{recipe.name}</span>
                   <Paragraph tone="muted">{t('list.openRecipe')}</Paragraph>
                 </div>
               </Link>

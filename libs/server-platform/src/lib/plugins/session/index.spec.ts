@@ -43,9 +43,7 @@ describe('session plugin', () => {
       url: '/start',
     });
 
-    const sessionCookie = response.cookies.find(
-      (cookie) => cookie.name === SESSION_COOKIE_NAME,
-    );
+    const sessionCookie = response.cookies.find((cookie) => cookie.name === SESSION_COOKIE_NAME);
 
     expect(response.statusCode).toBe(200);
     expect(response.json()).toEqual({

@@ -3,10 +3,7 @@ export interface LoginPromptConfig {
   queryValue: string;
 }
 
-export function buildLoginPromptHref(
-  homeRoute: string,
-  loginPrompt: LoginPromptConfig,
-): string {
+export function buildLoginPromptHref(homeRoute: string, loginPrompt: LoginPromptConfig): string {
   const searchParams = new URLSearchParams({
     [loginPrompt.queryParam]: loginPrompt.queryValue,
   });

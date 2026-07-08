@@ -96,10 +96,7 @@ This split avoids forcing plugin modules to depend on server runtime implementat
 import type { FastifyBaseLogger, FastifyInstance } from 'fastify';
 
 export type JsonPrimitive = string | number | boolean | null;
-export type JsonValue =
-  | JsonPrimitive
-  | { [key: string]: JsonValue }
-  | JsonValue[];
+export type JsonValue = JsonPrimitive | { [key: string]: JsonValue } | JsonValue[];
 
 export interface ServerPlatformAuthStoreUser {
   id: string;
@@ -139,10 +136,7 @@ export interface ServerPlatformDbStatement<
 }
 
 export interface ServerPlatformDbClient {
-  prepare<
-    TParams extends readonly JsonValue[] = readonly JsonValue[],
-    TResult = JsonValue,
-  >(
+  prepare<TParams extends readonly JsonValue[] = readonly JsonValue[], TResult = JsonValue>(
     sql: string,
   ): ServerPlatformDbStatement<TParams, TResult>;
   exec(sql: string): void;

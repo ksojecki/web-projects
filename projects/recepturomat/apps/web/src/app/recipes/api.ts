@@ -1,8 +1,4 @@
-import {
-  JSON_HEADERS,
-  requestJson,
-  requestNoContent,
-} from '@ksojecki/platform-web-platform';
+import { JSON_HEADERS, requestJson, requestNoContent } from '@ksojecki/platform-web-platform';
 import type { Recipe, RecipeListEntry } from './types';
 
 export async function listRecipes(): Promise<RecipeListEntry[]> {
@@ -25,10 +21,7 @@ export async function createRecipe(recipe: Recipe): Promise<Recipe> {
   });
 }
 
-export async function updateRecipe(
-  recipeId: string,
-  recipe: Recipe,
-): Promise<Recipe> {
+export async function updateRecipe(recipeId: string, recipe: Recipe): Promise<Recipe> {
   return requestJson<Recipe>(`/api/recipes/${encodeURIComponent(recipeId)}`, {
     method: 'PUT',
     headers: JSON_HEADERS,

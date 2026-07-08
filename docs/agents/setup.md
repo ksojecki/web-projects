@@ -121,9 +121,9 @@ browser plugin using the existing `node_repl` backend; there is no separate
 Use the smallest relevant check while developing, then run CI-equivalent checks before handoff when feasible:
 
 ```sh
+npm run format:check
 npm run lint
 npm run typecheck
-npm run format:check
 npx nx run-many -t test --no-tui
 npx nx run-many -t lint test build typecheck --no-tui
 ```
@@ -133,6 +133,8 @@ Prefer `--no-tui` for task-running Nx commands when the command supports it. Pre
 Nx MCP can assist with read-only exploration and Nx documentation, but keep CLI commands as the executable validation contract for this repo.
 
 Pre-commit behavior is defined by `.husky/pre-commit` and `.lintstagedrc.mjs`. Keep them aligned with the staged-file checks you expect contributors and agents to run locally.
+
+Before a Codex session ends, run `npm run format:check`, `npm run lint`, `npm run typecheck`, and `npm test`. If a check fails, keep working until it passes or report the blocker.
 
 ## 5) Handoff
 

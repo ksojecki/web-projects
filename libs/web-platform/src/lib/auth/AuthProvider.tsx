@@ -8,11 +8,7 @@ import {
   type PropsWithChildren,
 } from 'react';
 import type { AuthUser } from '@ksojecki/platform-shared';
-import {
-  loadSession,
-  login as loginRequest,
-  logout as logoutRequest,
-} from './authApi';
+import { loadSession, login as loginRequest, logout as logoutRequest } from './authApi';
 
 export type AuthStatus = 'loading' | 'guest' | 'authenticated';
 

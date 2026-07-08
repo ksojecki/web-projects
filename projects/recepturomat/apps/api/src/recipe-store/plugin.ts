@@ -13,11 +13,8 @@ declare module 'fastify' {
   }
 }
 
-export const recipeStorePlugin: FastifyPluginAsync<RecepturomatRecipeStoreConfig> =
-  fp(async function recipeStorePlugin(
-    fastify: FastifyInstance,
-    opts: RecepturomatRecipeStoreConfig,
-  ) {
+export const recipeStorePlugin: FastifyPluginAsync<RecepturomatRecipeStoreConfig> = fp(
+  async function recipeStorePlugin(fastify: FastifyInstance, opts: RecepturomatRecipeStoreConfig) {
     const databasePath = resolveRecipeDatabasePath(opts.path);
     const recipeDatabase = new Database(databasePath);
 
@@ -35,4 +32,5 @@ export const recipeStorePlugin: FastifyPluginAsync<RecepturomatRecipeStoreConfig
 
       recipeDatabase.close();
     });
-  });
+  },
+);

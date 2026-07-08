@@ -10,10 +10,7 @@ export default function userSettingsRoutes(fastify: FastifyInstance) {
     {
       preHandler: fastify.requireAuthenticatedSession,
     },
-    async (
-      request: FastifyRequest<{ Body: UpdateUserLanguageRequestBody }>,
-      reply,
-    ) => {
+    async (request: FastifyRequest<{ Body: UpdateUserLanguageRequestBody }>, reply) => {
       const session = request.authenticatedSession;
 
       if (session === undefined) {
@@ -22,10 +19,7 @@ export default function userSettingsRoutes(fastify: FastifyInstance) {
 
       const { language } = request.body;
 
-      fastify.userSettingsStore.updateUserPreferredLanguage(
-        session.userId,
-        language,
-      );
+      fastify.userSettingsStore.updateUserPreferredLanguage(session.userId, language);
 
       await reply.status(204).send();
     },

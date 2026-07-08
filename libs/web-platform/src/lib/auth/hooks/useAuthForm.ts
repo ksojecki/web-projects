@@ -1,14 +1,8 @@
-import type {
-  FieldValues,
-  SubmitHandler,
-  UseFormSetError,
-} from 'react-hook-form';
+import type { FieldValues, SubmitHandler, UseFormSetError } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 export interface AuthFormResult<TFieldValues extends FieldValues> {
-  withErrorHandling: (
-    submitHandler: SubmitHandler<TFieldValues>,
-  ) => SubmitHandler<TFieldValues>;
+  withErrorHandling: (submitHandler: SubmitHandler<TFieldValues>) => SubmitHandler<TFieldValues>;
 }
 
 export function useAuthForm<TFieldValues extends FieldValues>(
@@ -24,8 +18,7 @@ export function useAuthForm<TFieldValues extends FieldValues>(
         await submitHandler(values, event);
       } catch (error) {
         setError('root', {
-          message:
-            error instanceof Error ? error.message : t('unexpectedError'),
+          message: error instanceof Error ? error.message : t('unexpectedError'),
         });
       }
     };

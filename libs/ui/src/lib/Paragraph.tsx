@@ -14,19 +14,9 @@ const PARAGRAPH_TONE_CLASS_NAMES: Record<ParagraphTone, string> = {
   muted: 'text-base-content/70',
 };
 
-export function Paragraph({
-  children,
-  className,
-  tone = 'default',
-}: ParagraphProps) {
+export function Paragraph({ children, className, tone = 'default' }: ParagraphProps) {
   return (
-    <p
-      className={joinClassNames(
-        'leading-6',
-        PARAGRAPH_TONE_CLASS_NAMES[tone],
-        className,
-      )}
-    >
+    <p className={joinClassNames('leading-6', PARAGRAPH_TONE_CLASS_NAMES[tone], className)}>
       {children}
     </p>
   );

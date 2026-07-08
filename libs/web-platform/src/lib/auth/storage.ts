@@ -46,9 +46,7 @@ export function retrieveOAuthState(state: string): StoredOAuthState | null {
   }
 }
 
-function isStoredOAuthStateRecord(
-  value: unknown,
-): value is StoredOAuthStateRecord {
+function isStoredOAuthStateRecord(value: unknown): value is StoredOAuthStateRecord {
   if (!isRecord(value)) {
     return false;
   }

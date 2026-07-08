@@ -106,7 +106,7 @@ export function writeApiApp(tree: Tree, options: NormalizedOptions): void {
           executor: 'nx:run-commands',
           options: {
             cwd: apiRoot,
-            command: 'npx prettier --write .',
+            command: 'node ./node_modules/oxfmt/bin/oxfmt --write .',
           },
         },
       },
@@ -121,10 +121,7 @@ export function writeApiApp(tree: Tree, options: NormalizedOptions): void {
     extends: '../../../../tsconfig.base.json',
     files: [],
     include: [],
-    references: [
-      { path: './tsconfig.app.json' },
-      { path: './tsconfig.spec.json' },
-    ],
+    references: [{ path: './tsconfig.app.json' }, { path: './tsconfig.spec.json' }],
   });
 
   writeJson(tree, joinPathFragments(apiRoot, 'tsconfig.app.json'), {
@@ -159,21 +156,9 @@ export function writeApiApp(tree: Tree, options: NormalizedOptions): void {
     ],
   });
 
-  writeFile(
-    tree,
-    joinPathFragments(apiRoot, 'vite.config.mts'),
-    createApiViteConfig(options),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(apiRoot, 'vitest.config.mts'),
-    createApiVitestConfig(),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(apiRoot, 'src/main.ts'),
-    createApiMain(options),
-  );
+  writeFile(tree, joinPathFragments(apiRoot, 'vite.config.mts'), createApiViteConfig(options));
+  writeFile(tree, joinPathFragments(apiRoot, 'vitest.config.mts'), createApiVitestConfig());
+  writeFile(tree, joinPathFragments(apiRoot, 'src/main.ts'), createApiMain(options));
   writeFile(
     tree,
     joinPathFragments(apiRoot, 'src/productConfig.ts'),

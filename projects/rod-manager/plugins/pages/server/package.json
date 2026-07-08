@@ -1,6 +1,10 @@
 {
   "name": "@ksojecki/rod-manager-pages-server",
   "version": "0.0.1",
+  "files": [
+    "../../../../../dist/projects/rod-manager/plugins/pages/server",
+    "!**/*.tsbuildinfo"
+  ],
   "main": "../../../../../dist/projects/rod-manager/plugins/pages/server/index.js",
   "types": "../../../../../dist/projects/rod-manager/plugins/pages/server/index.d.ts",
   "exports": {
@@ -12,14 +16,10 @@
       "default": "../../../../../dist/projects/rod-manager/plugins/pages/server/index.js"
     }
   },
-  "files": [
-    "../../../../../dist/projects/rod-manager/plugins/pages/server",
-    "!**/*.tsbuildinfo"
-  ],
   "dependencies": {
-    "@ksojecki/rod-manager-pages-shared": "0.0.1",
     "@ksojecki/platform-server-platform": "0.0.1",
-    "@ksojecki/platform-shared": "0.0.1"
+    "@ksojecki/platform-shared": "0.0.1",
+    "@ksojecki/rod-manager-pages-shared": "0.0.1"
   },
   "nx": {
     "targets": {

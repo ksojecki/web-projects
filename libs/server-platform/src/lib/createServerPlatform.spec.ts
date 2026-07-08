@@ -5,12 +5,12 @@ import type { ServerPlatformSsrOptions } from './routes/ssr';
 
 const mocks = vi.hoisted(() => ({
   authRoutes: Symbol('authRoutes'),
-  createPluginRegistrar: vi.fn<
-    (plugins: unknown[]) => { kind: string; plugins: unknown[] }
-  >((plugins: unknown[]) => ({
-    kind: 'plugin-registrar',
-    plugins,
-  })),
+  createPluginRegistrar: vi.fn<(plugins: unknown[]) => { kind: string; plugins: unknown[] }>(
+    (plugins: unknown[]) => ({
+      kind: 'plugin-registrar',
+      plugins,
+    }),
+  ),
   databasePlugin: Symbol('databasePlugin'),
   oauthPlugin: Symbol('oauthPlugin'),
   oauthRoutes: Symbol('oauthRoutes'),

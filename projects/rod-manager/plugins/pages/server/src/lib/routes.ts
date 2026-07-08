@@ -6,10 +6,7 @@ import type {
 import type { PageStore } from './store';
 
 /** Registers pages API routes on the given Fastify instance. */
-export function registerPagesRoutes(
-  fastify: FastifyInstance,
-  pageStore: PageStore,
-): void {
+export function registerPagesRoutes(fastify: FastifyInstance, pageStore: PageStore): void {
   fastify.get(
     '/api/pages',
     {
@@ -26,16 +23,13 @@ export function registerPagesRoutes(
     },
   );
 
-  fastify.get<{ Params: { slug: string } }>(
-    '/api/pages/:slug',
-    async (request, reply) => {
-      const page = pageStore.findPageBySlug(request.params.slug);
-      if (page === undefined) {
-        await reply.status(404).send({ message: 'Page not found.' });
-        return;
-      }
-      const response: ContentPageResponseBody = { page };
-      await reply.send(response);
-    },
-  );
+  fastify.get<{ Params: { slug: string } }>('/api/pages/:slug', async (request, reply) => {
+    const page = pageStore.findPageBySlug(request.params.slug);
+    if (page === undefined) {
+      await reply.status(404).send({ message: 'Page not found.' });
+      return;
+    }
+    const response: ContentPageResponseBody = { page };
+    await reply.send(response);
+  });
 }

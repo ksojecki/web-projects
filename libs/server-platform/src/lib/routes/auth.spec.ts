@@ -3,9 +3,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { SessionResponse } from '@ksojecki/platform-shared';
 import type { ServerPlatformProjectConfig } from '../contracts/bootstrap.contract';
 import databasePlugin from '../plugins/database';
-import sessionPlugin from '../plugins/session';
+import sessionPlugin, { SESSION_COOKIE_NAME } from '../plugins/session';
 import authRoutes from './auth';
-import { SESSION_COOKIE_NAME } from '../plugins/session';
 
 const testProjectConfig: ServerPlatformProjectConfig = {
   projectId: 'test-project',
@@ -142,9 +141,7 @@ describe('auth routes', () => {
     expect(body.user.displayName).toBe('John Doe');
     expect(body.user.role).toBe('user');
 
-    const sessionCookie = response.cookies.find(
-      (cookie) => cookie.name === SESSION_COOKIE_NAME,
-    );
+    const sessionCookie = response.cookies.find((cookie) => cookie.name === SESSION_COOKIE_NAME);
     expect(sessionCookie).toBeDefined();
 
     await server.close();

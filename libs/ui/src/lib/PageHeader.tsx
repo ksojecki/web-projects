@@ -37,9 +37,7 @@ export function PageHeader({
           <Heading className="font-semibold" level={1}>
             {title}
           </Heading>
-          {description !== undefined ? (
-            <Paragraph tone="muted">{description}</Paragraph>
-          ) : null}
+          {description !== undefined ? <Paragraph tone="muted">{description}</Paragraph> : null}
         </div>
 
         {actions !== undefined ? (
@@ -48,9 +46,7 @@ export function PageHeader({
       </div>
 
       {meta !== undefined ? (
-        <div className="flex flex-wrap gap-3 text-sm text-base-content/70">
-          {meta}
-        </div>
+        <div className="flex flex-wrap gap-3 text-sm text-base-content/70">{meta}</div>
       ) : null}
     </header>
   );

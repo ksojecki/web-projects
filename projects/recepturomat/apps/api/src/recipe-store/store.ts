@@ -20,9 +20,7 @@ function serializeIngredients(recipe: Recipe): string {
   return JSON.stringify(recipe.ingredients);
 }
 
-function isRecipeIngredientArray(
-  value: unknown,
-): value is Recipe['ingredients'] {
+function isRecipeIngredientArray(value: unknown): value is Recipe['ingredients'] {
   return (
     Array.isArray(value) &&
     value.every(
@@ -62,9 +60,7 @@ export function createRecipeStore(db: Database.Database): RecipeStore {
         updated_at = unixepoch()`,
   );
 
-  const deleteRecipeStatement = db.prepare(
-    `DELETE FROM recipes WHERE recipe_id = ?`,
-  );
+  const deleteRecipeStatement = db.prepare(`DELETE FROM recipes WHERE recipe_id = ?`);
 
   function getByRecipeId(recipeId: string): Recipe | undefined {
     const row = getRecipeStatement.get(recipeId);

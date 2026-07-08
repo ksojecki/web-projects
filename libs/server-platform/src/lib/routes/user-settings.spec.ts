@@ -58,9 +58,7 @@ describe('user settings routes', () => {
     });
 
     expect(languageResponse.statusCode).toBe(204);
-    expect(
-      server.userSettingsStore.getUserPreferredLanguage('initial-admin-user'),
-    ).toBe('pl');
+    expect(server.userSettingsStore.getUserPreferredLanguage('initial-admin-user')).toBe('pl');
 
     await server.close();
   });

@@ -4,10 +4,7 @@ import type {
   ContentPageListResponseBody,
   ContentPageResponseBody,
 } from '@ksojecki/rod-manager-pages-shared';
-import {
-  createServerPlatform,
-  SESSION_COOKIE_NAME,
-} from '@ksojecki/platform-server-platform';
+import { createServerPlatform, SESSION_COOKIE_NAME } from '@ksojecki/platform-server-platform';
 import { pagesServerPlugin } from './plugin';
 
 const testProjectConfig = {

@@ -32,10 +32,7 @@ interface DatabasePluginOptions {
 /**
  * Registers SQLite-backed store for authentication and session persistence.
  */
-export default fp<DatabasePluginOptions>(function databasePlugin(
-  fastify: FastifyInstance,
-  opts,
-) {
+export default fp<DatabasePluginOptions>(function databasePlugin(fastify: FastifyInstance, opts) {
   if (!opts?.project) {
     throw new Error(
       'databasePlugin requires opts.project with database.path and database.seedInitialUser.',

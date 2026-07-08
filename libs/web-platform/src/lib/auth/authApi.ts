@@ -24,9 +24,7 @@ export async function login(input: LoginRequestBody): Promise<SessionResponse> {
   });
 }
 
-export async function register(
-  input: RegisterRequestBody,
-): Promise<SessionResponse> {
+export async function register(input: RegisterRequestBody): Promise<SessionResponse> {
   return requestJson<SessionResponse>('/api/auth/register', {
     method: 'POST',
     headers: JSON_HEADERS,
@@ -34,40 +32,29 @@ export async function register(
   });
 }
 
-export async function initiateOAuth(
-  provider: OAuthProviderType,
-): Promise<OAuthInitiateResponse> {
-  return requestJson<OAuthInitiateResponse>(
-    `/api/auth/oauth/authorize/${provider}`,
-    {
-      method: 'POST',
-    },
-  );
+export async function initiateOAuth(provider: OAuthProviderType): Promise<OAuthInitiateResponse> {
+  return requestJson<OAuthInitiateResponse>(`/api/auth/oauth/authorize/${provider}`, {
+    method: 'POST',
+  });
 }
 
 export async function linkOAuthProvider(
   provider: OAuthProviderType,
 ): Promise<OAuthInitiateResponse> {
-  return requestJson<OAuthInitiateResponse>(
-    `/api/auth/oauth/link/${provider}`,
-    {
-      method: 'POST',
-    },
-  );
+  return requestJson<OAuthInitiateResponse>(`/api/auth/oauth/link/${provider}`, {
+    method: 'POST',
+  });
 }
 
 export async function completeOAuthCallback(
   provider: OAuthProviderType,
   input: OAuthCallbackRequestBody,
 ): Promise<OAuthCallbackResponseBody> {
-  return requestJson<OAuthCallbackResponseBody>(
-    `/api/auth/oauth/callback/${provider}`,
-    {
-      method: 'POST',
-      headers: JSON_HEADERS,
-      body: JSON.stringify(input),
-    },
-  );
+  return requestJson<OAuthCallbackResponseBody>(`/api/auth/oauth/callback/${provider}`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    body: JSON.stringify(input),
+  });
 }
 
 export async function loadAuthenticationMethods(): Promise<AuthenticationMethodsResponseBody> {
@@ -76,9 +63,7 @@ export async function loadAuthenticationMethods(): Promise<AuthenticationMethods
   });
 }
 
-export async function updatePassword(
-  input: UpdatePasswordRequestBody,
-): Promise<void> {
+export async function updatePassword(input: UpdatePasswordRequestBody): Promise<void> {
   await requestNoContent('/api/auth/password', {
     method: 'POST',
     headers: JSON_HEADERS,
@@ -86,9 +71,7 @@ export async function updatePassword(
   });
 }
 
-export async function unlinkOAuthProvider(
-  provider: OAuthProviderType,
-): Promise<void> {
+export async function unlinkOAuthProvider(provider: OAuthProviderType): Promise<void> {
   await requestNoContent(`/api/auth/oauth/link/${provider}`, {
     method: 'DELETE',
   });

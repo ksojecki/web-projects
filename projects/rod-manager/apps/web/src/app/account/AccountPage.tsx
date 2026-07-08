@@ -1,9 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  AccountShell,
-  useAuth,
-  useDefaultAccountSections,
-} from '@ksojecki/platform-web-platform';
+import { AccountShell, useAuth, useDefaultAccountSections } from '@ksojecki/platform-web-platform';
 
 export const AccountPage = () => {
   const { t } = useTranslation('account');

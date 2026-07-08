@@ -174,17 +174,9 @@ async function completeOAuthFlow(
   oauthStates.delete(state);
 
   const { accessToken, refreshToken, expiresIn, idToken } =
-    await fastify.oauth.exchangeCodeForToken(
-      provider,
-      code,
-      oauthState.codeVerifier,
-    );
+    await fastify.oauth.exchangeCodeForToken(provider, code, oauthState.codeVerifier);
 
-  const userInfo = await fastify.oauth.getUserInfo(
-    provider,
-    accessToken,
-    idToken,
-  );
+  const userInfo = await fastify.oauth.getUserInfo(provider, accessToken, idToken);
   const accessTokenExpiresAt = Date.now() + expiresIn * 1000;
 
   if (oauthState.intent === 'login') {
@@ -222,27 +214,16 @@ async function completeOAuthFlow(
     throw new Error('OAuth link target user does not exist.');
   }
 
-  const linkedUser = fastify.authStore.findUserByOAuthProvider(
-    provider,
-    userInfo.id,
-  );
+  const linkedUser = fastify.authStore.findUserByOAuthProvider(provider, userInfo.id);
 
   if (linkedUser !== undefined && linkedUser.id !== existingUser.id) {
     throw new Error('This OAuth account is already linked to another user.');
   }
 
-  const existingProvider = fastify.authStore.getOAuthProvider(
-    existingUser.id,
-    provider,
-  );
+  const existingProvider = fastify.authStore.getOAuthProvider(existingUser.id, provider);
 
-  if (
-    existingProvider !== undefined &&
-    existingProvider.providerUserId !== userInfo.id
-  ) {
-    throw new Error(
-      'A different OAuth account is already linked for this provider.',
-    );
+  if (existingProvider !== undefined && existingProvider.providerUserId !== userInfo.id) {
+    throw new Error('A different OAuth account is already linked for this provider.');
   }
 
   fastify.authStore.linkOAuthProvider(
@@ -262,8 +243,7 @@ async function completeOAuthFlow(
 }
 
 function oauthRoutes(fastify: FastifyInstance) {
-  const authenticatedOAuthProviderPreHandler =
-    createAuthenticatedOAuthProviderPreHandler(fastify);
+  const authenticatedOAuthProviderPreHandler = createAuthenticatedOAuthProviderPreHandler(fastify);
 
   /**
    * Initiate OAuth authorization flow
@@ -293,11 +273,7 @@ function oauthRoutes(fastify: FastifyInstance) {
         });
 
         // Generate authorization URL
-        const authUrl = fastify.oauth.generateAuthorizationUrl(
-          provider,
-          state,
-          codeChallenge,
-        );
+        const authUrl = fastify.oauth.generateAuthorizationUrl(provider, state, codeChallenge);
 
         await reply.send({
           authorizationUrl: authUrl,
@@ -340,9 +316,7 @@ function oauthRoutes(fastify: FastifyInstance) {
 
     // Validate state
     if (!state || !code) {
-      await reply
-        .status(400)
-        .send({ message: 'Missing state or code parameter.' });
+      await reply.status(400).send({ message: 'Missing state or code parameter.' });
       return;
     }
 
@@ -375,9 +349,7 @@ function oauthRoutes(fastify: FastifyInstance) {
     }
 
     if (!code || !state) {
-      await reply
-        .status(400)
-        .send({ message: 'Missing state or code parameter.' });
+      await reply.status(400).send({ message: 'Missing state or code parameter.' });
       return;
     }
 
@@ -415,9 +387,7 @@ function oauthRoutes(fastify: FastifyInstance) {
         return;
       }
 
-      const linkedProviders = new Set(
-        fastify.authStore.listLinkedOAuthProviders(session.userId),
-      );
+      const linkedProviders = new Set(fastify.authStore.listLinkedOAuthProviders(session.userId));
 
       const response: OAuthProvidersResponseBody = {
         providers: OAUTH_PROVIDERS.map((provider) => ({
@@ -462,11 +432,7 @@ function oauthRoutes(fastify: FastifyInstance) {
         });
 
         // Generate authorization URL
-        const authUrl = fastify.oauth.generateAuthorizationUrl(
-          provider,
-          state,
-          codeChallenge,
-        );
+        const authUrl = fastify.oauth.generateAuthorizationUrl(provider, state, codeChallenge);
 
         await reply.send({
           authorizationUrl: authUrl,

@@ -10,9 +10,7 @@ export async function loadPages(): Promise<ContentPageListResponseBody> {
   });
 }
 
-export async function loadPageBySlug(
-  slug: string,
-): Promise<ContentPageResponseBody> {
+export async function loadPageBySlug(slug: string): Promise<ContentPageResponseBody> {
   return requestJson<ContentPageResponseBody>(`/api/pages/${slug}`, {
     method: 'GET',
   });
