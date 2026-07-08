@@ -32,9 +32,7 @@ export function Section({
           <Heading className="font-semibold" level={2}>
             {title}
           </Heading>
-          {description !== undefined ? (
-            <Paragraph tone="muted">{description}</Paragraph>
-          ) : null}
+          {description !== undefined ? <Paragraph tone="muted">{description}</Paragraph> : null}
         </div>
         {actions !== undefined ? (
           <div className="flex flex-wrap gap-2 sm:justify-end">{actions}</div>

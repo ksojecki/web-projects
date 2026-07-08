@@ -1,6 +1,10 @@
 {
   "name": "@ksojecki/platform-server-platform",
   "version": "0.0.1",
+  "files": [
+    "../../dist/libs/server-platform",
+    "!**/*.tsbuildinfo"
+  ],
   "main": "../../dist/libs/server-platform/index.js",
   "types": "../../dist/libs/server-platform/index.d.ts",
   "exports": {
@@ -12,10 +16,6 @@
       "default": "../../dist/libs/server-platform/index.js"
     }
   },
-  "files": [
-    "../../dist/libs/server-platform",
-    "!**/*.tsbuildinfo"
-  ],
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
     "@fastify/middie": "^9.3.2",

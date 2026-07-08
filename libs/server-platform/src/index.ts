@@ -3,10 +3,7 @@ export type { ServerPlatformOptions } from './lib/createServerPlatform';
 export { startProductServer } from './lib/startProductServer';
 export type { StartProductServerOptions } from './lib/startProductServer';
 export type { ServerPlatformProjectConfig } from './lib/contracts/bootstrap.contract';
-export type {
-  ServerPlatformSsrOptions,
-  ServerPlatformSsrProductionPaths,
-} from './lib/routes/ssr';
+export type { ServerPlatformSsrOptions, ServerPlatformSsrProductionPaths } from './lib/routes/ssr';
 export type {
   ServerPlatformPlugin,
   ServerPlatformPluginMeta,

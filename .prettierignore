@@ -3,5 +3,6 @@
 /coverage
 /.nx/cache
 /.nx/workspace-data
+/.codex
 /.codecodedrift
 /.venv-codrift

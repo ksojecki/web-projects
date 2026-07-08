@@ -7,10 +7,7 @@ startProductServer({
   productId: 'recepturomat',
   project: recepturomatProjectConfig,
   async registerFeaturePlugins(server) {
-    await server.register(
-      recipeStorePlugin,
-      recepturomatProjectConfig.recipeStore,
-    );
+    await server.register(recipeStorePlugin, recepturomatProjectConfig.recipeStore);
     await server.register(recepturomatRecipeApiPlugin);
   },
 });

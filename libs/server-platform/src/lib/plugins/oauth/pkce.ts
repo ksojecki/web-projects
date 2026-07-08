@@ -22,11 +22,7 @@ function generateCodeChallenge(codeVerifier: string): string {
   const hash = createHash('sha256');
   hash.update(codeVerifier);
 
-  return hash
-    .digest('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=/g, '');
+  return hash.digest('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
 /**

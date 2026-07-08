@@ -35,9 +35,7 @@ export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
         preHandler: fastify.requireAuthenticatedSession,
       },
       async (request, reply) => {
-        const recipe = fastify.recipeStore.getByRecipeId(
-          request.params.recipeId,
-        );
+        const recipe = fastify.recipeStore.getByRecipeId(request.params.recipeId);
 
         if (recipe === undefined) {
           await reply.status(404).send({ message: 'Recipe not found.' });
@@ -61,10 +59,7 @@ export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
           return;
         }
 
-        const createdRecipe = createRecipeWithStableSlug(
-          fastify.recipeStore.listRecipes(),
-          recipe,
-        );
+        const createdRecipe = createRecipeWithStableSlug(fastify.recipeStore.listRecipes(), recipe);
 
         await reply.status(201).send(fastify.recipeStore.upsert(createdRecipe));
       },
@@ -76,19 +71,14 @@ export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
         preHandler: fastify.requireAuthenticatedSession,
       },
       async (request, reply) => {
-        const recipe = parseRecipePayload(
-          request.body,
-          request.params.recipeId,
-        );
+        const recipe = parseRecipePayload(request.body, request.params.recipeId);
 
         if (recipe === undefined) {
           await reply.status(400).send({ message: 'Invalid recipe payload.' });
           return;
         }
 
-        const existingRecipe = fastify.recipeStore.getByRecipeId(
-          recipe.recipeId,
-        );
+        const existingRecipe = fastify.recipeStore.getByRecipeId(recipe.recipeId);
 
         if (existingRecipe === undefined) {
           await reply.status(404).send({ message: 'Recipe not found.' });
@@ -117,13 +107,8 @@ export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
     );
   };
 
-function parseRecipePayload(
-  payload: RecipePayload,
-): Omit<Recipe, 'recipeId'> | undefined;
-function parseRecipePayload(
-  payload: RecipePayload,
-  routeRecipeId: string,
-): Recipe | undefined;
+function parseRecipePayload(payload: RecipePayload): Omit<Recipe, 'recipeId'> | undefined;
+function parseRecipePayload(payload: RecipePayload, routeRecipeId: string): Recipe | undefined;
 function parseRecipePayload(
   payload: RecipePayload,
   routeRecipeId?: string,
@@ -136,11 +121,7 @@ function parseRecipePayload(
   const defaultWeight = normalizeNumber(payload.defaultWeight);
   const ingredients = parseIngredients(payload.ingredients);
 
-  if (
-    name === undefined ||
-    defaultWeight === undefined ||
-    ingredients === undefined
-  ) {
+  if (name === undefined || defaultWeight === undefined || ingredients === undefined) {
     return undefined;
   }
 
@@ -165,9 +146,7 @@ function createRecipeWithStableSlug(
   recipe: Omit<Recipe, 'recipeId'>,
 ): Recipe {
   const baseRecipeId = slugifyRecipeName(recipe.name);
-  const existingRecipeIds = new Set(
-    existingRecipes.map((candidate) => candidate.recipeId),
-  );
+  const existingRecipeIds = new Set(existingRecipes.map((candidate) => candidate.recipeId));
   let recipeId = baseRecipeId;
   let suffix = 2;
 
@@ -233,9 +212,7 @@ function parseIngredient(payload: unknown): RecipeIngredient | undefined {
     return undefined;
   }
 
-  return recipeId === undefined
-    ? { name, amount, unit }
-    : { name, amount, unit, recipeId };
+  return recipeId === undefined ? { name, amount, unit } : { name, amount, unit, recipeId };
 }
 
 function normalizeNonEmptyString(value: unknown): string | undefined {
@@ -275,15 +252,10 @@ function isRecipeUnit(value: string): value is RecipeIngredient['unit'] {
   return value === 'g' || value === 'ml' || value === 'pcs';
 }
 
-function isRecipeIngredientPayload(
-  value: unknown,
-): value is RecipeIngredientPayload {
+function isRecipeIngredientPayload(value: unknown): value is RecipeIngredientPayload {
   return (
     typeof value === 'object' &&
     value !== null &&
-    ('name' in value ||
-      'amount' in value ||
-      'unit' in value ||
-      'recipeId' in value)
+    ('name' in value || 'amount' in value || 'unit' in value || 'recipeId' in value)
   );
 }

@@ -38,15 +38,8 @@ export const Button = ({
   );
 
   return (
-    <button
-      className={resolvedClassName}
-      disabled={disabled || isLoading}
-      type="button"
-      {...props}
-    >
-      {isLoading ? (
-        <span className="loading loading-spinner loading-sm" />
-      ) : null}
+    <button className={resolvedClassName} disabled={disabled || isLoading} type="button" {...props}>
+      {isLoading ? <span className="loading loading-spinner loading-sm" /> : null}
       {children}
     </button>
   );

@@ -78,9 +78,7 @@ async function createServer() {
   return server;
 }
 
-async function loginAsInitialAdministrator(
-  server: Awaited<ReturnType<typeof createServer>>,
-) {
+async function loginAsInitialAdministrator(server: Awaited<ReturnType<typeof createServer>>) {
   const loginResponse = await server.inject({
     method: 'POST',
     url: '/api/auth/login',
@@ -90,9 +88,7 @@ async function loginAsInitialAdministrator(
     },
   });
 
-  const sessionCookie = loginResponse.cookies.find(
-    (cookie) => cookie.name === SESSION_COOKIE_NAME,
-  );
+  const sessionCookie = loginResponse.cookies.find((cookie) => cookie.name === SESSION_COOKIE_NAME);
 
   expect(loginResponse.statusCode).toBe(200);
   expect(sessionCookie?.value).toBeDefined();
@@ -369,8 +365,7 @@ describe('oauth routes', () => {
 
     expect(conflictResponse.statusCode).toBe(409);
     expect(conflictResponse.json()).toEqual({
-      message:
-        'OAuth callback failed: This OAuth account is already linked to another user.',
+      message: 'OAuth callback failed: This OAuth account is already linked to another user.',
     });
 
     await server.close();

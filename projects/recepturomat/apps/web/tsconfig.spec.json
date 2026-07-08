@@ -6,12 +6,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "tsBuildInfoFile": "../../../../dist/projects/recepturomat/apps/web/tsconfig.spec.tsbuildinfo",
-    "types": [
-      "node",
-      "vitest/globals",
-      "vite/client",
-      "@testing-library/jest-dom"
-    ]
+    "types": ["node", "vitest/globals", "vite/client", "@testing-library/jest-dom"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

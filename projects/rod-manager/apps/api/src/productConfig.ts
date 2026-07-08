@@ -17,10 +17,7 @@ export const rodManagerProjectConfig: ServerPlatformProjectConfig = {
   ssr: {
     webRoot: path.resolve(process.cwd(), 'projects/rod-manager/apps/web'),
     production: {
-      clientRoot: path.resolve(
-        process.cwd(),
-        'dist/projects/rod-manager/apps/web/client',
-      ),
+      clientRoot: path.resolve(process.cwd(), 'dist/projects/rod-manager/apps/web/client'),
       serverEntryPath: path.resolve(
         process.cwd(),
         'dist/projects/rod-manager/apps/web/server/entry-server.mjs',

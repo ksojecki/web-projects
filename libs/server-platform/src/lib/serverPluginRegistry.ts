@@ -11,6 +11,7 @@ import type { AuthStore } from './plugins/database';
 export function createPluginRegistrar(plugins: ServerPlatformPlugin[]) {
   return fp(async function serverPluginRegistrar(fastify: FastifyInstance) {
     for (const plugin of plugins) {
+      // oxlint-disable-next-line no-await-in-loop -- Plugin registration order is part of the runtime contract.
       await fastify.register(
         fp(async function serverPlugin(instance: FastifyInstance) {
           const ctx: ServerPlatformPluginContext = {
@@ -24,6 +25,7 @@ export function createPluginRegistrar(plugins: ServerPlatformPlugin[]) {
 
           if (plugin.migrations) {
             for (const migration of plugin.migrations) {
+              // oxlint-disable-next-line no-await-in-loop -- Migrations must run in order for each plugin.
               await migration.up(ctx);
             }
           }

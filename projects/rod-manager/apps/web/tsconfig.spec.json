@@ -11,12 +11,7 @@
       ]
     },
     "tsBuildInfoFile": "../../../../dist/projects/rod-manager/apps/web/tsconfig.spec.tsbuildinfo",
-    "types": [
-      "node",
-      "vitest/globals",
-      "vite/client",
-      "@testing-library/jest-dom"
-    ]
+    "types": ["node", "vitest/globals", "vite/client", "@testing-library/jest-dom"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

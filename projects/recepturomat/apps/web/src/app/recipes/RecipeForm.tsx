@@ -35,9 +35,7 @@ export function RecipeForm({
   const availableRecipeReferences = useMemo(
     () =>
       recipes.filter(
-        (candidate) =>
-          candidate.recipeId.length > 0 &&
-          candidate.recipeId !== recipe.recipeId,
+        (candidate) => candidate.recipeId.length > 0 && candidate.recipeId !== recipe.recipeId,
       ),
     [recipe.recipeId, recipes],
   );
@@ -58,16 +56,10 @@ export function RecipeForm({
   }
 
   return (
-    <form
-      className="flex flex-col gap-6"
-      onSubmit={(event) => void handleSubmit(event)}
-    >
+    <form className="flex flex-col gap-6" onSubmit={(event) => void handleSubmit(event)}>
       <PageHeader description={t('form.description')} title={title} />
 
-      <Section
-        description={t('form.detailsDescription')}
-        title={t('form.detailsTitle')}
-      >
+      <Section description={t('form.detailsDescription')} title={t('form.detailsTitle')}>
         <div className="grid gap-4">
           <label className="form-control">
             <span className="label-text">{t('form.name')}</span>
@@ -137,9 +129,7 @@ export function RecipeForm({
               <div className="grid gap-4">
                 <div className="grid gap-3 md:grid-cols-[2fr_1fr_1fr]">
                   <label className="form-control">
-                    <span className="label-text">
-                      {t('form.ingredientName')}
-                    </span>
+                    <span className="label-text">{t('form.ingredientName')}</span>
                     <input
                       className="input input-bordered"
                       onChange={(event) => {
@@ -196,9 +186,7 @@ export function RecipeForm({
                 </div>
 
                 <label className="form-control">
-                  <span className="label-text">
-                    {t('form.ingredientRecipeId')}
-                  </span>
+                  <span className="label-text">{t('form.ingredientRecipeId')}</span>
                   <input
                     className="input input-bordered"
                     list={`recipe-references-${index}`}
@@ -206,9 +194,7 @@ export function RecipeForm({
                       updateIngredient(index, {
                         ...ingredient,
                         recipeId:
-                          event.target.value.trim().length === 0
-                            ? undefined
-                            : event.target.value,
+                          event.target.value.trim().length === 0 ? undefined : event.target.value,
                       });
                     }}
                     type="text"
@@ -216,10 +202,7 @@ export function RecipeForm({
                   />
                   <datalist id={`recipe-references-${index}`}>
                     {availableRecipeReferences.map((candidate) => (
-                      <option
-                        key={candidate.recipeId}
-                        value={candidate.recipeId}
-                      >
+                      <option key={candidate.recipeId} value={candidate.recipeId}>
                         {candidate.name}
                       </option>
                     ))}
@@ -261,11 +244,7 @@ export function RecipeForm({
       ) : null}
 
       <footer className="flex flex-wrap gap-2">
-        <button
-          className="btn btn-primary"
-          disabled={isSubmitting}
-          type="submit"
-        >
+        <button className="btn btn-primary" disabled={isSubmitting} type="submit">
           {isSubmitting ? t('actions.saving') : t('actions.save')}
         </button>
         {onCancel !== undefined ? (
@@ -299,10 +278,7 @@ function normalizeRecipe(recipe: Recipe): Recipe {
   };
 }
 
-function validateRecipe(
-  recipe: Recipe,
-  t: (key: string) => string,
-): string | null {
+function validateRecipe(recipe: Recipe, t: (key: string) => string): string | null {
   if (recipe.name.length === 0) {
     return t('errors.missingFields');
   }

@@ -129,8 +129,7 @@ The login page includes OAuth provider buttons:
 import { initiateOAuth, storeOAuthState } from './authApi';
 
 async function handleOAuthLogin(provider: 'google' | 'apple' | 'facebook') {
-  const { authorizationUrl, state, codeVerifier } =
-    await initiateOAuth(provider);
+  const { authorizationUrl, state, codeVerifier } = await initiateOAuth(provider);
 
   // Store state for verification on callback
   storeOAuthState(state, codeVerifier);
@@ -198,11 +197,7 @@ CREATE TABLE oauth_providers (
 Add provider to `libs/shared/src/lib/auth.dto.ts`:
 
 ```typescript
-export type OAuthProviderType =
-  | 'google'
-  | 'apple'
-  | 'facebook'
-  | 'new_provider';
+export type OAuthProviderType = 'google' | 'apple' | 'facebook' | 'new_provider';
 ```
 
 ### 2. Update OAuth Plugin Modules

@@ -67,9 +67,7 @@ export function initializeSchema(db: Database.Database): void {
 }
 
 export function ensureUserSettingsModel(db: Database.Database): void {
-  const userColumns = db
-    .prepare<[], { name: string }>(`PRAGMA table_info('users')`)
-    .all();
+  const userColumns = db.prepare<[], { name: string }>(`PRAGMA table_info('users')`).all();
 
   const hasPreferredLanguageColumnInUsers = userColumns.some(
     (column) => column.name === 'preferred_language',
@@ -122,9 +120,7 @@ export function ensureUserSettingsModel(db: Database.Database): void {
 }
 
 export function ensureUserRoleColumn(db: Database.Database): void {
-  const userColumns = db
-    .prepare<[], { name: string }>(`PRAGMA table_info('users')`)
-    .all();
+  const userColumns = db.prepare<[], { name: string }>(`PRAGMA table_info('users')`).all();
 
   const hasRoleColumn = userColumns.some((column) => column.name === 'role');
 
@@ -132,19 +128,13 @@ export function ensureUserRoleColumn(db: Database.Database): void {
     db.exec(`ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'user'`);
   }
 
-  db.prepare(
-    `UPDATE users SET role = 'user' WHERE role NOT IN ('admin', 'user')`,
-  ).run();
+  db.prepare(`UPDATE users SET role = 'user' WHERE role NOT IN ('admin', 'user')`).run();
 }
 
 export function ensureNameColumns(db: Database.Database): void {
-  const userColumns = db
-    .prepare<[], { name: string }>(`PRAGMA table_info('users')`)
-    .all();
+  const userColumns = db.prepare<[], { name: string }>(`PRAGMA table_info('users')`).all();
 
-  const hasFirstName = userColumns.some(
-    (column) => column.name === 'first_name',
-  );
+  const hasFirstName = userColumns.some((column) => column.name === 'first_name');
   const hasLastName = userColumns.some((column) => column.name === 'last_name');
 
   if (!hasFirstName) {
@@ -157,10 +147,8 @@ export function ensureNameColumns(db: Database.Database): void {
 }
 
 export function seedInitialUser(db: Database.Database): void {
-  const initialUserEmail =
-    process.env.AUTH_INITIAL_USER_EMAIL ?? 'admin@rod-manager.local';
-  const initialUserPassword =
-    process.env.AUTH_INITIAL_USER_PASSWORD ?? 'admin1234';
+  const initialUserEmail = process.env.AUTH_INITIAL_USER_EMAIL ?? 'admin@rod-manager.local';
+  const initialUserPassword = process.env.AUTH_INITIAL_USER_PASSWORD ?? 'admin1234';
 
   db.prepare(
     `INSERT INTO users (id, email, password_hash, first_name, last_name, display_name, role)
@@ -184,10 +172,7 @@ export function seedInitialUser(db: Database.Database): void {
 
 export function ensureAdministratorExists(db: Database.Database): void {
   const adminCount = db
-    .prepare<
-      [],
-      CountRow
-    >(`SELECT COUNT(*) AS count FROM users WHERE role = 'admin'`)
+    .prepare<[], CountRow>(`SELECT COUNT(*) AS count FROM users WHERE role = 'admin'`)
     .get();
 
   if ((adminCount?.count ?? 0) > 0) {

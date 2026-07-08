@@ -63,9 +63,7 @@ export function NewRecipePage() {
             await navigate(buildRecipeDetailPath(createdRecipe.recipeId));
           } catch (caughtError) {
             setSubmitError(
-              caughtError instanceof Error
-                ? caughtError.message
-                : t('errors.submitFailed'),
+              caughtError instanceof Error ? caughtError.message : t('errors.submitFailed'),
             );
           } finally {
             setIsSubmitting(false);

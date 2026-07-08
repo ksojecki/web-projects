@@ -1,7 +1,4 @@
-import type {
-  AuthenticationMethodStatus,
-  OAuthProviderType,
-} from '@ksojecki/platform-shared';
+import type { AuthenticationMethodStatus, OAuthProviderType } from '@ksojecki/platform-shared';
 import type { ReactNode } from 'react';
 
 export type AccountPendingMethod = OAuthProviderType | null;

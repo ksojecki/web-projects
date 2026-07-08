@@ -1,10 +1,6 @@
 import { formatFiles, updateJson, type Tree } from '@nx/devkit';
 import { writeApiApp } from './api';
-import {
-  normalizeOptions,
-  type NormalizedOptions,
-  type ProjectTemplateSchema,
-} from './shared';
+import { normalizeOptions, type NormalizedOptions, type ProjectTemplateSchema } from './shared';
 import { writeWebApp } from './web';
 
 export async function projectTemplateGenerator(
@@ -23,10 +19,7 @@ export async function projectTemplateGenerator(
 
 export default projectTemplateGenerator;
 
-function updateRootPackageScripts(
-  tree: Tree,
-  options: NormalizedOptions,
-): void {
+function updateRootPackageScripts(tree: Tree, options: NormalizedOptions): void {
   updateJson(
     tree,
     'package.json',
@@ -41,17 +34,11 @@ function updateRootPackageScripts(
   );
 }
 
-function updateRootTsConfigReferences(
-  tree: Tree,
-  options: NormalizedOptions,
-): void {
+function updateRootTsConfigReferences(tree: Tree, options: NormalizedOptions): void {
   updateJson(
     tree,
     'tsconfig.json',
-    (value: {
-      references?: Array<{ path: string }>;
-      [key: string]: unknown;
-    }) => {
+    (value: { references?: Array<{ path: string }>; [key: string]: unknown }) => {
       const references = value.references ?? [];
       const nextPaths = new Set(references.map((reference) => reference.path));
       nextPaths.add(`./${options.projectRoot}/apps/api`);

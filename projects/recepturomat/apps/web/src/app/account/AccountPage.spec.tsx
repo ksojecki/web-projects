@@ -36,15 +36,11 @@ const {
   mockUpdatePassword,
 } = vi.hoisted(() => ({
   mockUseAuth: vi.fn<() => AuthContextLike>(),
-  mockLinkOAuthProvider:
-    vi.fn<(provider: OAuthProviderType) => Promise<OAuthInitiateResponse>>(),
-  mockLoadAuthenticationMethods:
-    vi.fn<() => Promise<AuthenticationMethodsResponseBody>>(),
+  mockLinkOAuthProvider: vi.fn<(provider: OAuthProviderType) => Promise<OAuthInitiateResponse>>(),
+  mockLoadAuthenticationMethods: vi.fn<() => Promise<AuthenticationMethodsResponseBody>>(),
   mockStoreOAuthState: vi.fn<(state: string, codeVerifier: string) => void>(),
-  mockUnlinkOAuthProvider:
-    vi.fn<(provider: OAuthProviderType) => Promise<void>>(),
-  mockUpdatePassword:
-    vi.fn<(input: UpdatePasswordRequestBody) => Promise<void>>(),
+  mockUnlinkOAuthProvider: vi.fn<(provider: OAuthProviderType) => Promise<void>>(),
+  mockUpdatePassword: vi.fn<(input: UpdatePasswordRequestBody) => Promise<void>>(),
 }));
 
 vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
@@ -57,9 +53,7 @@ vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
     extraSections: AccountSectionLike[] = [],
   ): AccountSectionLike[] {
     const { t } = useTranslation('account');
-    const [methods, setMethods] = useState<
-      AuthenticationMethodsResponseBody['methods']
-    >([]);
+    const [methods, setMethods] = useState<AuthenticationMethodsResponseBody['methods']>([]);
 
     const refreshAuthenticationMethods = useCallback(async () => {
       const response = await mockLoadAuthenticationMethods();
@@ -70,12 +64,9 @@ vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
       void refreshAuthenticationMethods();
     }, [refreshAuthenticationMethods]);
 
-    const passwordMethod =
-      methods.find((method) => method.type === 'password') ?? null;
+    const passwordMethod = methods.find((method) => method.type === 'password') ?? null;
     const oauthMethods = methods.filter(
-      (
-        method,
-      ): method is Extract<(typeof methods)[number], { type: 'oauth' }> =>
+      (method): method is Extract<(typeof methods)[number], { type: 'oauth' }> =>
         method.type === 'oauth',
     );
 
@@ -89,9 +80,7 @@ vi.mock('@ksojecki/platform-web-platform', async (importOriginal) => {
         content: (
           <div>
             <h2>{t('authentication.title')}</h2>
-            {passwordMethod !== null ? (
-              <p>{t('authentication.passwordLabel')}</p>
-            ) : null}
+            {passwordMethod !== null ? <p>{t('authentication.passwordLabel')}</p> : null}
             {oauthMethods.map((method) => (
               <p key={method.provider}>{method.provider}</p>
             ))}
@@ -169,19 +158,13 @@ describe('AccountPage', () => {
       </I18nextProvider>,
     );
 
-    expect(
-      screen.getByRole('heading', { name: 'Account' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Account' })).toBeInTheDocument();
     expect(screen.getByText('Welcome back, Test User.')).toBeInTheDocument();
     expect(screen.getByText('user@example.com')).toBeInTheDocument();
-    expect(
-      await screen.findByRole('heading', { name: 'Language' }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Language' })).toBeInTheDocument();
     expect(
       await screen.findByRole('heading', { name: 'Authentication methods' }),
     ).toBeInTheDocument();
-    expect(
-      screen.queryByText('Recepturomat starter notes'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Recepturomat starter notes')).not.toBeInTheDocument();
   });
 });

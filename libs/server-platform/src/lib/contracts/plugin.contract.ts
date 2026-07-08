@@ -1,10 +1,7 @@
 import type { FastifyBaseLogger, FastifyInstance } from 'fastify';
 
 export type JsonPrimitive = string | number | boolean | null;
-export type JsonValue =
-  | JsonPrimitive
-  | { [key: string]: JsonValue }
-  | JsonValue[];
+export type JsonValue = JsonPrimitive | { [key: string]: JsonValue } | JsonValue[];
 
 export interface ServerPlatformAuthStoreUser {
   id: string;

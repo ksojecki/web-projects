@@ -66,10 +66,7 @@ export function buildLoginPromptHref(): string {
 }
 
 export function buildRecipeDetailPath(recipeId: string): string {
-  return frontendProductConfig.routes.recipeDetail.replace(
-    ':recipeId',
-    recipeId,
-  );
+  return frontendProductConfig.routes.recipeDetail.replace(':recipeId', recipeId);
 }
 
 export function buildRecipeEditPath(recipeId: string): string {

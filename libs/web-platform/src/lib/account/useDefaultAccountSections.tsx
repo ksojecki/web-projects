@@ -6,9 +6,7 @@ import { LanguageSelector } from './LanguageSelector';
 import type { AccountSection } from './types';
 import { useAuthenticationMethods } from './useAuthenticationMethods';
 
-export function useDefaultAccountSections(
-  extraSections: AccountSection[] = [],
-): AccountSection[] {
+export function useDefaultAccountSections(extraSections: AccountSection[] = []): AccountSection[] {
   const { t } = useTranslation('account');
   const {
     connectOAuthProvider,
@@ -28,9 +26,7 @@ export function useDefaultAccountSections(
     await refreshAuthenticationMethods();
   }
 
-  async function handleConnectProvider(
-    provider: OAuthProviderType,
-  ): Promise<void> {
+  async function handleConnectProvider(provider: OAuthProviderType): Promise<void> {
     setErrorMessage(null);
     setSuccessMessage(null);
     setShowPasswordForm(false);
@@ -38,15 +34,11 @@ export function useDefaultAccountSections(
     try {
       await connectOAuthProvider(provider);
     } catch (error) {
-      setErrorMessage(
-        getErrorMessage(error, t('authentication.linkStartError')),
-      );
+      setErrorMessage(getErrorMessage(error, t('authentication.linkStartError')));
     }
   }
 
-  async function handleDisconnectProvider(
-    provider: OAuthProviderType,
-  ): Promise<void> {
+  async function handleDisconnectProvider(provider: OAuthProviderType): Promise<void> {
     setErrorMessage(null);
     setSuccessMessage(null);
 

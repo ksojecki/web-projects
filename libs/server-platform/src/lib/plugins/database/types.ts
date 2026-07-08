@@ -1,8 +1,4 @@
-import type {
-  OAuthProviderType,
-  UserLanguage,
-  UserRole,
-} from '@ksojecki/platform-shared';
+import type { OAuthProviderType, UserLanguage, UserRole } from '@ksojecki/platform-shared';
 import type { ServerPlatformDbClient } from '../../contracts/plugin.contract';
 
 export type { OAuthProviderType };
@@ -46,12 +42,7 @@ export interface AuthStore {
     provider: OAuthProviderType,
     providerUserId: string,
   ): AuthStoreUser | undefined;
-  createUser(
-    email: string,
-    name: string,
-    surname: string,
-    password: string | null,
-  ): AuthStoreUser;
+  createUser(email: string, name: string, surname: string, password: string | null): AuthStoreUser;
   findOrCreateUserByOAuth(
     provider: OAuthProviderType,
     providerUserId: string,
@@ -68,10 +59,7 @@ export interface AuthStore {
     accessTokenExpiresAt: number,
   ): void;
   unlinkOAuthProvider(userId: string, provider: OAuthProviderType): void;
-  getOAuthProvider(
-    userId: string,
-    provider: OAuthProviderType,
-  ): OAuthProviderData | undefined;
+  getOAuthProvider(userId: string, provider: OAuthProviderType): OAuthProviderData | undefined;
   updateOAuthToken(
     userId: string,
     provider: OAuthProviderType,

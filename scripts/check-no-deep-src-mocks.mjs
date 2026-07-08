@@ -4,13 +4,7 @@ import path from 'node:path';
 const sourceFilePattern = /\.(?:[cm]?[jt]sx?)$/;
 const deepSrcMockPattern =
   /vi\.mock\(\s*['"`][^'"`]*(?:libs|projects)\/[^'"`]+\/src(?:\/[^'"`]*)?['"`]/g;
-const ignoredDirectories = new Set([
-  '.git',
-  '.nx',
-  'coverage',
-  'dist',
-  'node_modules',
-]);
+const ignoredDirectories = new Set(['.git', '.nx', 'coverage', 'dist', 'node_modules']);
 
 const fileArguments = process.argv.slice(2);
 const filesToCheck =

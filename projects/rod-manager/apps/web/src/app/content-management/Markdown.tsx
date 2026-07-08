@@ -82,10 +82,7 @@ export function renderMarkdown(contentMd: string): ReactElement[] {
   return blocks.map((block, index) => {
     if (block.type === 'heading') {
       return (
-        <Heading
-          key={`heading-${String(index)}`}
-          level={toHeadingLevel(block.level)}
-        >
+        <Heading key={`heading-${String(index)}`} level={toHeadingLevel(block.level)}>
           {block.text}
         </Heading>
       );
@@ -95,9 +92,7 @@ export function renderMarkdown(contentMd: string): ReactElement[] {
       return (
         <ol className="list-decimal pl-5" key={`list-${String(index)}`}>
           {block.items.map((item, itemIndex) => (
-            <li key={`list-item-${String(index)}-${String(itemIndex)}`}>
-              {item}
-            </li>
+            <li key={`list-item-${String(index)}-${String(itemIndex)}`}>{item}</li>
           ))}
         </ol>
       );

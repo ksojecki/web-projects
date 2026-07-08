@@ -193,9 +193,7 @@ async function createRecipeApiTestServer(): Promise<RecipeApiTestServer> {
   };
 }
 
-async function disposeRecipeApiTestServer(
-  serverHarness: RecipeApiTestServer,
-): Promise<void> {
+async function disposeRecipeApiTestServer(serverHarness: RecipeApiTestServer): Promise<void> {
   await serverHarness.server.close();
   rmSync(serverHarness.tempDirectory, { recursive: true, force: true });
 }
@@ -213,8 +211,7 @@ async function login(server: RecipeApiServer) {
   expect(loginResponse.statusCode).toBe(200);
 
   const sessionCookie = loginResponse.cookies.find(
-    (cookie: { name: string; value: string }) =>
-      cookie.name === sessionCookieName,
+    (cookie: { name: string; value: string }) => cookie.name === sessionCookieName,
   );
 
   expect(sessionCookie).toBeDefined();

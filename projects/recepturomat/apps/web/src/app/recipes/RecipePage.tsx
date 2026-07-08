@@ -24,11 +24,7 @@ export function RecipePage() {
     enabled: status === 'authenticated',
     recipeId,
   });
-  const {
-    reset,
-    setNewWeight,
-    value: recalculatedRecipe,
-  } = useRecalculatedRecipe(recipe);
+  const { reset, setNewWeight, value: recalculatedRecipe } = useRecalculatedRecipe(recipe);
 
   useEffect(() => {
     const parsedValue = Number(weightInput);
@@ -104,11 +100,7 @@ export function RecipePage() {
       await deleteCurrentRecipe();
       await navigate(frontendProductConfig.routes.home);
     } catch (caughtError) {
-      setDeleteError(
-        caughtError instanceof Error
-          ? caughtError.message
-          : t('errors.loadFailed'),
-      );
+      setDeleteError(caughtError instanceof Error ? caughtError.message : t('errors.loadFailed'));
     }
   }
 
@@ -117,16 +109,10 @@ export function RecipePage() {
       <PageHeader
         actions={
           <>
-            <Link
-              className="btn btn-ghost"
-              to={frontendProductConfig.routes.home}
-            >
+            <Link className="btn btn-ghost" to={frontendProductConfig.routes.home}>
               {t('actions.back')}
             </Link>
-            <Link
-              className="btn btn-secondary"
-              to={buildRecipeEditPath(recipeId)}
-            >
+            <Link className="btn btn-secondary" to={buildRecipeEditPath(recipeId)}>
               {t('actions.edit')}
             </Link>
             <button
@@ -216,22 +202,16 @@ export function RecipePage() {
         </p>
       ) : null}
 
-      <Section
-        description={t('detail.ingredientsDescription')}
-        title={t('detail.ingredients')}
-      >
+      <Section description={t('detail.ingredientsDescription')} title={t('detail.ingredients')}>
         <ul className="grid gap-4">
           {recalculatedRecipe.ingredients.map((ingredient, index) => (
             <li key={`${ingredient.name}-${index}`}>
               <Card className="border border-base-200 bg-base-100 shadow-none">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex flex-col gap-2">
-                    <div className="text-lg font-semibold">
-                      {ingredient.name}
-                    </div>
+                    <div className="text-lg font-semibold">{ingredient.name}</div>
                     <Paragraph tone="muted">
-                      {formatAmount(ingredient.amount)}{' '}
-                      {t(`units.${ingredient.unit}`)}
+                      {formatAmount(ingredient.amount)} {t(`units.${ingredient.unit}`)}
                     </Paragraph>
                   </div>
                   {ingredient.recipeId !== undefined ? (

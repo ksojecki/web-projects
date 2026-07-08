@@ -21,9 +21,7 @@ export function Card({ actions, children, className, title }: CardProps) {
       <div className={CARD_BODY_CLASS_NAME}>
         {title !== undefined ? <div className="card-title">{title}</div> : null}
         <div>{children}</div>
-        {actions !== undefined ? (
-          <div className={CARD_ACTIONS_CLASS_NAME}>{actions}</div>
-        ) : null}
+        {actions !== undefined ? <div className={CARD_ACTIONS_CLASS_NAME}>{actions}</div> : null}
       </div>
     </section>
   );

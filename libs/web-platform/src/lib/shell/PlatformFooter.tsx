@@ -7,11 +7,7 @@ export interface PlatformFooterProps {
   text: string;
 }
 
-export function PlatformFooter({
-  links = [],
-  sections = [],
-  text,
-}: PlatformFooterProps) {
+export function PlatformFooter({ links = [], sections = [], text }: PlatformFooterProps) {
   const hasSections = sections.length > 0;
   const hasLinks = links.length > 0;
 
@@ -23,19 +19,13 @@ export function PlatformFooter({
         {hasSections ? (
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             {sections.map((section) => (
-              <div
-                className="flex flex-col items-center gap-2"
-                key={section.title ?? text}
-              >
+              <div className="flex flex-col items-center gap-2" key={section.title ?? text}>
                 {section.title !== undefined ? (
                   <p className="font-medium">{section.title}</p>
                 ) : null}
                 <div className="flex flex-wrap justify-center gap-3">
                   {section.links.map((link) => (
-                    <FooterLinkItem
-                      key={`${section.title ?? 'section'}-${link.to}`}
-                      link={link}
-                    />
+                    <FooterLinkItem key={`${section.title ?? 'section'}-${link.to}`} link={link} />
                   ))}
                 </div>
               </div>
@@ -58,12 +48,7 @@ export function PlatformFooter({
 function FooterLinkItem({ link }: { link: PlatformFooterLink }) {
   if (link.external) {
     return (
-      <a
-        className="link link-hover"
-        href={link.to}
-        rel="noreferrer"
-        target="_blank"
-      >
+      <a className="link link-hover" href={link.to} rel="noreferrer" target="_blank">
         {link.label}
       </a>
     );

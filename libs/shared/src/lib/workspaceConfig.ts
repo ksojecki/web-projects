@@ -70,16 +70,11 @@ export function applyProductRuntimeDefaults(productId: ProductId): void {
 }
 
 export function getProductApiPort(productId: ProductId): number {
-  return readIntegerFromEnv(
-    process.env.PORT,
-    PRODUCT_WORKSPACE_CONFIG[productId].apiPort,
-  );
+  return readIntegerFromEnv(process.env.PORT, PRODUCT_WORKSPACE_CONFIG[productId].apiPort);
 }
 
 export function getProductAuthDbPath(productId: ProductId): string {
-  return (
-    process.env.AUTH_DB_PATH ?? PRODUCT_WORKSPACE_CONFIG[productId].authDbPath
-  );
+  return process.env.AUTH_DB_PATH ?? PRODUCT_WORKSPACE_CONFIG[productId].authDbPath;
 }
 
 export function getProductChromeDebugPort(productId: ProductId): number {
@@ -90,10 +85,7 @@ export function getProductChromeDebugPort(productId: ProductId): number {
 }
 
 export function getProductFrontendBaseUrl(productId: ProductId): string {
-  return (
-    process.env.OAUTH_REDIRECT_BASE_URL ??
-    PRODUCT_WORKSPACE_CONFIG[productId].frontendBaseUrl
-  );
+  return process.env.OAUTH_REDIRECT_BASE_URL ?? PRODUCT_WORKSPACE_CONFIG[productId].frontendBaseUrl;
 }
 
 export function getProductRecipeDbPath(): string {
@@ -105,16 +97,10 @@ export function getProductSeedInitialUser(): boolean {
 }
 
 export function getProductWebPort(productId: ProductId): number {
-  return readIntegerFromEnv(
-    process.env.WEB_PORT,
-    PRODUCT_WORKSPACE_CONFIG[productId].webPort,
-  );
+  return readIntegerFromEnv(process.env.WEB_PORT, PRODUCT_WORKSPACE_CONFIG[productId].webPort);
 }
 
-function readBooleanFromEnv(
-  value: string | undefined,
-  fallback: boolean,
-): boolean {
+function readBooleanFromEnv(value: string | undefined, fallback: boolean): boolean {
   if (value === undefined) {
     return fallback;
   }
@@ -130,10 +116,7 @@ function readBooleanFromEnv(
   return fallback;
 }
 
-function readIntegerFromEnv(
-  value: string | undefined,
-  fallback: number,
-): number {
+function readIntegerFromEnv(value: string | undefined, fallback: number): number {
   if (value === undefined) {
     return fallback;
   }

@@ -13,13 +13,7 @@ const FORM_FIELD_BASE_CLASS_NAME = 'input w-full';
 /**
  * Shared labeled auth form field with optional hint and validation message.
  */
-export function FormField({
-  label,
-  type,
-  registration,
-  errorMessage,
-  hint,
-}: FormFieldProps) {
+export function FormField({ label, type, registration, errorMessage, hint }: FormFieldProps) {
   const hasError = !!errorMessage || !!hint;
   return (
     <>

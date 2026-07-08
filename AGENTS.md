@@ -74,6 +74,7 @@
 - If a project's default API port is already in use, inspect the listener with `lsof -nP -iTCP:<port> -sTCP:LISTEN` and reuse an existing matching dev server when possible. Stop the process only if it is clearly a stale server from this repository; otherwise report the conflict and ask the user.
 - Run lint via npm script: `npm run lint` (delegates to Nx `lint` targets).
 - Run formatting checks: `npm run format:check`; auto-fix formatting: `npm run format`.
+- Before ending a Codex session, run `npm run format:check`, `npm run lint`, `npm run typecheck`, and `npm test`. If any command fails, keep working until the failure is fixed or you can report a concrete blocker.
 - Run CI-equivalent checks locally: `npx nx run-many -t lint test build typecheck --no-tui`.
 - For frontend review work, inspect the rendered localhost page before judging the UI from source alone. Prefer the Nx `dev` target or its npm alias so Codex can debug the real page through the Chrome-backed browser path after startup, authenticate the localhost session before evaluating page or API behavior, compare the first SSR shell with the hydrated/authenticated state, and capture concrete evidence from rendered HTML, API payloads, browser automation, or DevTools inspection. If browser access is blocked by the environment, report that blocker explicitly and fall back to the best available rendered-page evidence instead of guessing from code only.
 - On this machine there is no standalone `[mcp_servers.chrome-devtools]` entry. The supported Chrome path is the bundled browser plugin talking to the existing `node_repl` backend with Chrome enabled, alongside the repo-local Nx MCP configuration.
@@ -84,8 +85,8 @@
 
 ## Project-Specific Conventions
 
-- Formatting: Prettier with single quotes (`.prettierrc`).
-- Formatting indentation is 2 spaces globally (`tabWidth: 2`, `useTabs: false`); JSON/JSONC have explicit Prettier override.
+- Formatting: Oxfmt with single quotes (`.oxfmtrc.json`).
+- Formatting indentation is 2 spaces globally (`tabWidth: 2`, `useTabs: false`); JSON/JSONC and YAML keep explicit overrides in `.oxfmtrc.json`.
 - Ignore generated artifacts in formatting and VCS (`.prettierignore`, `.gitignore` include `dist`, `coverage`, `.nx/*`).
 - Oxlint uses `.oxlintrc.json` with explicit per-project Nx `lint` targets.
 - Oxlint enforces the configured TypeScript rules, including `typescript/no-explicit-any` and `typescript/no-floating-promises`.

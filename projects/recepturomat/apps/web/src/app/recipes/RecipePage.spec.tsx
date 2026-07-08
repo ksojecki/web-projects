@@ -4,13 +4,11 @@ import { vi } from 'vitest';
 import '../i18n/i18n';
 import { RecipePage } from './RecipePage';
 
-const { useAuthMock, useRecipeMock, useRecalculatedRecipeMock } = vi.hoisted(
-  () => ({
-    useAuthMock: vi.fn<() => { status: string }>(),
-    useRecipeMock: vi.fn<() => unknown>(),
-    useRecalculatedRecipeMock: vi.fn<() => unknown>(),
-  }),
-);
+const { useAuthMock, useRecipeMock, useRecalculatedRecipeMock } = vi.hoisted(() => ({
+  useAuthMock: vi.fn<() => { status: string }>(),
+  useRecipeMock: vi.fn<() => unknown>(),
+  useRecalculatedRecipeMock: vi.fn<() => unknown>(),
+}));
 
 vi.mock('@ksojecki/platform-web-platform', async () => {
   const actual = await vi.importActual('@ksojecki/platform-web-platform');
@@ -81,9 +79,7 @@ describe('RecipePage', () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByRole('heading', { name: 'Vanilla cupcakes' }),
-    ).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Vanilla cupcakes' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Delete' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Scale recipe' })).toBeTruthy();
     expect(screen.getByText('Current yield')).toBeTruthy();

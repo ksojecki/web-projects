@@ -1,7 +1,4 @@
-import type {
-  OAuthProviderType,
-  OAuthUserInfo,
-} from '@ksojecki/platform-shared';
+import type { OAuthProviderType, OAuthUserInfo } from '@ksojecki/platform-shared';
 
 /**
  * OAuth provider configuration

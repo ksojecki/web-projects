@@ -31,10 +31,7 @@ export const recepturomatProjectConfig: RecepturomatProjectConfig = {
   ssr: {
     webRoot: path.resolve(process.cwd(), 'projects/recepturomat/apps/web'),
     production: {
-      clientRoot: path.resolve(
-        process.cwd(),
-        'dist/projects/recepturomat/apps/web/client',
-      ),
+      clientRoot: path.resolve(process.cwd(), 'dist/projects/recepturomat/apps/web/client'),
       serverEntryPath: path.resolve(
         process.cwd(),
         'dist/projects/recepturomat/apps/web/server/entry-server.mjs',

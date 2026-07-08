@@ -38,23 +38,18 @@ export function OAuthButtons() {
     setErrorMessage(null);
 
     try {
-      const { authorizationUrl, state, codeVerifier } =
-        await initiateOAuth(provider);
+      const { authorizationUrl, state, codeVerifier } = await initiateOAuth(provider);
 
       storeOAuthState(state, codeVerifier);
       window.location.href = authorizationUrl;
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : t('unexpectedError'),
-      );
+      setErrorMessage(error instanceof Error ? error.message : t('unexpectedError'));
     }
   }
 
   return (
     <>
-      {errorMessage !== null ? (
-        <p className="mb-4 text-sm text-error">{errorMessage}</p>
-      ) : null}
+      {errorMessage !== null ? <p className="mb-4 text-sm text-error">{errorMessage}</p> : null}
       <div className="flex flex-col gap-4">
         {OAUTH_BUTTONS.map(({ icon: Icon, label, provider }) => (
           <button

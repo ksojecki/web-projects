@@ -4,18 +4,12 @@ export const JSON_HEADERS = {
   'Content-Type': 'application/json',
 };
 
-export async function requestJson<T>(
-  url: string,
-  init: RequestInit = {},
-): Promise<T> {
+export async function requestJson<T>(url: string, init: RequestInit = {}): Promise<T> {
   const response = await request(url, init);
   return await response.json();
 }
 
-export async function requestNoContent(
-  url: string,
-  init: RequestInit = {},
-): Promise<void> {
+export async function requestNoContent(url: string, init: RequestInit = {}): Promise<void> {
   await request(url, init);
 }
 

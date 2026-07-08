@@ -66,7 +66,7 @@ export function writeWebApp(tree: Tree, options: NormalizedOptions): void {
           executor: 'nx:run-commands',
           options: {
             cwd: webRoot,
-            command: 'npx prettier --write .',
+            command: 'node ./node_modules/oxfmt/bin/oxfmt --write .',
           },
         },
       },
@@ -79,11 +79,7 @@ export function writeWebApp(tree: Tree, options: NormalizedOptions): void {
     },
   });
 
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'index.html'),
-    createWebIndexHtml(options),
-  );
+  writeFile(tree, joinPathFragments(webRoot, 'index.html'), createWebIndexHtml(options));
   writeJson(tree, joinPathFragments(webRoot, 'tsconfig.json'), {
     files: [],
     include: [],
@@ -150,76 +146,35 @@ export function writeWebApp(tree: Tree, options: NormalizedOptions): void {
       module: 'esnext',
       moduleResolution: 'bundler',
       tsBuildInfoFile: `../../../../dist/${webRoot}/tsconfig.spec.tsbuildinfo`,
-      types: [
-        'node',
-        'vitest/globals',
-        'vite/client',
-        '@testing-library/jest-dom',
-      ],
+      types: ['node', 'vitest/globals', 'vite/client', '@testing-library/jest-dom'],
     },
     include: ['src/**/*.ts', 'src/**/*.tsx'],
   });
 
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'vite.config.mts'),
-    createWebViteConfig(options),
-  );
+  writeFile(tree, joinPathFragments(webRoot, 'vite.config.mts'), createWebViteConfig(options));
   writeFile(
     tree,
     joinPathFragments(webRoot, 'src/main.tsx'),
     "import { startClient } from './entry-client';\nimport './styles.css';\n\nstartClient();\n",
   );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/entry-client.tsx'),
-    createEntryClient(),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/entry-server.tsx'),
-    createEntryServer(),
-  );
+  writeFile(tree, joinPathFragments(webRoot, 'src/entry-client.tsx'), createEntryClient());
+  writeFile(tree, joinPathFragments(webRoot, 'src/entry-server.tsx'), createEntryServer());
   writeFile(
     tree,
     joinPathFragments(webRoot, 'src/test-setup.ts'),
     "process.env.NODE_ENV = 'test';\n\nimport '@testing-library/jest-dom/vitest';\n",
   );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/styles.css'),
-    createStylesCss(),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/app/i18n/i18n.ts'),
-    createI18nSetup(options),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/app/productConfig.ts'),
-    createWebProductConfig(),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/app/routes.tsx'),
-    createRoutes(),
-  );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/app/HomePage.tsx'),
-    createHomePage(),
-  );
+  writeFile(tree, joinPathFragments(webRoot, 'src/styles.css'), createStylesCss());
+  writeFile(tree, joinPathFragments(webRoot, 'src/app/i18n/i18n.ts'), createI18nSetup(options));
+  writeFile(tree, joinPathFragments(webRoot, 'src/app/productConfig.ts'), createWebProductConfig());
+  writeFile(tree, joinPathFragments(webRoot, 'src/app/routes.tsx'), createRoutes());
+  writeFile(tree, joinPathFragments(webRoot, 'src/app/HomePage.tsx'), createHomePage());
   writeFile(
     tree,
     joinPathFragments(webRoot, 'src/app/account/AccountPage.tsx'),
     createAccountPage(),
   );
-  writeFile(
-    tree,
-    joinPathFragments(webRoot, 'src/app/layout/AppLayout.tsx'),
-    createAppLayout(),
-  );
+  writeFile(tree, joinPathFragments(webRoot, 'src/app/layout/AppLayout.tsx'), createAppLayout());
 }
 
 function createWebIndexHtml(options: NormalizedOptions): string {

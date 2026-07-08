@@ -29,5 +29,5 @@ Use root docs for rules that apply across the workspace. Put project and library
 - `README.md` links the workspace map.
 - `package.json` defines root scripts.
 - `nx.json` defines Nx orchestration.
-- `tsconfig.base.json`, `.oxlintrc.json`, and `.prettierrc` set shared TypeScript, lint, and formatting rules.
+- `tsconfig.base.json`, `.oxlintrc.json`, and `.oxfmtrc.json` set shared TypeScript, lint, and formatting rules.
 - GitHub issues track active task progress.

@@ -1,9 +1,4 @@
-import {
-  randomBytes,
-  randomUUID,
-  scryptSync,
-  timingSafeEqual,
-} from 'node:crypto';
+import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from 'node:crypto';
 import type { UserRole } from '@ksojecki/platform-shared';
 import type Database from 'better-sqlite3';
 import type {
@@ -29,10 +24,7 @@ export function hashPassword(password: string): string {
   return `${salt}:${derived}`;
 }
 
-export function verifyPassword(
-  password: string,
-  passwordHash: string,
-): boolean {
+export function verifyPassword(password: string, passwordHash: string): boolean {
   const parts = passwordHash.split(':');
   const salt = parts[0];
   const expectedHex = parts[1];
@@ -52,9 +44,7 @@ export function verifyPassword(
 }
 
 export function getRoleForNewUser(db: Database.Database): UserRole {
-  const userCount = db
-    .prepare<[], CountRow>(`SELECT COUNT(*) AS count FROM users`)
-    .get();
+  const userCount = db.prepare<[], CountRow>(`SELECT COUNT(*) AS count FROM users`).get();
 
   return (userCount?.count ?? 0) === 0 ? 'admin' : 'user';
 }
@@ -68,10 +58,7 @@ export function createStore(db: Database.Database): AuthStore {
     `SELECT id, email, first_name, last_name, display_name, role, password_hash FROM users WHERE email = ?`,
   );
 
-  const findUserByOAuthProviderStatement = db.prepare<
-    [string, string],
-    UserRow
-  >(
+  const findUserByOAuthProviderStatement = db.prepare<[string, string], UserRow>(
     `SELECT u.id, u.email, u.first_name, u.last_name, u.display_name, u.role, u.password_hash FROM users u
       JOIN oauth_providers o ON u.id = o.user_id
       WHERE o.provider = ? AND o.provider_user_id = ?`,
@@ -87,10 +74,7 @@ export function createStore(db: Database.Database): AuthStore {
       VALUES (?, ?, ?, ?, ?, ?, ?)`,
   );
 
-  const getOAuthProviderStatement = db.prepare<
-    [string, string],
-    OAuthProviderRow
-  >(
+  const getOAuthProviderStatement = db.prepare<[string, string], OAuthProviderRow>(
     `SELECT id, user_id, provider, provider_user_id, access_token, refresh_token, access_token_expires_at, created_at
       FROM oauth_providers
       WHERE user_id = ? AND provider = ?`,
@@ -111,10 +95,7 @@ export function createStore(db: Database.Database): AuthStore {
     `DELETE FROM oauth_providers WHERE user_id = ? AND provider = ?`,
   );
 
-  const listLinkedOAuthProvidersStatement = db.prepare<
-    [string],
-    OAuthProviderListRow
-  >(
+  const listLinkedOAuthProvidersStatement = db.prepare<[string], OAuthProviderListRow>(
     `SELECT provider FROM oauth_providers WHERE user_id = ? ORDER BY provider ASC`,
   );
 
@@ -129,13 +110,9 @@ export function createStore(db: Database.Database): AuthStore {
       WHERE s.token = ?`,
   );
 
-  const deleteSessionStatement = db.prepare(
-    `DELETE FROM sessions WHERE token = ?`,
-  );
+  const deleteSessionStatement = db.prepare(`DELETE FROM sessions WHERE token = ?`);
 
-  const deleteExpiredSessionsStatement = db.prepare(
-    `DELETE FROM sessions WHERE expires_at <= ?`,
-  );
+  const deleteExpiredSessionsStatement = db.prepare(`DELETE FROM sessions WHERE expires_at <= ?`);
 
   return {
     findUserById(id) {
@@ -173,10 +150,7 @@ export function createStore(db: Database.Database): AuthStore {
       };
     },
     findUserByOAuthProvider(provider, providerUserId) {
-      const row = findUserByOAuthProviderStatement.get(
-        provider,
-        providerUserId,
-      );
+      const row = findUserByOAuthProviderStatement.get(provider, providerUserId);
 
       if (row === undefined) {
         return undefined;
@@ -204,19 +178,9 @@ export function createStore(db: Database.Database): AuthStore {
       const passwordHash =
         password !== null && password.length > 0
           ? hashPassword(password)
-          : hashPassword(
-              randomBytes(OAUTH_USER_PASSWORD_BYTES).toString('hex'),
-            );
+          : hashPassword(randomBytes(OAUTH_USER_PASSWORD_BYTES).toString('hex'));
 
-      createUserStatement.run(
-        userId,
-        email,
-        passwordHash,
-        name,
-        surname,
-        displayName,
-        role,
-      );
+      createUserStatement.run(userId, email, passwordHash, name, surname, displayName, role);
 
       return {
         id: userId,
@@ -242,9 +206,7 @@ export function createStore(db: Database.Database): AuthStore {
 
       if (existingUser === undefined) {
         // Create new user with random password (OAuth user doesn't have password)
-        const randomPassword = randomBytes(OAUTH_USER_PASSWORD_BYTES).toString(
-          'hex',
-        );
+        const randomPassword = randomBytes(OAUTH_USER_PASSWORD_BYTES).toString('hex');
         const role = getRoleForNewUser(db);
         createUserStatement.run(
           userId,
@@ -336,13 +298,7 @@ export function createStore(db: Database.Database): AuthStore {
         createdAt: row.created_at,
       };
     },
-    updateOAuthToken(
-      userId,
-      provider,
-      accessToken,
-      refreshToken,
-      accessTokenExpiresAt,
-    ) {
+    updateOAuthToken(userId, provider, accessToken, refreshToken, accessTokenExpiresAt) {
       updateOAuthTokenStatement.run(
         accessToken,
         refreshToken,
@@ -352,9 +308,7 @@ export function createStore(db: Database.Database): AuthStore {
       );
     },
     listLinkedOAuthProviders(userId) {
-      return listLinkedOAuthProvidersStatement
-        .all(userId)
-        .map((row) => row.provider);
+      return listLinkedOAuthProvidersStatement.all(userId).map((row) => row.provider);
     },
     verifyPassword,
     createSession(userId) {

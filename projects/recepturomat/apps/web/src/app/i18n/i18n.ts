@@ -44,11 +44,9 @@ void installI18nextPlugin(initReactI18next).init({
         register: {
           title: 'Create account',
           passwordSectionTitle: 'Create account with password',
-          passwordSectionHint:
-            'Create a local account with your name, email, and password.',
+          passwordSectionHint: 'Create a local account with your name, email, and password.',
           oauthSectionTitle: 'Create account with OAuth',
-          oauthSectionHint:
-            'Use your provider profile details to create an account.',
+          oauthSectionHint: 'Use your provider profile details to create an account.',
           oauthDivider: 'or continue with',
           nameLabel: 'First name',
           nameRequired: 'First name is required.',
@@ -58,8 +56,7 @@ void installI18nextPlugin(initReactI18next).init({
           emailRequired: 'Email is required.',
           emailInvalid: 'Enter a valid email address.',
           passwordLabel: 'Password',
-          passwordHint:
-            'Required for account creation with email and password.',
+          passwordHint: 'Required for account creation with email and password.',
           passwordMinLength: 'Password must be at least 8 characters.',
           submit: 'Create account',
           submitting: 'Creating account...',
@@ -100,8 +97,7 @@ void installI18nextPlugin(initReactI18next).init({
           setPasswordDescription:
             'Add a local password so you can sign in without an external provider.',
           changePasswordTitle: 'Change password',
-          changePasswordDescription:
-            'Update your local password for password-based sign in.',
+          changePasswordDescription: 'Update your local password for password-based sign in.',
           currentPasswordLabel: 'Current password',
           newPasswordLabel: 'New password',
           confirmPasswordLabel: 'Confirm new password',
@@ -150,8 +146,7 @@ void installI18nextPlugin(initReactI18next).init({
           description: 'Adjust the batch size or open linked recipes.',
           ingredientRecipe: 'Recipe reference: {{recipeId}}',
           ingredientsCount: '{{count}} ingredients',
-          ingredientsDescription:
-            'Ingredient amounts update when you change the target yield.',
+          ingredientsDescription: 'Ingredient amounts update when you change the target yield.',
           ingredients: 'Ingredients',
           invalidTitle: 'Recipe unavailable',
           loadingDescription: 'Loading the recipe.',
@@ -177,8 +172,7 @@ void installI18nextPlugin(initReactI18next).init({
           amount: 'Amount',
           defaultWeight: 'Default weight',
           description: 'Name the recipe and add ingredients.',
-          detailsDescription:
-            'Set the recipe name and base weight used for scaling.',
+          detailsDescription: 'Set the recipe name and base weight used for scaling.',
           detailsTitle: 'Recipe details',
           emptyIngredients: 'Add at least one ingredient.',
           ingredientCardTitle: 'Ingredient',
@@ -239,8 +233,7 @@ void installI18nextPlugin(initReactI18next).init({
           amount: 'Ilość',
           defaultWeight: 'Masa bazowa',
           description: 'Nazwij przepis i dodaj składniki.',
-          detailsDescription:
-            'Ustaw nazwę przepisu i masę bazową używaną do skalowania.',
+          detailsDescription: 'Ustaw nazwę przepisu i masę bazową używaną do skalowania.',
           detailsTitle: 'Szczegóły przepisu',
           emptyIngredients: 'Dodaj co najmniej jeden składnik.',
           ingredientCardTitle: 'Składnik',
@@ -259,8 +252,7 @@ void installI18nextPlugin(initReactI18next).init({
         },
         list: {
           count: '{{count}} przepisów',
-          description:
-            'Przeglądaj zapisane przepisy lub otwórz jeden do edycji.',
+          description: 'Przeglądaj zapisane przepisy lub otwórz jeden do edycji.',
           empty: 'Nie znaleziono przepisów.',
           emptyHint: 'Spróbuj innego wyszukiwania albo utwórz przepis.',
           emptyTitle: 'Brak pasujących przepisów',

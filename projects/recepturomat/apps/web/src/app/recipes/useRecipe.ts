@@ -15,10 +15,7 @@ export interface UseRecipeOptions {
   recipeId?: string;
 }
 
-export function useRecipe({
-  enabled = true,
-  recipeId,
-}: UseRecipeOptions): UseRecipeResult {
+export function useRecipe({ enabled = true, recipeId }: UseRecipeOptions): UseRecipeResult {
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [recipe, setRecipe] = useState<Recipe | null>(null);

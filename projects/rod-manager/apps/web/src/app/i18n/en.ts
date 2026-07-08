@@ -46,8 +46,7 @@ const en: TranslationResources = {
       setPasswordDescription:
         'Add a local password so you can sign in without an external provider.',
       changePasswordTitle: 'Change password',
-      changePasswordDescription:
-        'Update your local password for password-based sign in.',
+      changePasswordDescription: 'Update your local password for password-based sign in.',
       currentPasswordLabel: 'Current password',
       newPasswordLabel: 'New password',
       confirmPasswordLabel: 'Confirm new password',
@@ -93,11 +92,9 @@ const en: TranslationResources = {
     register: {
       title: 'Create account',
       passwordSectionTitle: 'Create account with password',
-      passwordSectionHint:
-        'Create a local account with your name, email, and password.',
+      passwordSectionHint: 'Create a local account with your name, email, and password.',
       oauthSectionTitle: 'Create account with OAuth',
-      oauthSectionHint:
-        'Use your provider profile details to create an account.',
+      oauthSectionHint: 'Use your provider profile details to create an account.',
       oauthDivider: 'or continue with',
       nameLabel: 'First name',
       nameRequired: 'First name is required.',

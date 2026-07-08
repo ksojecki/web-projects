@@ -12,10 +12,7 @@ const workspaceConfigUrl = new URL(
 const cacheDir = `${workspaceRelativeRoot}node_modules/.vite/projects/rod-manager/apps/web`;
 const clientOutDir = `${workspaceRelativeRoot}dist/projects/rod-manager/apps/web/client`;
 const webPlatformSourcePath = fileURLToPath(
-  new URL(
-    `${workspaceRelativeRoot}libs/web-platform/src/index.ts`,
-    import.meta.url,
-  ),
+  new URL(`${workspaceRelativeRoot}libs/web-platform/src/index.ts`, import.meta.url),
 );
 const pagesSharedSourcePath = fileURLToPath(
   new URL(
@@ -31,10 +28,7 @@ export default defineConfig(async ({ command }) => {
 
   loadProductEnv('rod-manager');
 
-  const nodeEnv =
-    command === 'build'
-      ? 'production'
-      : (process.env.NODE_ENV ?? 'development');
+  const nodeEnv = command === 'build' ? 'production' : (process.env.NODE_ENV ?? 'development');
   const apiPort = getProductApiPort('rod-manager');
   const webPort = getProductWebPort('rod-manager');
 

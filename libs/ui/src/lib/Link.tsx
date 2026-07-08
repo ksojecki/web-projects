@@ -48,11 +48,7 @@ export const Link = ({
         fullWidth ? 'w-full' : undefined,
         className,
       )
-    : joinClassNames(
-        LINK_BASE_CLASS_NAME,
-        LINK_TONE_CLASS_NAMES[tone],
-        className,
-      );
+    : joinClassNames(LINK_BASE_CLASS_NAME, LINK_TONE_CLASS_NAMES[tone], className);
 
   return (
     <RouterLink className={resolvedClassName} to={to} {...props}>

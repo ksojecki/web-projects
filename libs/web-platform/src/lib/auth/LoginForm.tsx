@@ -49,9 +49,7 @@ export function LoginForm({ onSuccess, redirectTo }: LoginFormProps = {}) {
     >
       <FormField
         errorMessage={
-          errors.email !== undefined
-            ? t(getEmailErrorKey(errors.email.message))
-            : undefined
+          errors.email !== undefined ? t(getEmailErrorKey(errors.email.message)) : undefined
         }
         label={t('emailLabel')}
         registration={register('email')}
@@ -80,14 +78,10 @@ export function LoginForm({ onSuccess, redirectTo }: LoginFormProps = {}) {
   );
 }
 
-function getEmailErrorKey(
-  message: string | undefined,
-): 'emailInvalid' | 'emailRequired' {
+function getEmailErrorKey(message: string | undefined): 'emailInvalid' | 'emailRequired' {
   return message === 'emailInvalid' ? 'emailInvalid' : 'emailRequired';
 }
 
 function getPasswordErrorKey(message: string | undefined): 'passwordRequired' {
-  return message === 'passwordRequired'
-    ? 'passwordRequired'
-    : 'passwordRequired';
+  return message === 'passwordRequired' ? 'passwordRequired' : 'passwordRequired';
 }

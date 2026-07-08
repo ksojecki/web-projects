@@ -11,11 +11,10 @@ describe('RecipeAccessPrompt', () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByRole('heading', { name: 'Authentication required' }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole('link', { name: 'Log in to continue' }),
-    ).toHaveAttribute('href', '/?login=1');
+    expect(screen.getByRole('heading', { name: 'Authentication required' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Log in to continue' })).toHaveAttribute(
+      'href',
+      '/?login=1',
+    );
   });
 });

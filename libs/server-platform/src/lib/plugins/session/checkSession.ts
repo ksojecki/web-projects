@@ -15,9 +15,7 @@ export const getSessionToken = readSessionToken;
  * Creates a request-bound function that resolves and caches the current session.
  */
 export function createGetSessionDecorator(getAuthStore: () => AuthStore) {
-  return function getSession(
-    this: FastifyRequest,
-  ): AuthStoreSession | undefined {
+  return function getSession(this: FastifyRequest): AuthStoreSession | undefined {
     return resolveSessionFromRequest(getAuthStore(), this);
   };
 }

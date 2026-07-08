@@ -72,9 +72,7 @@ function filterRecipes(
     return recipes;
   }
 
-  return recipes.filter((recipe) =>
-    recipe.name.toLocaleLowerCase().includes(normalizedQuery),
-  );
+  return recipes.filter((recipe) => recipe.name.toLocaleLowerCase().includes(normalizedQuery));
 }
 
 function sortRecipesByName(recipes: RecipeListEntry[]): RecipeListEntry[] {
@@ -87,10 +85,6 @@ function sortRecipesByName(recipes: RecipeListEntry[]): RecipeListEntry[] {
       return [...sortedRecipes, recipe];
     }
 
-    return [
-      ...sortedRecipes.slice(0, insertIndex),
-      recipe,
-      ...sortedRecipes.slice(insertIndex),
-    ];
+    return [...sortedRecipes.slice(0, insertIndex), recipe, ...sortedRecipes.slice(insertIndex)];
   }, []);
 }

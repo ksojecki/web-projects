@@ -28,9 +28,7 @@ function getMkcertCliPath() {
   try {
     return require.resolve('mkcert-cli/cli.js');
   } catch {
-    throw new Error(
-      'Missing npm package "mkcert-cli". Run npm install to install dependencies.',
-    );
+    throw new Error('Missing npm package "mkcert-cli". Run npm install to install dependencies.');
   }
 }
 
@@ -105,9 +103,7 @@ function generateCertificates() {
   try {
     generateWithMkcert();
   } catch (error) {
-    console.warn(
-      '[cert] mkcert-cli failed; falling back to an OpenSSL self-signed certificate.',
-    );
+    console.warn('[cert] mkcert-cli failed; falling back to an OpenSSL self-signed certificate.');
     console.warn(error instanceof Error ? error.message : String(error));
     runOpenSsl();
   }

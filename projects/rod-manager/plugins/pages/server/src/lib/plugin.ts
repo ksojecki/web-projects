@@ -15,11 +15,7 @@ export function pagesServerPlugin(): ServerPlatformPlugin {
       version: '0.0.1',
       description: 'Content pages feature plugin',
     },
-    migrations: [
-      pagesSchemaMigration,
-      pagesValidationRulesMigration,
-      pagesSeedMigration,
-    ],
+    migrations: [pagesSchemaMigration, pagesValidationRulesMigration, pagesSeedMigration],
     register(ctx) {
       const pageStore = createPageStore(ctx.services.db);
       registerPagesRoutes(ctx.fastify, pageStore);

@@ -15,11 +15,7 @@ export interface PasswordMethodFormProps {
 /**
  * Form for setting or changing the local password authentication method.
  */
-export function PasswordMethodForm({
-  hasPassword,
-  onCancel,
-  onSuccess,
-}: PasswordMethodFormProps) {
+export function PasswordMethodForm({ hasPassword, onCancel, onSuccess }: PasswordMethodFormProps) {
   const { t } = useTranslation('account');
   const {
     register,
@@ -51,9 +47,7 @@ export function PasswordMethodForm({
     });
     reset();
     await onSuccess(
-      hasPassword
-        ? t('authentication.passwordChanged')
-        : t('authentication.passwordConnected'),
+      hasPassword ? t('authentication.passwordChanged') : t('authentication.passwordConnected'),
     );
   }
 
@@ -117,12 +111,7 @@ export function PasswordMethodForm({
       ) : null}
 
       <div className="flex flex-wrap justify-end gap-2">
-        <Button
-          disabled={isSubmitting}
-          onClick={onCancel}
-          tone="ghost"
-          type="button"
-        >
+        <Button disabled={isSubmitting} onClick={onCancel} tone="ghost" type="button">
           {t('authentication.cancelAction')}
         </Button>
         <Button isLoading={isSubmitting} type="submit">

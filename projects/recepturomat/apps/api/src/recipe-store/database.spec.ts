@@ -29,9 +29,7 @@ describe('recipe database bootstrap', () => {
   it('creates the recipe schema and seeds legacy recipes when enabled', () => {
     const tempDirectory = mkdtempSync(join(tmpdir(), 'recepturomat-recipes-'));
     tempDirectories.push(tempDirectory);
-    const databasePath = resolveRecipeDatabasePath(
-      join(tempDirectory, 'recipes.sqlite'),
-    );
+    const databasePath = resolveRecipeDatabasePath(join(tempDirectory, 'recipes.sqlite'));
     const db = createTestDatabase(databasePath);
 
     bootstrapRecipeDatabase(db, { seedLegacyRecipes: true });
@@ -50,9 +48,7 @@ describe('recipe database bootstrap', () => {
           default_weight: number;
           ingredients_json: string;
         }
-      >(
-        `SELECT recipe_id, name, default_weight, ingredients_json FROM recipes WHERE recipe_id = ?`,
-      )
+      >(`SELECT recipe_id, name, default_weight, ingredients_json FROM recipes WHERE recipe_id = ?`)
       .get('dessertlemontart');
 
     expect(seededRecipe).toEqual({

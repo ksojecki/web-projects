@@ -17,9 +17,7 @@ export const ContentManagementPage = () => {
         setPages(response.pages);
         setErrorMessage(null);
       } catch (error) {
-        setErrorMessage(
-          error instanceof Error ? error.message : t('loadErrorDefault'),
-        );
+        setErrorMessage(error instanceof Error ? error.message : t('loadErrorDefault'));
       }
     })();
   }, [t]);
@@ -36,9 +34,7 @@ export const ContentManagementPage = () => {
             <ul className="menu rounded-box bg-base-200">
               {pages.map((page) => (
                 <li key={page.slug}>
-                  <Link to={page.slug === 'home' ? '/' : `/${page.slug}`}>
-                    {page.slug}
-                  </Link>
+                  <Link to={page.slug === 'home' ? '/' : `/${page.slug}`}>{page.slug}</Link>
                 </li>
               ))}
             </ul>

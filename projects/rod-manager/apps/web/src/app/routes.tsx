@@ -10,10 +10,7 @@ import { AccountPage } from './account/AccountPage';
 import { AppLayout } from './layout/AppLayout';
 import { ContentManagementPage } from './content-management/ContentManagementPage';
 import { ContentPage } from './content-management/ContentPage';
-import {
-  buildLoginPromptHref,
-  frontendProductConfig,
-} from './frontendProductConfig';
+import { buildLoginPromptHref, frontendProductConfig } from './frontendProductConfig';
 
 export function AppRoutes() {
   const { auth, registration, routes } = frontendProductConfig;
@@ -22,10 +19,7 @@ export function AppRoutes() {
     <AuthProvider>
       <Routes>
         <Route element={<AppLayout />}>
-          <Route
-            path={routes.home}
-            element={<ContentPage forcedSlug="home" />}
-          />
+          <Route path={routes.home} element={<ContentPage forcedSlug="home" />} />
           <Route
             path={routes.register}
             element={

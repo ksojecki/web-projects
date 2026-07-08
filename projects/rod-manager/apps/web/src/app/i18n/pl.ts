@@ -33,8 +33,7 @@ const pl = {
       description:
         'Zarządzaj sposobami logowania do swojego konta. Co najmniej jedna metoda uwierzytelniania musi pozostać podłączona.',
       loadError: 'Nie udało się załadować metod uwierzytelniania.',
-      linkStartError:
-        'Nie udało się rozpocząć podłączania metody uwierzytelniania.',
+      linkStartError: 'Nie udało się rozpocząć podłączania metody uwierzytelniania.',
       unlinkError: 'Nie udało się odłączyć metody uwierzytelniania.',
       connected: 'Podłączona',
       notConnected: 'Niepodłączona',
@@ -42,11 +41,9 @@ const pl = {
       passwordCannotBeDisabled:
         'Uwierzytelnianie hasłem można zmienić, ale po ustawieniu nie można go wyłączyć.',
       setPasswordTitle: 'Ustaw hasło',
-      setPasswordDescription:
-        'Dodaj lokalne hasło, aby móc logować się bez zewnętrznego dostawcy.',
+      setPasswordDescription: 'Dodaj lokalne hasło, aby móc logować się bez zewnętrznego dostawcy.',
       changePasswordTitle: 'Zmień hasło',
-      changePasswordDescription:
-        'Zaktualizuj lokalne hasło używane do logowania hasłem.',
+      changePasswordDescription: 'Zaktualizuj lokalne hasło używane do logowania hasłem.',
       currentPasswordLabel: 'Obecne hasło',
       newPasswordLabel: 'Nowe hasło',
       confirmPasswordLabel: 'Potwierdź nowe hasło',
@@ -69,8 +66,7 @@ const pl = {
       currentRequired: 'Obecne hasło jest wymagane.',
       newMinLength: 'Nowe hasło musi mieć co najmniej 8 znaków.',
       confirmRequired: 'Potwierdzenie hasła jest wymagane.',
-      confirmMismatch:
-        'Potwierdzenie hasła musi być takie samo jak nowe hasło.',
+      confirmMismatch: 'Potwierdzenie hasła musi być takie samo jak nowe hasło.',
     },
   },
   auth: {
@@ -93,8 +89,7 @@ const pl = {
     register: {
       title: 'Utwórz konto',
       passwordSectionTitle: 'Utwórz konto z hasłem',
-      passwordSectionHint:
-        'Utwórz lokalne konto przy użyciu imienia, adresu email i hasła.',
+      passwordSectionHint: 'Utwórz lokalne konto przy użyciu imienia, adresu email i hasła.',
       oauthSectionTitle: 'Utwórz konto przez OAuth',
       oauthSectionHint: 'Użyj danych profilu od dostawcy, aby utworzyć konto.',
       oauthDivider: 'lub kontynuuj przez',

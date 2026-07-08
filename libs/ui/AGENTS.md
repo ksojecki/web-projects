@@ -12,6 +12,7 @@ This library owns reusable React primitives. Keep it free of app-specific behavi
 
 - Run `npx nx lint @ksojecki/platform-ui --no-tui` after component changes.
 - Use `npm run format:check` before handoff.
+- Before ending a Codex session, run `npm run format:check`, `npm run lint`, `npm run typecheck`, and `npm test`. If a command fails, keep working until it passes or report the blocker.
 - If you touch public exports or component contracts, check the consumer app that imports them.
 
 ## Local conventions

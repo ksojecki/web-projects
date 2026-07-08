@@ -18,10 +18,7 @@ export default defineConfig(async ({ command }) => {
 
   loadProductEnv('recepturomat');
 
-  const nodeEnv =
-    command === 'build'
-      ? 'production'
-      : (process.env.NODE_ENV ?? 'development');
+  const nodeEnv = command === 'build' ? 'production' : (process.env.NODE_ENV ?? 'development');
   const apiPort = getProductApiPort('recepturomat');
   const webPort = getProductWebPort('recepturomat');
 

@@ -1,6 +1,10 @@
 {
   "name": "@ksojecki/platform-ui",
   "version": "0.0.1",
+  "files": [
+    "../../dist/libs/ui",
+    "!**/*.tsbuildinfo"
+  ],
   "type": "module",
   "main": "../../dist/libs/ui/index.js",
   "module": "../../dist/libs/ui/index.js",
@@ -14,10 +18,10 @@
       "default": "../../dist/libs/ui/index.js"
     }
   },
-  "files": [
-    "../../dist/libs/ui",
-    "!**/*.tsbuildinfo"
-  ],
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
   "nx": {
     "targets": {
       "lint": {
@@ -30,13 +34,9 @@
         "executor": "nx:run-commands",
         "options": {
           "cwd": "libs/ui",
-          "command": "node ../../node_modules/prettier/bin/prettier.cjs --write ."
+          "command": "node ../../node_modules/oxfmt/bin/oxfmt --write ."
         }
       }
     }
-  },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
   }
 }

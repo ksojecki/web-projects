@@ -1,9 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type {
-  AuthenticationMethodStatus,
-  OAuthProviderType,
-} from '@ksojecki/platform-shared';
+import type { AuthenticationMethodStatus, OAuthProviderType } from '@ksojecki/platform-shared';
 import { Button, Heading } from '@ksojecki/platform-ui';
 import { PasswordMethodForm } from './PasswordMethodForm';
 import type { AccountAuthenticationMethodsPanelProps } from './types';
@@ -31,34 +28,25 @@ export function AuthenticationMethodsPanel({
     () =>
       methods
         .filter(
-          (
-            method,
-          ): method is Extract<AuthenticationMethodStatus, { type: 'oauth' }> =>
+          (method): method is Extract<AuthenticationMethodStatus, { type: 'oauth' }> =>
             method.type === 'oauth',
         )
         .sort((left, right) =>
-          OAUTH_PROVIDER_LABELS[left.provider].localeCompare(
-            OAUTH_PROVIDER_LABELS[right.provider],
-          ),
+          OAUTH_PROVIDER_LABELS[left.provider].localeCompare(OAUTH_PROVIDER_LABELS[right.provider]),
         ),
     [methods],
   );
 
-  const passwordMethod =
-    methods.find((method) => method.type === 'password') ?? null;
+  const passwordMethod = methods.find((method) => method.type === 'password') ?? null;
 
   return (
     <div className="rounded-box border border-base-300 bg-base-100 p-4 shadow-sm">
       <div className="space-y-1">
         <Heading level={2}>{t('authentication.title')}</Heading>
-        <p className="text-sm text-base-content/70">
-          {t('authentication.description')}
-        </p>
+        <p className="text-sm text-base-content/70">{t('authentication.description')}</p>
       </div>
 
-      {errorMessage !== null ? (
-        <p className="mt-4 text-sm text-error">{errorMessage}</p>
-      ) : null}
+      {errorMessage !== null ? <p className="mt-4 text-sm text-error">{errorMessage}</p> : null}
 
       {successMessage !== null ? (
         <p className="mt-4 text-sm text-success">{successMessage}</p>
@@ -110,9 +98,7 @@ export function AuthenticationMethodsPanel({
               key={method.provider}
             >
               <div>
-                <p className="font-medium">
-                  {OAUTH_PROVIDER_LABELS[method.provider]}
-                </p>
+                <p className="font-medium">{OAUTH_PROVIDER_LABELS[method.provider]}</p>
                 <p className="text-sm text-base-content/70">
                   {method.connected
                     ? t('authentication.connected')

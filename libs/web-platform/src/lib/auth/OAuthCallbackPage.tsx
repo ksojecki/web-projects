@@ -54,9 +54,7 @@ export function OAuthCallbackPage({
         await navigate(response.redirectTo, { replace: true });
       } catch (nextError) {
         setError(
-          nextError instanceof Error
-            ? nextError.message
-            : 'Failed to process OAuth callback',
+          nextError instanceof Error ? nextError.message : 'Failed to process OAuth callback',
         );
       }
     };
@@ -66,12 +64,9 @@ export function OAuthCallbackPage({
 
   if (error !== null) {
     const handleBackToLogin = () => {
-      void navigate(
-        status === 'authenticated' ? authenticatedFallbackTo : guestFallbackTo,
-        {
-          replace: true,
-        },
-      );
+      void navigate(status === 'authenticated' ? authenticatedFallbackTo : guestFallbackTo, {
+        replace: true,
+      });
     };
 
     return (

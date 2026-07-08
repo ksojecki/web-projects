@@ -38,17 +38,13 @@ export function RegisterPage({
       <div className="flex flex-row gap-2">
         <div className="flex-1">
           <Heading level={2}>{t('register.passwordSectionTitle')}</Heading>
-          <p className="mb-4 text-sm text-base-content/70">
-            {t('register.passwordSectionHint')}
-          </p>
+          <p className="mb-4 text-sm text-base-content/70">{t('register.passwordSectionHint')}</p>
           <PasswordRegisterForm redirectTo={authenticatedRedirectTo} />
         </div>
         <div className="divider divider-horizontal">{t('or')}</div>
         <div className="flex-1">
           <Heading level={2}>{t('register.oauthSectionTitle')}</Heading>
-          <p className="mb-4 text-sm text-base-content/70">
-            {t('register.oauthSectionHint')}
-          </p>
+          <p className="mb-4 text-sm text-base-content/70">{t('register.oauthSectionHint')}</p>
           <OAuthButtons />
         </div>
       </div>

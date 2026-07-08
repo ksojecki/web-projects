@@ -1,6 +1,10 @@
 {
   "name": "@ksojecki/rod-manager-pages-shared",
   "version": "0.0.1",
+  "files": [
+    "../../../../../dist/projects/rod-manager/plugins/pages/shared",
+    "!**/*.tsbuildinfo"
+  ],
   "type": "module",
   "main": "../../../../../dist/projects/rod-manager/plugins/pages/shared/index.js",
   "module": "../../../../../dist/projects/rod-manager/plugins/pages/shared/index.js",
@@ -14,10 +18,6 @@
       "default": "../../../../../dist/projects/rod-manager/plugins/pages/shared/index.js"
     }
   },
-  "files": [
-    "../../../../../dist/projects/rod-manager/plugins/pages/shared",
-    "!**/*.tsbuildinfo"
-  ],
   "dependencies": {},
   "nx": {
     "targets": {

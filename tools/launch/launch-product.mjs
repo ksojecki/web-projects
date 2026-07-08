@@ -2,12 +2,7 @@ import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
 import https from 'node:https';
 import { resolve } from 'node:path';
-import {
-  Browser,
-  detectBrowserPlatform,
-  install,
-  resolveBuildId,
-} from '@puppeteer/browsers';
+import { Browser, detectBrowserPlatform, install, resolveBuildId } from '@puppeteer/browsers';
 import { executablePath, launch } from 'puppeteer-core';
 import { loadProductEnv } from '../../scripts/workspace-config.mjs';
 
@@ -25,8 +20,7 @@ async function main() {
     process.env.CHROME_DEBUG_PORT,
     options.defaultChromeDebugPort,
   );
-  const frontendBaseUrl =
-    process.env.OAUTH_REDIRECT_BASE_URL ?? options.defaultFrontendBaseUrl;
+  const frontendBaseUrl = process.env.OAUTH_REDIRECT_BASE_URL ?? options.defaultFrontendBaseUrl;
   const chromeUserDataDir = resolve(
     process.cwd(),
     process.env.CHROME_USER_DATA_DIR ?? `tmp/chrome/${options.projectId}`,
@@ -34,12 +28,7 @@ async function main() {
   const chromeExecutablePath = await resolveChromeExecutablePath();
   const serverProcess = spawn(
     'node',
-    [
-      './node_modules/nx/dist/bin/nx.js',
-      'run',
-      options.serveTarget,
-      '--no-tui',
-    ],
+    ['./node_modules/nx/dist/bin/nx.js', 'run', options.serveTarget, '--no-tui'],
     {
       cwd: process.cwd(),
       env: {
@@ -126,10 +115,7 @@ async function main() {
 }
 
 function getPuppeteerCacheDir() {
-  return resolve(
-    process.cwd(),
-    process.env.PUPPETEER_CACHE_DIR ?? 'tmp/puppeteer',
-  );
+  return resolve(process.cwd(), process.env.PUPPETEER_CACHE_DIR ?? 'tmp/puppeteer');
 }
 
 function parseArgs(args) {
@@ -212,9 +198,7 @@ async function resolveChromeExecutablePath() {
   const platform = detectBrowserPlatform();
 
   if (platform === undefined) {
-    throw new Error(
-      'Unable to detect a supported platform for Chrome for Testing.',
-    );
+    throw new Error('Unable to detect a supported platform for Chrome for Testing.');
   }
 
   const buildId = await resolveBuildId(Browser.CHROME, platform, 'stable');
@@ -233,14 +217,10 @@ function waitForServer(frontendBaseUrl) {
 
   return new Promise((resolvePromise, rejectPromise) => {
     const attemptConnection = () => {
-      const request = https.get(
-        frontendBaseUrl,
-        { rejectUnauthorized: false },
-        (response) => {
-          response.resume();
-          resolvePromise();
-        },
-      );
+      const request = https.get(frontendBaseUrl, { rejectUnauthorized: false }, (response) => {
+        response.resume();
+        resolvePromise();
+      });
 
       request.on('error', () => {
         if (Date.now() > deadline) {

@@ -1,11 +1,8 @@
 import type { ServerPlatformMigration } from '@ksojecki/platform-server-platform';
 
 const RESERVED_PAGE_SLUGS = ['account', 'register', 'pages', 'auth', 'api'];
-const RESERVED_PAGE_SLUGS_SQL = RESERVED_PAGE_SLUGS.map(
-  (slug) => `'${slug}'`,
-).join(', ');
-const RESERVED_PAGE_SLUG_ERROR_MESSAGE =
-  'Page slug collides with a reserved application route.';
+const RESERVED_PAGE_SLUGS_SQL = RESERVED_PAGE_SLUGS.map((slug) => `'${slug}'`).join(', ');
+const RESERVED_PAGE_SLUG_ERROR_MESSAGE = 'Page slug collides with a reserved application route.';
 const EMPTY_PAGE_SLUG_ERROR_MESSAGE = 'Page slug cannot be empty.';
 
 export const pagesSchemaMigration: ServerPlatformMigration = {

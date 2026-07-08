@@ -57,13 +57,10 @@ function mockGuestSessionWithHomePage() {
       );
     }
 
-    return new Response(
-      JSON.stringify({ message: 'Unexpected URL in test.' }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return new Response(JSON.stringify({ message: 'Unexpected URL in test.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   });
 }
 
@@ -171,8 +168,7 @@ function mockGuestSessionWithPrettyUrlPage() {
         JSON.stringify({
           page: {
             slug: 'about',
-            contentMd:
-              '# About\n\nThis page is stored in the database as Markdown content.',
+            contentMd: '# About\n\nThis page is stored in the database as Markdown content.',
           },
         }),
         {
@@ -182,13 +178,10 @@ function mockGuestSessionWithPrettyUrlPage() {
       );
     }
 
-    return new Response(
-      JSON.stringify({ message: 'Unexpected URL in test.' }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return new Response(JSON.stringify({ message: 'Unexpected URL in test.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   });
 }
 
@@ -229,13 +222,9 @@ describe('AppRoutes', () => {
       </MemoryRouter>,
     );
 
+    expect(await screen.findByRole('heading', { name: 'about' })).toBeInTheDocument();
     expect(
-      await screen.findByRole('heading', { name: 'about' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        'This page is stored in the database as Markdown content.',
-      ),
+      screen.getByText('This page is stored in the database as Markdown content.'),
     ).toBeInTheDocument();
   });
 
@@ -266,15 +255,11 @@ describe('AppRoutes', () => {
       </MemoryRouter>,
     );
 
-    expect(
-      await screen.findByRole('heading', { name: 'Create account' }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Create account' })).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { name: 'Create account with password' }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: 'Create account with OAuth' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Create account with OAuth' })).toBeInTheDocument();
   });
 
   it('hides registration entry points when registration is disabled', async () => {
@@ -311,9 +296,7 @@ describe('AppRoutes', () => {
 
     await screen.findByRole('button', { name: 'Log in' });
     expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument();
-    expect(
-      screen.queryByRole('heading', { name: 'Create account' }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Create account' })).not.toBeInTheDocument();
   });
 
   it('switches the interface to Polish', async () => {
@@ -330,9 +313,7 @@ describe('AppRoutes', () => {
 
     await user.selectOptions(await screen.findByRole('combobox'), 'pl');
 
-    expect(
-      await screen.findByRole('heading', { name: 'Konto' }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Konto' })).toBeInTheDocument();
     expect(screen.getByText('Język')).toBeInTheDocument();
   });
 
@@ -371,12 +352,8 @@ describe('AppRoutes', () => {
       </MemoryRouter>,
     );
 
-    expect(
-      await screen.findByRole('link', { name: 'Content Management' }),
-    ).toBeInTheDocument();
-    expect(
-      await screen.findByRole('link', { name: 'about' }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('link', { name: 'Content Management' })).toBeInTheDocument();
+    expect(await screen.findByRole('link', { name: 'about' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'home' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'rules' })).toBeInTheDocument();
   });

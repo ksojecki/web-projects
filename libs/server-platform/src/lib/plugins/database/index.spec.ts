@@ -75,26 +75,13 @@ describe('database plugin', () => {
       expect(existsSync(databasePathA)).toBe(true);
       expect(existsSync(databasePathB)).toBe(true);
 
-      expect(
-        serverA.authStore.findUserByEmail('admin@rod-manager.local'),
-      ).toBeDefined();
-      expect(
-        serverB.authStore.findUserByEmail('admin@rod-manager.local'),
-      ).toBeDefined();
+      expect(serverA.authStore.findUserByEmail('admin@rod-manager.local')).toBeDefined();
+      expect(serverB.authStore.findUserByEmail('admin@rod-manager.local')).toBeDefined();
 
-      serverA.authStore.createUser(
-        'alice@example.com',
-        'Alice',
-        'Example',
-        'secret123',
-      );
+      serverA.authStore.createUser('alice@example.com', 'Alice', 'Example', 'secret123');
 
-      expect(
-        serverA.authStore.findUserByEmail('alice@example.com'),
-      ).toBeDefined();
-      expect(
-        serverB.authStore.findUserByEmail('alice@example.com'),
-      ).toBeUndefined();
+      expect(serverA.authStore.findUserByEmail('alice@example.com')).toBeDefined();
+      expect(serverB.authStore.findUserByEmail('alice@example.com')).toBeUndefined();
     } finally {
       await serverA.close();
       await serverB.close();

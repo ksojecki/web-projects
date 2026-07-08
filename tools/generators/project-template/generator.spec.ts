@@ -72,28 +72,16 @@ describe('projectTemplateGenerator', () => {
   it('scaffolds template-based api and web apps without rod-manager dependencies', async () => {
     await projectTemplateGenerator(tree, { name: 'recepturomat' });
 
-    expect(tree.exists('projects/recepturomat/apps/api/src/main.ts')).toBe(
+    expect(tree.exists('projects/recepturomat/apps/api/src/main.ts')).toBe(true);
+    expect(tree.exists('projects/recepturomat/apps/api/src/productConfig.ts')).toBe(true);
+    expect(tree.exists('projects/recepturomat/apps/web/src/app/routes.tsx')).toBe(true);
+    expect(tree.exists('projects/recepturomat/apps/web/src/app/account/AccountPage.tsx')).toBe(
       true,
     );
-    expect(
-      tree.exists('projects/recepturomat/apps/api/src/productConfig.ts'),
-    ).toBe(true);
-    expect(
-      tree.exists('projects/recepturomat/apps/web/src/app/routes.tsx'),
-    ).toBe(true);
-    expect(
-      tree.exists(
-        'projects/recepturomat/apps/web/src/app/account/AccountPage.tsx',
-      ),
-    ).toBe(true);
-    expect(
-      tree.exists('projects/recepturomat/apps/web/src/app/auth/LoginPanel.tsx'),
-    ).toBe(false);
-    expect(
-      tree.exists(
-        'projects/recepturomat/apps/web/src/app/layout/components/Navbar.tsx',
-      ),
-    ).toBe(false);
+    expect(tree.exists('projects/recepturomat/apps/web/src/app/auth/LoginPanel.tsx')).toBe(false);
+    expect(tree.exists('projects/recepturomat/apps/web/src/app/layout/components/Navbar.tsx')).toBe(
+      false,
+    );
 
     const apiPackageJson = readPackageJsonWithDependencies(
       tree,
@@ -113,9 +101,7 @@ describe('projectTemplateGenerator', () => {
     );
     expect(apiPackageJson.dependencies).not.toHaveProperty('dotenv');
     expect(apiPackageJson.dependencies).not.toHaveProperty('fastify');
-    expect(apiPackageJson.dependencies).not.toHaveProperty(
-      '@ksojecki/rod-manager-pages-server',
-    );
+    expect(apiPackageJson.dependencies).not.toHaveProperty('@ksojecki/rod-manager-pages-server');
 
     expect(webPackageJson.name).toBe('@ksojecki/recepturomat-web');
     expect(webPackageJson.dependencies).toEqual(
@@ -137,22 +123,14 @@ describe('projectTemplateGenerator', () => {
     expect(rootPackageJson.scripts).not.toHaveProperty('launch:rod-manager');
     expect(rootPackageJson.scripts).not.toHaveProperty('launch:recepturomat');
 
-    const productConfig = tree.read(
-      'projects/recepturomat/apps/api/src/productConfig.ts',
-      'utf-8',
-    );
+    const productConfig = tree.read('projects/recepturomat/apps/api/src/productConfig.ts', 'utf-8');
     expect(productConfig).toContain("projectId: 'recepturomat'");
     expect(productConfig).toContain("loadProductEnv('recepturomat')");
     expect(productConfig).toContain("getProductAuthDbPath('recepturomat')");
     expect(productConfig).toContain('getProductSeedInitialUser()');
-    expect(productConfig).toContain(
-      'dist/projects/recepturomat/apps/web/client',
-    );
+    expect(productConfig).toContain('dist/projects/recepturomat/apps/web/client');
 
-    const apiMain = tree.read(
-      'projects/recepturomat/apps/api/src/main.ts',
-      'utf-8',
-    );
+    const apiMain = tree.read('projects/recepturomat/apps/api/src/main.ts', 'utf-8');
     expect(apiMain).toContain('startProductServer');
     expect(apiMain).not.toContain('Fastify from');
 
@@ -163,17 +141,12 @@ describe('projectTemplateGenerator', () => {
     expect(apiProjectPackageJson.nx.targets.dev.options?.command).toContain(
       'tools/launch/launch-product.mjs',
     );
-    expect(apiProjectPackageJson.nx.targets.build.options?.command).toContain(
-      'npx vite build',
+    expect(apiProjectPackageJson.nx.targets.build.options?.command).toContain('npx vite build');
+    expect(apiProjectPackageJson.nx.targets.build.options?.command).not.toContain(
+      'node_modules/vite',
     );
-    expect(
-      apiProjectPackageJson.nx.targets.build.options?.command,
-    ).not.toContain('node_modules/vite');
 
-    const routesSource = tree.read(
-      'projects/recepturomat/apps/web/src/app/routes.tsx',
-      'utf-8',
-    );
+    const routesSource = tree.read('projects/recepturomat/apps/web/src/app/routes.tsx', 'utf-8');
     expect(routesSource).toContain('@ksojecki/platform-web-platform');
     expect(routesSource).not.toContain('@ksojecki/rod-manager');
     expect(routesSource).toContain('<RegisterPage');
@@ -182,9 +155,7 @@ describe('projectTemplateGenerator', () => {
       'projects/recepturomat/apps/web/src/app/productConfig.ts',
       'utf-8',
     );
-    expect(webProductConfig).toContain(
-      'buildLoginPromptHref as buildSharedLoginPromptHref',
-    );
+    expect(webProductConfig).toContain('buildLoginPromptHref as buildSharedLoginPromptHref');
     expect(webProductConfig).toContain('type LoginPromptConfig');
     expect(webProductConfig).toContain(
       "routes: {\n    home: '/',\n    account: '/account',\n    register: '/register',\n  },",
@@ -215,41 +186,32 @@ describe('projectTemplateGenerator', () => {
     expect(accountPageSource).toContain('useDefaultAccountSections');
     expect(accountPageSource).not.toContain('productAccountConfig');
     expect(
-      tree.exists(
-        'projects/recepturomat/apps/web/src/app/account/productAccountConfig.ts',
-      ),
+      tree.exists('projects/recepturomat/apps/web/src/app/account/productAccountConfig.ts'),
     ).toBe(false);
     expect(
-      tree.exists(
-        'projects/recepturomat/apps/web/src/app/account/productAccountSections.tsx',
-      ),
+      tree.exists('projects/recepturomat/apps/web/src/app/account/productAccountSections.tsx'),
     ).toBe(false);
 
-    const i18nSource = tree.read(
-      'projects/recepturomat/apps/web/src/app/i18n/i18n.ts',
-      'utf-8',
-    );
+    const i18nSource = tree.read('projects/recepturomat/apps/web/src/app/i18n/i18n.ts', 'utf-8');
     expect(i18nSource).toContain("menuLogin: 'Log in'");
-    expect(i18nSource).toContain(
-      "passwordSectionTitle: 'Create account with password'",
-    );
+    expect(i18nSource).toContain("passwordSectionTitle: 'Create account with password'");
 
     const webProjectPackageJson = readWebProjectPackageJson(
       tree,
       'projects/recepturomat/apps/web/package.json',
     );
-    expect(
-      webProjectPackageJson.nx.targets['build-client'].options?.command,
-    ).toContain('dist/projects/recepturomat/apps/web/client');
-    expect(
-      webProjectPackageJson.nx.targets['build-client'].options?.command,
-    ).not.toContain('sample-portal');
-    expect(
-      webProjectPackageJson.nx.targets['build-client'].options?.command,
-    ).toContain('npx vite build');
-    expect(
-      webProjectPackageJson.nx.targets['build-client'].options?.command,
-    ).not.toContain('node_modules/vite');
+    expect(webProjectPackageJson.nx.targets['build-client'].options?.command).toContain(
+      'dist/projects/recepturomat/apps/web/client',
+    );
+    expect(webProjectPackageJson.nx.targets['build-client'].options?.command).not.toContain(
+      'sample-portal',
+    );
+    expect(webProjectPackageJson.nx.targets['build-client'].options?.command).toContain(
+      'npx vite build',
+    );
+    expect(webProjectPackageJson.nx.targets['build-client'].options?.command).not.toContain(
+      'node_modules/vite',
+    );
 
     const rootTsConfig = readTsConfigWithReferences(tree, 'tsconfig.json');
     expect(rootTsConfig.references).toEqual(
@@ -261,40 +223,27 @@ describe('projectTemplateGenerator', () => {
   });
 });
 
-function readApiProjectPackageJson(
-  tree: Tree,
-  path: string,
-): ApiProjectPackageJson {
+function readApiProjectPackageJson(tree: Tree, path: string): ApiProjectPackageJson {
   const value = readJson(tree, path);
 
   if (!isApiProjectPackageJson(value)) {
-    throw new Error(
-      `Expected ${path} to contain Nx public dev target metadata.`,
-    );
+    throw new Error(`Expected ${path} to contain Nx public dev target metadata.`);
   }
 
   return value;
 }
 
-function readWebProjectPackageJson(
-  tree: Tree,
-  path: string,
-): WebProjectPackageJson {
+function readWebProjectPackageJson(tree: Tree, path: string): WebProjectPackageJson {
   const value = readJson(tree, path);
 
   if (!isWebProjectPackageJson(value)) {
-    throw new Error(
-      `Expected ${path} to contain Nx public build target metadata.`,
-    );
+    throw new Error(`Expected ${path} to contain Nx public build target metadata.`);
   }
 
   return value;
 }
 
-function readPackageJsonWithDependencies(
-  tree: Tree,
-  path: string,
-): PackageJsonWithDependencies {
+function readPackageJsonWithDependencies(tree: Tree, path: string): PackageJsonWithDependencies {
   const value = readJson(tree, path);
 
   if (!isPackageJsonWithDependencies(value)) {
@@ -314,10 +263,7 @@ function readRootPackageJson(tree: Tree, path: string): RootPackageJson {
   return value;
 }
 
-function readTsConfigWithReferences(
-  tree: Tree,
-  path: string,
-): TsConfigWithReferences {
+function readTsConfigWithReferences(tree: Tree, path: string): TsConfigWithReferences {
   const value = readJson(tree, path);
 
   if (!isTsConfigWithReferences(value)) {
@@ -349,9 +295,7 @@ function hasJsonObjectProperty(
   return typeof property === 'object' && property !== null;
 }
 
-function isApiProjectPackageJson(
-  value: unknown,
-): value is ApiProjectPackageJson {
+function isApiProjectPackageJson(value: unknown): value is ApiProjectPackageJson {
   if (!isJsonObject(value) || !hasJsonObjectProperty(value, 'nx')) {
     return false;
   }
@@ -361,9 +305,7 @@ function isApiProjectPackageJson(
   return hasJsonObjectProperty(nx, 'targets');
 }
 
-function isWebProjectPackageJson(
-  value: unknown,
-): value is WebProjectPackageJson {
+function isWebProjectPackageJson(value: unknown): value is WebProjectPackageJson {
   if (!isJsonObject(value) || !hasJsonObjectProperty(value, 'nx')) {
     return false;
   }
@@ -377,9 +319,7 @@ function isJsonObject(value: unknown): value is JsonObject {
   return typeof value === 'object' && value !== null;
 }
 
-function isPackageJsonWithDependencies(
-  value: unknown,
-): value is PackageJsonWithDependencies {
+function isPackageJsonWithDependencies(value: unknown): value is PackageJsonWithDependencies {
   return (
     isJsonObject(value) &&
     typeof value.name === 'string' &&
@@ -391,15 +331,12 @@ function isRootPackageJson(value: unknown): value is RootPackageJson {
   return isJsonObject(value) && hasStringRecordProperty(value, 'scripts');
 }
 
-function isTsConfigWithReferences(
-  value: unknown,
-): value is TsConfigWithReferences {
+function isTsConfigWithReferences(value: unknown): value is TsConfigWithReferences {
   return (
     isJsonObject(value) &&
     Array.isArray(value.references) &&
     value.references.every(
-      (reference) =>
-        isJsonObject(reference) && typeof reference.path === 'string',
+      (reference) => isJsonObject(reference) && typeof reference.path === 'string',
     )
   );
 }

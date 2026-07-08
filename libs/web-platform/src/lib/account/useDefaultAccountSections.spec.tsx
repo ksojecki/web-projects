@@ -34,8 +34,7 @@ describe('useDefaultAccountSections', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseAuthenticationMethods.mockReturnValue({
-      connectOAuthProvider:
-        vi.fn<(provider: 'apple' | 'facebook' | 'google') => Promise<void>>(),
+      connectOAuthProvider: vi.fn<(provider: 'apple' | 'facebook' | 'google') => Promise<void>>(),
       disconnectOAuthProvider:
         vi.fn<(provider: 'apple' | 'facebook' | 'google') => Promise<void>>(),
       methods: [
@@ -134,9 +133,7 @@ describe('useDefaultAccountSections', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'Language' })).toBeTruthy();
-    expect(
-      screen.getByRole('heading', { name: 'Authentication methods' }),
-    ).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Authentication methods' })).toBeTruthy();
     expect(screen.getByText('Project extra section')).toBeTruthy();
   });
 });

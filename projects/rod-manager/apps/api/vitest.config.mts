@@ -6,10 +6,7 @@ const sharedSourcePath = fileURLToPath(
   new URL(`${workspaceRelativeRoot}libs/shared/src/index.ts`, import.meta.url),
 );
 const serverPlatformSourcePath = fileURLToPath(
-  new URL(
-    `${workspaceRelativeRoot}libs/server-platform/src/index.ts`,
-    import.meta.url,
-  ),
+  new URL(`${workspaceRelativeRoot}libs/server-platform/src/index.ts`, import.meta.url),
 );
 
 export default defineConfig({

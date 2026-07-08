@@ -14,9 +14,7 @@ export interface NormalizedOptions {
   webPackageName: string;
 }
 
-export function normalizeOptions(
-  schema: ProjectTemplateSchema,
-): NormalizedOptions {
+export function normalizeOptions(schema: ProjectTemplateSchema): NormalizedOptions {
   const parsedName = names(schema.name);
   const projectName = parsedName.fileName;
 
