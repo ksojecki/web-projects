@@ -10,6 +10,7 @@ export interface Recipe {
   name: string;
   defaultWeight: number;
   ingredients: RecipeIngredient[];
+  instructions: string[];
 }
 
 export interface RecipeDatabaseBootstrapOptions {
@@ -33,4 +34,5 @@ export interface RecipeRow {
   name: string;
   default_weight: number;
   ingredients_json: string;
+  instructions_json: string;
 }

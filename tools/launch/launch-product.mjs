@@ -2,8 +2,15 @@ import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
 import https from 'node:https';
 import { resolve } from 'node:path';
-import { Browser, detectBrowserPlatform, install, resolveBuildId } from '@puppeteer/browsers';
-import { executablePath, launch } from 'puppeteer-core';
+import {
+  Browser,
+  computeExecutablePath,
+  computeSystemExecutablePath,
+  detectBrowserPlatform,
+  install,
+  resolveBuildId,
+} from '@puppeteer/browsers';
+import { launch } from 'puppeteer-core';
 import { loadProductEnv } from '../../scripts/workspace-config.mjs';
 
 const SERVER_START_TIMEOUT_MS = 120000;
@@ -189,10 +196,13 @@ async function resolveChromeExecutablePath() {
     return process.env.CHROME_FOR_TESTING_BIN;
   }
 
-  const bundledExecutablePath = await executablePath();
-
-  if (existsSync(bundledExecutablePath)) {
-    return bundledExecutablePath;
+  try {
+    return computeSystemExecutablePath({
+      browser: Browser.CHROME,
+      channel: 'stable',
+    });
+  } catch {
+    // Fall back to Chrome for Testing when no system Chrome is available.
   }
 
   const platform = detectBrowserPlatform();
@@ -202,6 +212,17 @@ async function resolveChromeExecutablePath() {
   }
 
   const buildId = await resolveBuildId(Browser.CHROME, platform, 'stable');
+  const cachedExecutablePath = computeExecutablePath({
+    browser: Browser.CHROME,
+    buildId,
+    cacheDir: getPuppeteerCacheDir(),
+    platform,
+  });
+
+  if (existsSync(cachedExecutablePath)) {
+    return cachedExecutablePath;
+  }
+
   const installedBrowser = await install({
     browser: Browser.CHROME,
     buildId,

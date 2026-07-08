@@ -13,6 +13,7 @@ import type { Recipe } from './types';
 const emptyRecipe: Recipe = {
   defaultWeight: 1000,
   ingredients: [],
+  instructions: [],
   name: '',
   recipeId: '',
 };
@@ -22,7 +23,6 @@ export function NewRecipePage() {
   const { status } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
   const { recipes } = useRecipesList({
     enabled: status === 'authenticated',
   });
@@ -56,21 +56,15 @@ export function NewRecipePage() {
         }}
         onSubmit={async (recipe) => {
           setIsSubmitting(true);
-          setSubmitError(null);
 
           try {
             const createdRecipe = await createRecipe(recipe);
             await navigate(buildRecipeDetailPath(createdRecipe.recipeId));
-          } catch (caughtError) {
-            setSubmitError(
-              caughtError instanceof Error ? caughtError.message : t('errors.submitFailed'),
-            );
           } finally {
             setIsSubmitting(false);
           }
         }}
         recipes={recipes}
-        submitError={submitError}
         title={t('form.titleNew')}
       />
     </section>

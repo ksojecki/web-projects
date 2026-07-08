@@ -45,6 +45,7 @@ describe('RecipePage', () => {
             unit: 'g',
           },
         ],
+        instructions: ['Mix the batter.', 'Bake the cake.'],
         name: 'Vanilla cupcakes',
         recipeId: 'dessertvanillacupcakes',
       },
@@ -66,6 +67,7 @@ describe('RecipePage', () => {
             unit: 'g',
           },
         ],
+        instructions: ['Mix the batter.', 'Bake the cake.'],
         name: 'Vanilla cupcakes',
         weight: 400,
       },
@@ -83,6 +85,8 @@ describe('RecipePage', () => {
     expect(screen.getByRole('button', { name: 'Delete' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Scale recipe' })).toBeTruthy();
     expect(screen.getByText('Current yield')).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Instructions' })).toBeTruthy();
+    expect(screen.getByText('Mix the batter.')).toBeTruthy();
     expect(
       screen.getByRole('link', {
         name: 'Recipe reference: basecreamvanilla',

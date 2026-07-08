@@ -3,8 +3,9 @@ import type { Recipe, RecipeRow, RecipeStore } from './types';
 
 function mapRecipeRow(row: RecipeRow): Recipe {
   const ingredients = JSON.parse(row.ingredients_json);
+  const instructions = JSON.parse(row.instructions_json);
 
-  if (!isRecipeIngredientArray(ingredients)) {
+  if (!isRecipeIngredientArray(ingredients) || !isRecipeInstructionArray(instructions)) {
     throw new Error('Invalid recipe row.');
   }
 
@@ -13,11 +14,16 @@ function mapRecipeRow(row: RecipeRow): Recipe {
     name: row.name,
     defaultWeight: row.default_weight,
     ingredients,
+    instructions,
   };
 }
 
 function serializeIngredients(recipe: Recipe): string {
   return JSON.stringify(recipe.ingredients);
+}
+
+function serializeInstructions(recipe: Recipe): string {
+  return JSON.stringify(recipe.instructions);
 }
 
 function isRecipeIngredientArray(value: unknown): value is Recipe['ingredients'] {
@@ -33,30 +39,35 @@ function isRecipeIngredientArray(value: unknown): value is Recipe['ingredients']
   );
 }
 
+function isRecipeInstructionArray(value: unknown): value is Recipe['instructions'] {
+  return Array.isArray(value) && value.every((instruction) => typeof instruction === 'string');
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
 
 export function createRecipeStore(db: Database.Database): RecipeStore {
   const listRecipesStatement = db.prepare<[], RecipeRow>(
-    `SELECT recipe_id, name, default_weight, ingredients_json
+    `SELECT recipe_id, name, default_weight, ingredients_json, instructions_json
       FROM recipes
       ORDER BY recipe_id ASC`,
   );
 
   const getRecipeStatement = db.prepare<[string], RecipeRow>(
-    `SELECT recipe_id, name, default_weight, ingredients_json
+    `SELECT recipe_id, name, default_weight, ingredients_json, instructions_json
       FROM recipes
       WHERE recipe_id = ?`,
   );
 
   const upsertRecipeStatement = db.prepare(
-    `INSERT INTO recipes (recipe_id, name, default_weight, ingredients_json)
-      VALUES (?, ?, ?, ?)
+    `INSERT INTO recipes (recipe_id, name, default_weight, ingredients_json, instructions_json)
+      VALUES (?, ?, ?, ?, ?)
       ON CONFLICT(recipe_id) DO UPDATE SET
         name = excluded.name,
         default_weight = excluded.default_weight,
         ingredients_json = excluded.ingredients_json,
+        instructions_json = excluded.instructions_json,
         updated_at = unixepoch()`,
   );
 
@@ -83,6 +94,7 @@ export function createRecipeStore(db: Database.Database): RecipeStore {
         recipe.name,
         recipe.defaultWeight,
         serializeIngredients(recipe),
+        serializeInstructions(recipe),
       );
 
       const storedRecipe = getByRecipeId(recipe.recipeId);

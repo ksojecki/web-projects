@@ -32,6 +32,18 @@ export function initializeRecipeSchema(db: Database.Database): void {
 
     CREATE INDEX IF NOT EXISTS idx_recipes_name ON recipes(name);
   `);
+
+  const instructionsColumn = db
+    .prepare<[], { count: number }>(
+      `SELECT COUNT(*) AS count
+        FROM pragma_table_info('recipes')
+        WHERE name = 'instructions_json'`,
+    )
+    .get();
+
+  if ((instructionsColumn?.count ?? 0) === 0) {
+    db.exec(`ALTER TABLE recipes ADD COLUMN instructions_json TEXT NOT NULL DEFAULT '[]'`);
+  }
 }
 
 export function bootstrapRecipeDatabase(

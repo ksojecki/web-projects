@@ -16,7 +16,6 @@ export function EditRecipePage() {
   const navigate = useNavigate();
   const { recipeId } = useParams<{ recipeId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
   const { error, isLoading, recipe } = useRecipe({
     enabled: status === 'authenticated',
     recipeId,
@@ -89,21 +88,15 @@ export function EditRecipePage() {
         }}
         onSubmit={async (nextRecipe) => {
           setIsSubmitting(true);
-          setSubmitError(null);
 
           try {
             await updateRecipe(recipeId, nextRecipe);
             await navigate(buildRecipeDetailPath(recipeId));
-          } catch (caughtError) {
-            setSubmitError(
-              caughtError instanceof Error ? caughtError.message : t('errors.submitFailed'),
-            );
           } finally {
             setIsSubmitting(false);
           }
         }}
         recipes={recipes}
-        submitError={submitError}
         title={t('form.titleEdit')}
       />
     </section>

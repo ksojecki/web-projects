@@ -1,5 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { Recipe, RecipeIngredient } from '../recipe-store';
+import { collectInstructionDraftIngredients } from './instruction-parser';
+import type { RecipeInstructionDraftsResponseBody } from './types';
 
 interface RecipeParams {
   recipeId: string;
@@ -17,6 +19,7 @@ interface RecipePayload {
   name?: unknown;
   defaultWeight?: unknown;
   ingredients?: unknown;
+  instructions?: unknown;
 }
 
 export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
@@ -59,6 +62,16 @@ export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
           return;
         }
 
+        const draftResponse = findRecipeInstructionDrafts(
+          recipe,
+          fastify.recipeStore.listRecipes(),
+        );
+
+        if (draftResponse !== undefined) {
+          await reply.status(422).send(draftResponse);
+          return;
+        }
+
         const createdRecipe = createRecipeWithStableSlug(fastify.recipeStore.listRecipes(), recipe);
 
         await reply.status(201).send(fastify.recipeStore.upsert(createdRecipe));
@@ -82,6 +95,16 @@ export const recepturomatRecipeApiPlugin: FastifyPluginAsync =
 
         if (existingRecipe === undefined) {
           await reply.status(404).send({ message: 'Recipe not found.' });
+          return;
+        }
+
+        const draftResponse = findRecipeInstructionDrafts(
+          recipe,
+          fastify.recipeStore.listRecipes(),
+        );
+
+        if (draftResponse !== undefined) {
+          await reply.status(422).send(draftResponse);
           return;
         }
 
@@ -120,8 +143,14 @@ function parseRecipePayload(
   const name = normalizeNonEmptyString(payload.name);
   const defaultWeight = normalizeNumber(payload.defaultWeight);
   const ingredients = parseIngredients(payload.ingredients);
+  const instructions = parseInstructions(payload.instructions);
 
-  if (name === undefined || defaultWeight === undefined || ingredients === undefined) {
+  if (
+    name === undefined ||
+    defaultWeight === undefined ||
+    ingredients === undefined ||
+    instructions === undefined
+  ) {
     return undefined;
   }
 
@@ -131,6 +160,7 @@ function parseRecipePayload(
       name,
       defaultWeight,
       ingredients,
+      instructions,
     };
   }
 
@@ -138,6 +168,7 @@ function parseRecipePayload(
     name,
     defaultWeight,
     ingredients,
+    instructions,
   };
 }
 
@@ -191,6 +222,26 @@ function parseIngredients(payload: unknown): RecipeIngredient[] | undefined {
   }
 
   return ingredients;
+}
+
+function parseInstructions(payload: unknown): string[] | undefined {
+  if (!Array.isArray(payload)) {
+    return undefined;
+  }
+
+  const instructions: string[] = [];
+
+  for (const item of payload) {
+    const instruction = normalizeNonEmptyString(item);
+
+    if (instruction === undefined) {
+      return undefined;
+    }
+
+    instructions.push(instruction);
+  }
+
+  return instructions;
 }
 
 function parseIngredient(payload: unknown): RecipeIngredient | undefined {
@@ -258,4 +309,20 @@ function isRecipeIngredientPayload(value: unknown): value is RecipeIngredientPay
     value !== null &&
     ('name' in value || 'amount' in value || 'unit' in value || 'recipeId' in value)
   );
+}
+
+function findRecipeInstructionDrafts(
+  recipe: Omit<Recipe, 'recipeId'> | Recipe,
+  recipes: Recipe[],
+): RecipeInstructionDraftsResponseBody | undefined {
+  const parseResult = collectInstructionDraftIngredients(recipe, recipes);
+
+  if (parseResult.draftIngredients.length === 0) {
+    return undefined;
+  }
+
+  return {
+    draftIngredients: parseResult.draftIngredients,
+    message: 'Complete the added ingredients before saving the recipe.',
+  };
 }

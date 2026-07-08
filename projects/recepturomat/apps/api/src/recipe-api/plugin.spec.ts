@@ -63,6 +63,7 @@ describe('recepturomat recipe api plugin', () => {
           { name: 'Cream', amount: 400, unit: 'ml' },
           { name: 'Shell', amount: 1, unit: 'pcs', recipeId: 'baseshortcrust' },
         ],
+        instructions: ['Add Cream.', 'Fold in Shell.'],
       };
 
       const createResponse = await serverHarness.server.inject({
@@ -110,6 +111,7 @@ describe('recepturomat recipe api plugin', () => {
         name: 'Updated Tart',
         defaultWeight: 1250,
         ingredients: [{ name: 'Cream', amount: 450, unit: 'ml' }],
+        instructions: ['Add Cream.', 'Bake.'],
       };
 
       const updateResponse = await serverHarness.server.inject({
@@ -142,6 +144,44 @@ describe('recepturomat recipe api plugin', () => {
 
       expect(missingResponse.statusCode).toBe(404);
       expect(missingResponse.json()).toEqual({ message: 'Recipe not found.' });
+    } finally {
+      await disposeRecipeApiTestServer(serverHarness);
+    }
+  });
+
+  it('returns draft ingredients when instructions reference missing items', async () => {
+    const serverHarness = await createRecipeApiTestServer();
+
+    try {
+      const authCookie = await login(serverHarness.server);
+      serverHarness.server.recipeStore.upsert({
+        recipeId: 'basecreamvanilla',
+        name: 'Krem waniliowy bazowy',
+        defaultWeight: 500,
+        ingredients: [{ name: 'Cukier', amount: 80, unit: 'g' }],
+        instructions: ['Podgrzej mleko.'],
+      });
+
+      const response = await serverHarness.server.inject({
+        method: 'POST',
+        url: '/api/recipes',
+        cookies: authCookie,
+        payload: {
+          name: 'Instruction Draft Test',
+          defaultWeight: 600,
+          ingredients: [{ name: 'Mleko', amount: 300, unit: 'ml' }],
+          instructions: ['Dodaj cukier i @{Krem waniliowy bazowy}.'],
+        },
+      });
+
+      expect(response.statusCode).toBe(422);
+      expect(response.json()).toEqual({
+        draftIngredients: [
+          { name: 'cukier' },
+          { name: 'Krem waniliowy bazowy', recipeId: 'basecreamvanilla' },
+        ],
+        message: 'Complete the added ingredients before saving the recipe.',
+      });
     } finally {
       await disposeRecipeApiTestServer(serverHarness);
     }

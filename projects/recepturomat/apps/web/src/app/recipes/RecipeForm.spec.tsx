@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import '../i18n/i18n';
+import { RecipeInstructionDraftsError } from './api';
 import { RecipeForm } from './RecipeForm';
 import type { Recipe } from './types';
 
@@ -9,6 +10,7 @@ describe('RecipeForm', () => {
     const initialRecipe: Recipe = {
       defaultWeight: 1000,
       ingredients: [],
+      instructions: ['Mix the batter.'],
       name: 'Vanilla cupcakes',
       recipeId: 'vanilla-cupcakes',
     };
@@ -26,5 +28,38 @@ describe('RecipeForm', () => {
     expect(screen.getByLabelText('Default weight')).toBeInTheDocument();
     expect(screen.queryByText('Recipe id')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('Recipe id')).not.toBeInTheDocument();
+  });
+
+  it('adds draft ingredients returned from instruction parsing', async () => {
+    const initialRecipe: Recipe = {
+      defaultWeight: 1000,
+      ingredients: [{ name: 'Milk', amount: 200, unit: 'ml' }],
+      instructions: ['Add sugar.'],
+      name: 'Vanilla cupcakes',
+      recipeId: 'vanilla-cupcakes',
+    };
+
+    render(
+      <RecipeForm
+        initialRecipe={initialRecipe}
+        onSubmit={vi
+          .fn<() => Promise<void>>()
+          .mockRejectedValue(
+            new RecipeInstructionDraftsError(
+              'Complete the added ingredients before saving again.',
+              [{ name: 'sugar' }],
+            ),
+          )}
+        recipes={[]}
+        title="Edit recipe"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(await screen.findByDisplayValue('sugar')).toBeInTheDocument();
+    expect(
+      screen.getByText('Complete the added ingredients before saving again.'),
+    ).toBeInTheDocument();
   });
 });

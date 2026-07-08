@@ -32,6 +32,7 @@ describe('recipe store', () => {
         { name: 'Flour', amount: 100, unit: 'g' },
         { name: 'Milk', amount: 150, unit: 'ml', recipeId: 'basecreamvanilla' },
       ],
+      instructions: ['Mix the flour.', 'Add the milk.'],
     };
 
     expect(recipeStore.listRecipes()).toEqual([]);
@@ -49,6 +50,7 @@ describe('recipe store', () => {
         { name: 'Flour', amount: 120, unit: 'g' },
         { name: 'Milk', amount: 180, unit: 'ml' },
       ],
+      instructions: ['Whisk the batter.', 'Bake the cake.'],
     });
 
     expect(updatedRecipe).toEqual({
@@ -59,6 +61,7 @@ describe('recipe store', () => {
         { name: 'Flour', amount: 120, unit: 'g' },
         { name: 'Milk', amount: 180, unit: 'ml' },
       ],
+      instructions: ['Whisk the batter.', 'Bake the cake.'],
     });
 
     expect(recipeStore.getByRecipeId('testcake')).toEqual(updatedRecipe);
@@ -77,6 +80,7 @@ describe('recipe store', () => {
       name: 'Standalone',
       defaultWeight: 100,
       ingredients: [{ name: 'Sugar', amount: 100, unit: 'g' }],
+      instructions: ['Add sugar.'],
     });
 
     expect(getByRecipeId('standalone')).toEqual({
@@ -84,6 +88,7 @@ describe('recipe store', () => {
       name: 'Standalone',
       defaultWeight: 100,
       ingredients: [{ name: 'Sugar', amount: 100, unit: 'g' }],
+      instructions: ['Add sugar.'],
     });
   });
 });
