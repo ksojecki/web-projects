@@ -1,34 +1,6 @@
-import type { Recipe } from '../recipe-store';
-import { buildPhraseKey, countPhraseTokens } from './instruction-parser.text';
-
-export { buildPhraseKey } from './instruction-parser.text';
-
-export interface KnownReference {
-  kind: 'ingredient' | 'recipe';
-  key: string;
-  name: string;
-  recipeId?: string;
-  tokenCount: number;
-}
-
-export interface ExplicitMention {
-  span: {
-    end: number;
-    start: number;
-  };
-  value: string;
-}
-
-export interface InstructionMatch {
-  endIndex: number;
-  reference: KnownReference;
-  startIndex: number;
-}
-
-export interface InstructionToken {
-  key: string;
-  value: string;
-}
+import type { Recipe } from '../../../recipe-store';
+import { buildPhraseKey, countPhraseTokens } from '../text';
+import type { KnownReference } from './types';
 
 export function buildKnownReferences(
   ingredients: Recipe['ingredients'],
