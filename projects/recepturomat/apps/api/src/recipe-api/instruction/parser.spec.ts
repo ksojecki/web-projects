@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { Recipe } from '../recipe-store';
-import { collectInstructionDraftIngredients } from './instruction-parser';
+import type { Recipe } from '../../recipe-store';
+import { collectInstructionDraftIngredients } from '.';
 
 const recipeCatalog: Recipe[] = [
   {

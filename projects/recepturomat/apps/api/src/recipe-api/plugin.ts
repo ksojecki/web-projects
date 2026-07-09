@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { Recipe, RecipeIngredient } from '../recipe-store';
-import { collectInstructionDraftIngredients } from './instruction-parser';
+import { collectInstructionDraftIngredients } from './instruction';
 import type { RecipeInstructionDraftsResponseBody } from './types';
 
 interface RecipeParams {

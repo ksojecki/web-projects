@@ -123,6 +123,16 @@
       }
     },
     {
+      "files": ["projects/recepturomat/apps/api/src/recipe-api/instruction/**/*.{ts,tsx}"],
+      "rules": {
+        "complexity": ["error", 10],
+        "max-depth": ["error", 3],
+        "max-lines-per-function": ["error", 80],
+        "max-statements": ["error", 12],
+        "unicorn/filename-case": "error"
+      }
+    },
+    {
       "files": ["**/*.{spec,test}.{ts,tsx,mts,cts}"],
       "env": {
         "vitest": true
