@@ -14,20 +14,3 @@ BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 [features]
 plugins = true
 multi_agent = true
-
-[[hooks.PostToolUse]]
-matcher = "Edit|Write"
-
-[[hooks.PostToolUse.hooks]]
-type = "command"
-command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/post-edit-oxfix.mjs"'
-timeout = 120
-statusMessage = "Running oxfmt and oxlint on changed files"
-
-[[hooks.Stop]]
-
-[[hooks.Stop.hooks]]
-type = "command"
-command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/stop-validate.mjs"'
-timeout = 1800
-statusMessage = "Running workspace validation before stop"
