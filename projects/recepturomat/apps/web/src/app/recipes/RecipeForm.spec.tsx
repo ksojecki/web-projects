@@ -62,4 +62,35 @@ describe('RecipeForm', () => {
       screen.getByText('Complete the added ingredients before saving again.'),
     ).toBeInTheDocument();
   });
+
+  it('keeps ingredient input focus while typing', () => {
+    const initialRecipe: Recipe = {
+      defaultWeight: 1000,
+      ingredients: [{ name: 'Milk', amount: 200, unit: 'ml' }],
+      instructions: ['Add sugar.'],
+      name: 'Vanilla cupcakes',
+      recipeId: 'vanilla-cupcakes',
+    };
+
+    render(
+      <RecipeForm
+        initialRecipe={initialRecipe}
+        onSubmit={vi.fn<() => Promise<void>>().mockResolvedValue(undefined)}
+        recipes={[]}
+        title="Edit recipe"
+      />,
+    );
+
+    const ingredientInput = screen.getByDisplayValue('Milk');
+    ingredientInput.focus();
+
+    fireEvent.change(ingredientInput, { target: { value: 'Milk s' } });
+
+    const updatedIngredientInput = screen.getByDisplayValue('Milk s');
+    expect(document.activeElement).toBe(updatedIngredientInput);
+
+    fireEvent.change(updatedIngredientInput, { target: { value: 'Milk su' } });
+
+    expect(document.activeElement).toBe(screen.getByDisplayValue('Milk su'));
+  });
 });

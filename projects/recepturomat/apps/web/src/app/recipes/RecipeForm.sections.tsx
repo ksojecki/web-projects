@@ -119,7 +119,7 @@ export function RecipeIngredientsSection({
                 ? 'border-base-300 bg-base-200/50'
                 : 'border-base-200 bg-base-100'
             }`}
-            key={`${ingredient.recipeId ?? ingredient.name}-${index}`}
+            key={ingredient.id}
             title={`${t('form.ingredientCardTitle')} ${index + 1}`}
           >
             <div className="grid gap-4">

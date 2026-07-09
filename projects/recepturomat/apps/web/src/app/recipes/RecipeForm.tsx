@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { PageHeader, Section } from '@ksojecki/platform-ui';
 import { RecipeInstructionDraftsError } from './api';
 import {
+  createNextEditableIngredientId,
   mergeDraftIngredients,
   normalizeEditableRecipe,
   toEditableRecipe,
@@ -145,7 +146,12 @@ export function RecipeForm({
         onAddIngredient={() => {
           setRecipe((current) => ({
             ...current,
-            ingredients: [...current.ingredients, recipeFormInitializers.createEmptyIngredient()],
+            ingredients: [
+              ...current.ingredients,
+              recipeFormInitializers.createEmptyIngredient(
+                createNextEditableIngredientId(current.ingredients),
+              ),
+            ],
           }));
         }}
         onRemoveIngredient={(index) => {
