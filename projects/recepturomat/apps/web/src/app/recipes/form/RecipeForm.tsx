@@ -1,7 +1,8 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PageHeader, Section } from '@ksojecki/platform-ui';
-import { RecipeInstructionDraftsError } from './api';
+import { RecipeInstructionDraftsError } from '../api';
+import type { Recipe } from '../types';
 import {
   createNextEditableIngredientId,
   mergeDraftIngredients,
@@ -10,13 +11,12 @@ import {
   validateAndBuildRecipe,
   type EditableRecipe,
   type EditableRecipeIngredient,
-} from './RecipeForm.model';
+} from './model';
+import { recipeFormIngredientInitializers, RecipeIngredientsSection } from './ingredientsSection';
 import {
-  RecipeIngredientsSection,
+  recipeFormInstructionInitializers,
   RecipeInstructionsSection,
-  recipeFormInitializers,
-} from './RecipeForm.sections';
-import type { Recipe } from './types';
+} from './instructionsSection';
 
 export interface RecipeFormProps {
   initialRecipe: Recipe;
@@ -126,7 +126,7 @@ export function RecipeForm({
             ...current,
             instructions: [
               ...current.instructions,
-              recipeFormInitializers.createEmptyInstruction(),
+              recipeFormInstructionInitializers.createEmptyInstruction(),
             ],
           }));
         }}
@@ -148,7 +148,7 @@ export function RecipeForm({
             ...current,
             ingredients: [
               ...current.ingredients,
-              recipeFormInitializers.createEmptyIngredient(
+              recipeFormIngredientInitializers.createEmptyIngredient(
                 createNextEditableIngredientId(current.ingredients),
               ),
             ],

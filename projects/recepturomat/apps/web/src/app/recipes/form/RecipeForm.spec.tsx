@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import '../i18n/i18n';
-import { RecipeInstructionDraftsError } from './api';
+import '../../i18n/i18n';
+import { RecipeInstructionDraftsError } from '../api';
+import type { Recipe } from '../types';
 import { RecipeForm } from './RecipeForm';
-import type { Recipe } from './types';
 
 describe('RecipeForm', () => {
   it('does not expose a recipe id input for new or edited recipes', () => {

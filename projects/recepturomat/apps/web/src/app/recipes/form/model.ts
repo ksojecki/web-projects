@@ -1,5 +1,5 @@
-import type { DraftRecipeIngredient } from './api';
-import type { Recipe, RecipeIngredient, RecipeUnit } from './types';
+import type { DraftRecipeIngredient } from '../api';
+import type { Recipe, RecipeIngredient, RecipeUnit } from '../types';
 
 export interface EditableRecipe {
   defaultWeight: string;

@@ -5,7 +5,7 @@ import { Section } from '@ksojecki/platform-ui';
 import { useAuth } from '@ksojecki/platform-web-platform';
 import { buildRecipeDetailPath } from '../productConfig';
 import { RecipeAccessPrompt } from './RecipeAccessPrompt';
-import { RecipeForm } from './RecipeForm';
+import { RecipeForm } from './form';
 import { updateRecipe } from './api';
 import { useRecipe } from './useRecipe';
 import { useRecipesList } from './useRecipesList';
