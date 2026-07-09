@@ -10,14 +10,16 @@ export interface EditableRecipe {
 }
 
 export interface EditableRecipeIngredient {
+  id: string;
   amount: string;
   name: string;
   recipeId?: string;
   unit: RecipeUnit | '';
 }
 
-export function createEmptyIngredient(): EditableRecipeIngredient {
+export function createEmptyIngredient(id: string): EditableRecipeIngredient {
   return {
+    id,
     amount: '',
     name: '',
     unit: '',
@@ -31,12 +33,15 @@ export function createEmptyInstruction(): string {
 export function toEditableRecipe(recipe: Recipe): EditableRecipe {
   return {
     defaultWeight: String(recipe.defaultWeight),
-    ingredients: recipe.ingredients.map((ingredient) => ({
-      amount: String(ingredient.amount),
-      name: ingredient.name,
-      recipeId: ingredient.recipeId,
-      unit: ingredient.unit,
-    })),
+    ingredients: recipe.ingredients.map((ingredient, index) =>
+      createEditableIngredient(
+        buildEditableIngredientId(index),
+        String(ingredient.amount),
+        ingredient.name,
+        ingredient.unit,
+        ingredient.recipeId,
+      ),
+    ),
     instructions: recipe.instructions,
     name: recipe.name,
     recipeId: recipe.recipeId,
@@ -53,6 +58,7 @@ export function mergeDraftIngredients(
     ),
   );
   const nextIngredients = [...recipe.ingredients];
+  let nextIngredientId = createNextEditableIngredientId(nextIngredients);
 
   for (const draftIngredient of draftIngredients) {
     const key = buildDraftMergeKey(draftIngredient.name, draftIngredient.recipeId);
@@ -62,12 +68,16 @@ export function mergeDraftIngredients(
     }
 
     existingKeys.add(key);
-    nextIngredients.push({
-      amount: '',
-      name: draftIngredient.name,
-      recipeId: draftIngredient.recipeId,
-      unit: '',
-    });
+    nextIngredients.push(
+      createEditableIngredient(
+        nextIngredientId,
+        '',
+        draftIngredient.name,
+        '',
+        draftIngredient.recipeId,
+      ),
+    );
+    nextIngredientId = createNextEditableIngredientId(nextIngredients);
   }
 
   return {
@@ -158,10 +168,46 @@ export function isEditableRecipeUnit(value: string): value is RecipeUnit | '' {
   return value === '' || value === 'g' || value === 'ml' || value === 'pcs';
 }
 
+export function createNextEditableIngredientId(ingredients: EditableRecipeIngredient[]): string {
+  return buildEditableIngredientId(getNextEditableIngredientNumericId(ingredients));
+}
+
 function buildDraftMergeKey(name: string, recipeId?: string): string {
   return `${recipeId ?? ''}::${name.trim().toLowerCase()}`;
 }
 
 function isRecipeUnit(value: RecipeUnit | ''): value is RecipeUnit {
   return value === 'g' || value === 'ml' || value === 'pcs';
+}
+
+function createEditableIngredient(
+  id: string,
+  amount: string,
+  name: string,
+  unit: RecipeUnit | '',
+  recipeId?: string,
+): EditableRecipeIngredient {
+  return {
+    id,
+    amount,
+    name,
+    recipeId,
+    unit,
+  };
+}
+
+function buildEditableIngredientId(index: number): string {
+  return `ingredient-${String(index)}`;
+}
+
+function getNextEditableIngredientNumericId(ingredients: EditableRecipeIngredient[]): number {
+  return ingredients.reduce((maxId, ingredient) => {
+    const numericId = Number(ingredient.id.replace('ingredient-', ''));
+
+    if (!Number.isInteger(numericId)) {
+      return maxId;
+    }
+
+    return Math.max(maxId, numericId + 1);
+  }, 0);
 }
