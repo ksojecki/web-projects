@@ -6,7 +6,7 @@ import { useAuth } from '@ksojecki/platform-web-platform';
 import { buildRecipeDetailPath } from '../productConfig';
 import { createRecipe } from './api';
 import { RecipeAccessPrompt } from './RecipeAccessPrompt';
-import { RecipeForm } from './RecipeForm';
+import { RecipeForm } from './form';
 import { useRecipesList } from './useRecipesList';
 import type { Recipe } from './types';
 

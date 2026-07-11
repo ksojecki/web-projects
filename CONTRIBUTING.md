@@ -5,6 +5,14 @@
 - Write documentation in English.
 - Use English for generated identifiers, comments, and user-facing messages.
 
+## File Naming
+
+- Do not introduce new file names with `.` or `-` inside the stem.
+- When a name would naturally need separators, create a directory and use `index.ts`, `index.tsx`, `index.mts`, or `index.mjs` inside it.
+- Examples:
+  - use `RecipeFormSectionEmptyState/index.tsx`
+  - do not use `RecipeForm.section-empty-state.tsx`
+
 ## Local Development
 
 Install dependencies:
