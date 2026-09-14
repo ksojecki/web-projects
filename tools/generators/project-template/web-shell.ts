@@ -1,4 +1,4 @@
-import type { NormalizedOptions } from './shared';
+import type { NormalizedOptions } from './shared.ts';
 
 export function createWebIndexHtml(options: NormalizedOptions): string {
   return `<!doctype html>

@@ -1,0 +1,9 @@
+Data transakcji,Data księgowania,Bank,Konto,Typ,Podtyp,Kwota,Waluta,Kwota PLN,Kontrahent,Tytuł,Szczegóły,ID transakcji,Transfer ID,Pewność,Kwota obca,Waluta obca,Źródło,Kategoria,Podkategoria,Źródło kategorii,Pewność kategorii,Opis z e-maila,Źródło e-maila,ID e-maila
+01.01.2026,02.01.2026,Fictional Bank,Main PLN,TRANSFER_WEWNĘTRZNY,,100.00,PLN,100.00,Own account,Move to reserve,,fictional-transfer-a,transfer-a,1.0,,,,,,,,,,
+03.01.2026,03.01.2026,Fictional Bank,Main PLN,PRZYCHÓD,,12500.00,PLN,12500.00,Fictional Motors,Car sale,,fictional-car-sale,,1.0,,,legacy,Finanse,Praca,legacy,1.0,,,
+04.01.2026,04.01.2026,Fictional Bank,Main PLN,PRZYCHÓD,,6000.00,PLN,6000.00,Ewelina Nowak,Household contribution,,fictional-ewelina,,1.0,,,legacy,Finanse,Praca,legacy,1.0,,,
+05.01.2026,05.01.2026,Fictional Bank,Main PLN,OPERACJE_TECHNICZNE,bank fee,-1.00,PLN,-1.00,Fictional Bank,Technical operation,,fictional-technical,,1.0,,,legacy,Wyłączone,Operacje techniczne,legacy,1.0,,,
+06.01.2026,06.01.2026,Fictional Bank,Main PLN,WYDATEK,, -45.50,PLN,-45.50,Fictional Market,"Child, supplies","note with
+newline",fictional-child,,1.0,,,legacy,Życie,Dziecko,legacy,1.0,,,
+07.01.2026,07.01.2026,Fictional Bank,Main PLN,WYDATEK,, -30.25,PLN,-30.25,Fictional Garden,Garden supplies,,fictional-garden,,1.0,,,legacy,Działka,Ogród i działka,legacy,1.0,,,
+08.01.2026,08.01.2026,Fictional Bank,Main PLN,WYŁĄCZONE,,10.00,PLN,10.00,Fictional Bank,Excluded operation,,fictional-excluded,,1.0,,,legacy,Wyłączone,Operacje techniczne,legacy,1.0,,,

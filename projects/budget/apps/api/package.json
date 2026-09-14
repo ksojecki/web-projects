@@ -1,0 +1,124 @@
+{
+  "name": "@ksojecki/budget-api",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@ksojecki/platform-server-platform": "0.0.1",
+    "@ksojecki/platform-shared": "0.0.1"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "nx:run-commands",
+        "outputs": [
+          "{workspaceRoot}/dist/projects/budget/apps/api"
+        ],
+        "defaultConfiguration": "production",
+        "options": {
+          "cwd": "projects/budget/apps/api",
+          "command": "npx vite build --config vite.config.mts --mode production"
+        },
+        "configurations": {
+          "development": {
+            "command": "npx vite build --config vite.config.mts --mode development"
+          },
+          "production": {
+            "command": "npx vite build --config vite.config.mts --mode production"
+          }
+        }
+      },
+      "prune-lockfile": {
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true,
+        "executor": "@nx/js:prune-lockfile",
+        "outputs": [
+          "{workspaceRoot}/dist/projects/budget/apps/api/package.json",
+          "{workspaceRoot}/dist/projects/budget/apps/api/package-lock.json"
+        ],
+        "options": {
+          "buildTarget": "build"
+        }
+      },
+      "copy-workspace-modules": {
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true,
+        "outputs": [
+          "{workspaceRoot}/dist/projects/budget/apps/api/workspace_modules"
+        ],
+        "executor": "@nx/js:copy-workspace-modules",
+        "options": {
+          "buildTarget": "build"
+        }
+      },
+      "prune": {
+        "dependsOn": [
+          "prune-lockfile",
+          "copy-workspace-modules"
+        ],
+        "executor": "nx:noop"
+      },
+      "serve": {
+        "continuous": true,
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "@ksojecki/budget-api:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "@ksojecki/budget-api:build:development"
+          },
+          "production": {
+            "buildTarget": "@ksojecki/budget-api:build:production"
+          }
+        }
+      },
+      "dev": {
+        "continuous": true,
+        "cache": false,
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node ./tools/launch/launch-product.mjs --project-id budget --serve-target @ksojecki/budget-api:serve --default-api-port 3200 --default-frontend-base-url https://localhost:3200 --default-chrome-debug-port 9444"
+        }
+      },
+      "typecheck": {
+        "dependsOn": [
+          "^build"
+        ],
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "projects/budget/apps/api",
+          "command": "npx tsc --noEmit -p tsconfig.app.json && npx tsc --noEmit -p tsconfig.spec.json"
+        }
+      },
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node node_modules/oxlint/bin/oxlint projects/budget/apps/api --config .oxlintrc.json"
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "projects/budget/apps/api",
+          "command": "npx vitest run --config vitest.config.mts"
+        }
+      },
+      "format": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "projects/budget/apps/api",
+          "command": "node ./node_modules/oxfmt/bin/oxfmt --write ."
+        }
+      }
+    }
+  }
+}

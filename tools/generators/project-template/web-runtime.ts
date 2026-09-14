@@ -1,4 +1,4 @@
-import type { NormalizedOptions } from './shared';
+import type { NormalizedOptions } from './shared.ts';
 
 export function createWebViteConfig(options: NormalizedOptions): string {
   return `/// <reference types='vitest' />
@@ -7,31 +7,40 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
 const workspaceRelativeRoot = '../../../../';
+const workspaceConfigUrl = new URL(
+  \`\${workspaceRelativeRoot}scripts/workspace-config.mjs\`,
+  import.meta.url,
+);
 const cacheDir = \`\${workspaceRelativeRoot}node_modules/.vite/${options.projectRoot}/apps/web\`;
 const clientOutDir = \`\${workspaceRelativeRoot}dist/${options.projectRoot}/apps/web/client\`;
 
-export default defineConfig(({ command }) => {
-  const nodeEnv =
-    command === 'build'
-      ? 'production'
-      : (process.env.NODE_ENV ?? 'development');
+export default defineConfig(async ({ command }) => {
+  const { getProductApiPort, getProductWebPort, loadProductEnv } = await import(
+    workspaceConfigUrl.href
+  );
+
+  loadProductEnv('${options.name}');
+
+  const nodeEnv = command === 'build' ? 'production' : (process.env.NODE_ENV ?? 'development');
+  const apiPort = getProductApiPort('${options.name}');
+  const webPort = getProductWebPort('${options.name}');
 
   return {
     root: import.meta.dirname,
     cacheDir,
     server: {
-      port: 4200,
+      port: webPort,
       host: 'localhost',
       proxy: {
         '/api': {
-          target: 'https://localhost:3000',
+          target: \`https://localhost:\${String(apiPort)}\`,
           changeOrigin: true,
           secure: false,
         },
       },
     },
     preview: {
-      port: 4200,
+      port: webPort,
       host: 'localhost',
     },
     define: {
@@ -118,10 +127,10 @@ export function render(url: string): string {
 }
 
 export function createI18nSetup(options: NormalizedOptions): string {
-  return `import i18n from 'i18next';
+  return `import { use as installI18nextPlugin } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-void i18n.use(initReactI18next).init({
+void installI18nextPlugin(initReactI18next).init({
   lng: 'en',
   fallbackLng: 'en',
   interpolation: {
@@ -134,6 +143,7 @@ void i18n.use(initReactI18next).init({
         menuHome: 'Home',
         menuAccount: 'Account',
         menuLogin: 'Log in',
+        sessionLoading: 'Loading...',
         menuLogout: 'Log out',
         menuRegister: 'Register',
         footerText: '${options.displayName}',

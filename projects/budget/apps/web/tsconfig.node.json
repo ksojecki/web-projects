@@ -1,0 +1,11 @@
+{
+  "extends": "../../../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "composite": true,
+    "outDir": "../../../../dist/projects/budget/apps/web",
+    "tsBuildInfoFile": "../../../../dist/projects/budget/apps/web/tsconfig.node.tsbuildinfo"
+  },
+  "include": ["vite.config.mts"]
+}

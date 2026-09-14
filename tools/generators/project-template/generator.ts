@@ -1,7 +1,7 @@
 import { formatFiles, updateJson, type Tree } from '@nx/devkit';
-import { writeApiApp } from './api';
-import { normalizeOptions, type NormalizedOptions, type ProjectTemplateSchema } from './shared';
-import { writeWebApp } from './web';
+import { writeApiApp } from './api.ts';
+import { normalizeOptions, type NormalizedOptions, type ProjectTemplateSchema } from './shared.ts';
+import { writeWebApp } from './web.ts';
 
 export async function projectTemplateGenerator(
   tree: Tree,

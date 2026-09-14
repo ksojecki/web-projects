@@ -1,5 +1,5 @@
 import { joinPathFragments, type Tree } from '@nx/devkit';
-import { type NormalizedOptions, writeFile, writeJson } from './shared';
+import { type NormalizedOptions, writeFile, writeJson } from './shared.ts';
 
 export function writeApiApp(tree: Tree, options: NormalizedOptions): void {
   const apiRoot = joinPathFragments(options.projectRoot, 'apps/api');
@@ -78,7 +78,7 @@ export function writeApiApp(tree: Tree, options: NormalizedOptions): void {
           cache: false,
           executor: 'nx:run-commands',
           options: {
-            command: `node ./tools/launch/launch-product.mjs --project-id ${options.name} --serve-target ${options.apiPackageName}:serve --default-api-port 3000 --default-frontend-base-url https://localhost:3000 --default-chrome-debug-port 9222`,
+            command: `node ./tools/launch/launch-product.mjs --project-id ${options.name} --serve-target ${options.apiPackageName}:serve --default-api-port ${String(options.apiPort)} --default-frontend-base-url ${options.frontendBaseUrl} --default-chrome-debug-port ${String(options.chromeDebugPort)}`,
           },
         },
         typecheck: {

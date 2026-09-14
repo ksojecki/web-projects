@@ -1,0 +1,11 @@
+Data transakcji,Data księgowania,Bank,Konto,Typ,Podtyp,Kwota,Waluta,Kwota PLN,Kontrahent,Tytuł,Szczegóły,ID transakcji,Transfer ID,Pewność,Kwota obca,Waluta obca,Źródło,Kategoria,Podkategoria,Źródło kategorii,Pewność kategorii,Opis z e-maila,Źródło e-maila,ID e-maila
+2026-01-02,2026-01-02,Fictional Bank,Main PLN,TRANSFER_WEWNĘTRZNY,, -100.00,PLN,-100.00,Own account,Move to reserve,,parity-transfer-out,parity-transfer-1,1.0,,,,,,,,,,
+2026-01-02,2026-01-02,Fictional Bank,Reserve PLN,TRANSFER_WEWNĘTRZNY,,100.00,PLN,100.00,Own account,Move from main,,parity-transfer-in,parity-transfer-1,1.0,,,,,,,,,,
+2026-01-03,2026-01-03,Fictional Bank,Main PLN,PRZYCHÓD,,2000.00,PLN,2000.00,Fictional Motors,Car sale,,parity-car-sale,,1.0,,,legacy,Finanse,Praca,legacy,1.0,,,
+2026-01-10,2026-01-10,Fictional Bank,Main PLN,WYDATEK,school,-125.00,PLN,-125.00,Fictional Market,Child supplies,,parity-child,,1.0,,,legacy,Życie,Dziecko,legacy,1.0,,,
+2026-01-11,2026-01-11,Fictional Bank,Main PLN,WYDATEK,garden,-80.00,PLN,-80.00,Fictional Garden,Garden supplies,,parity-garden,,1.0,,,legacy,Działka,Ogród i działka,legacy,1.0,,,
+2026-01-12,2026-01-12,Fictional Bank,Main PLN,OPERACJE_TECHNICZNE,bank fee,-10.00,PLN,-10.00,Fictional Bank,Technical operation,,parity-technical,,1.0,,,legacy,Wyłączone,Operacje techniczne,legacy,1.0,,,
+2026-01-13,2026-01-13,Fictional Bank,Main PLN,WYŁĄCZONE,,5.00,PLN,5.00,Fictional Bank,Excluded operation,,parity-excluded,,1.0,,,legacy,Wyłączone,Operacje techniczne,legacy,1.0,,,
+2026-02-03,2026-02-03,Fictional Bank,Main PLN,PRZYCHÓD,,1500.00,PLN,1500.00,Ewelina Nowak,Household contribution,,parity-ewelina,,1.0,,,legacy,Finanse,Praca,legacy,1.0,,,
+2026-02-10,2026-02-10,Fictional Bank,Main PLN,WYDATEK,,200.00,PLN,-200.00,Fictional Market,Food,,parity-food,,1.0,,,legacy,Życie,Żywność,legacy,1.0,,,
+2026-02-11,2026-02-11,Fictional Bank,Main PLN,SPLATA_KARTY,, -50.00,PLN,-50.00,Fictional Card,Card repayment,,parity-card-repayment,,1.0,,,,,,,,,,

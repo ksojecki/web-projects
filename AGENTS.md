@@ -57,7 +57,7 @@
 - When a workflow step needs GitHub network access through `gh` or equivalent remote issue/PR inspection, request elevated access up front.
 - For features, bug fixes, and error remediation, first agree on a plan when the task calls for planning, then execute that accepted plan through the delivery loop in `.agents/skills/agent-delivery-loop/SKILL.md`.
 - In that delivery loop, divide the plan into small, easy-to-implement steps before execution.
-- In that delivery loop, always use one `gpt-5.4-mini` implementer subagent, then one `gpt-5.4-mini` tester subagent for the same accepted current step.
+- In that delivery loop, always use one `gpt-5.6-luna` implementer subagent, then one `gpt-5.6-luna` tester subagent for the same accepted current step.
 - Keep planning and review in the current agent session unless the user explicitly asks for a different model.
 - Do not spawn implementers or testers for multiple planned steps in parallel.
 - The implementer should execute the accepted current step rather than re-reviewing or re-planning it.

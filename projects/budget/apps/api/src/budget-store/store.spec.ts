@@ -1,0 +1,125 @@
+import Database from 'better-sqlite3';
+import { afterEach, describe, expect, it } from 'vitest';
+import { bootstrapBudgetDatabase } from './database';
+import { createBudgetStore } from './store';
+
+const databases: Database.Database[] = [];
+
+function createStore() {
+  const db = new Database(':memory:');
+  databases.push(db);
+  bootstrapBudgetDatabase(db);
+  db.prepare(`INSERT INTO accounts (id, name) VALUES ('main', 'Main')`).run();
+  return { db, store: createBudgetStore(db) };
+}
+
+afterEach(() => {
+  for (const db of databases.splice(0)) {
+    db.close();
+  }
+});
+
+describe('budget store', () => {
+  it('deduplicates an immutable source row', () => {
+    const { store } = createStore();
+    const transaction = {
+      id: 'tx-1',
+      accountId: 'main',
+      bookedAt: '2026-01-01',
+      valueDate: null,
+      amountCents: -1250,
+      currency: 'PLN',
+      description: 'Groceries',
+      counterpartyName: null,
+      counterpartyAccount: null,
+      bankReference: null,
+      legacySource: 'ledger.csv',
+      legacyRow: 42,
+      sourceHash: 'hash-42',
+      transferId: null,
+      legacyTransferId: null,
+    } as const;
+
+    expect(store.insertBankTransaction(transaction).inserted).toBe(true);
+    const duplicate = store.insertBankTransaction({ ...transaction, id: 'different-id' });
+    expect(duplicate.inserted).toBe(false);
+    expect(duplicate.transaction.id).toBe('tx-1');
+  });
+
+  it('prevents source fact updates and validates classification categories', () => {
+    const { db, store } = createStore();
+    store.insertBankTransaction({
+      id: 'tx-2',
+      accountId: 'main',
+      bookedAt: '2026-01-02',
+      valueDate: null,
+      amountCents: 1000,
+      currency: 'PLN',
+      description: 'Salary',
+      counterpartyName: null,
+      counterpartyAccount: null,
+      bankReference: null,
+      legacySource: null,
+      legacyRow: null,
+      sourceHash: null,
+      transferId: null,
+      legacyTransferId: null,
+    });
+
+    expect(() =>
+      db.prepare(`UPDATE bank_transactions SET amount_cents = 2000 WHERE id = 'tx-2'`).run(),
+    ).toThrow('immutable');
+    expect(() =>
+      store.classifyTransaction({
+        transactionId: 'tx-2',
+        economicType: 'income',
+        categoryId: 'missing-category',
+        source: 'manual',
+      }),
+    ).toThrow('FOREIGN KEY');
+  });
+
+  it('keeps exactly one current classification when replacing it', () => {
+    const { db, store } = createStore();
+    store.insertBankTransaction({
+      id: 'tx-3',
+      accountId: 'main',
+      bookedAt: '2026-01-03',
+      valueDate: null,
+      amountCents: -100,
+      currency: 'PLN',
+      description: 'Child',
+      counterpartyName: null,
+      counterpartyAccount: null,
+      bankReference: null,
+      legacySource: null,
+      legacyRow: null,
+      sourceHash: null,
+      transferId: null,
+      legacyTransferId: null,
+    });
+    const first = store.classifyTransaction({
+      transactionId: 'tx-3',
+      economicType: 'expense',
+      categoryId: 'zycie-dziecko',
+      source: 'legacy',
+    });
+    const second = store.classifyTransaction({
+      transactionId: 'tx-3',
+      economicType: 'expense',
+      categoryId: 'dzialka-ogrod-i-dzialka',
+      source: 'manual',
+    });
+
+    expect(first.isCurrent).toBe(true);
+    expect(second.isCurrent).toBe(true);
+    expect(store.getCurrentClassification('tx-3')?.id).toBe(second.id);
+    expect(
+      db
+        .prepare<[], { count: number }>(
+          `SELECT COUNT(*) AS count FROM transaction_classifications WHERE transaction_id = 'tx-3' AND is_current = 1`,
+        )
+        .get()?.count,
+    ).toBe(1);
+  });
+});
