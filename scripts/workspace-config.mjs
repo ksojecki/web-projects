@@ -3,6 +3,14 @@ import { resolve } from 'node:path';
 import dotenv from 'dotenv';
 
 export const PRODUCT_CONFIG = {
+  budget: {
+    authDbPath: 'tmp/budget/auth.sqlite',
+    budgetDbPath: 'tmp/budget/budget.sqlite',
+    apiPort: 3200,
+    chromeDebugPort: 9444,
+    frontendBaseUrl: 'https://localhost:3200',
+    webPort: 4400,
+  },
   'rod-manager': {
     authDbPath: 'tmp/rod-manager/auth.sqlite',
     apiPort: 3000,
@@ -26,6 +34,16 @@ export function getChromeUserDataDir(projectId) {
 
 export function getProductApiPort(projectId) {
   return readIntegerFromEnv(process.env.PORT, PRODUCT_CONFIG[projectId].apiPort);
+}
+
+export function getProductBudgetDbPath(projectId) {
+  const budgetDbPath = PRODUCT_CONFIG[projectId].budgetDbPath;
+
+  if (budgetDbPath === undefined) {
+    throw new Error(`Budget database is not configured for product ${projectId}.`);
+  }
+
+  return process.env.BUDGET_DB_PATH ?? budgetDbPath;
 }
 
 export function getProductChromeDebugPort(projectId) {

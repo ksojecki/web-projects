@@ -1,19 +1,19 @@
 import { joinPathFragments, type Tree } from '@nx/devkit';
-import { type NormalizedOptions, writeFile, writeJson } from './shared';
+import { type NormalizedOptions, writeFile, writeJson } from './shared.ts';
 import {
   createAccountPage,
   createAppLayout,
   createHomePage,
   createRoutes,
   createWebProductConfig,
-} from './web-app-files';
+} from './web-app-files.ts';
 import {
   createEntryClient,
   createEntryServer,
   createI18nSetup,
   createWebViteConfig,
-} from './web-runtime';
-import { createStylesCss, createWebIndexHtml } from './web-shell';
+} from './web-runtime.ts';
+import { createStylesCss, createWebIndexHtml } from './web-shell.ts';
 
 export function writeWebApp(tree: Tree, options: NormalizedOptions): void {
   const webRoot = joinPathFragments(options.projectRoot, 'apps/web');
@@ -133,11 +133,7 @@ export function writeWebApp(tree: Tree, options: NormalizedOptions): void {
       'src/**/*.test.jsx',
     ],
     include: ['src/**/*.js', 'src/**/*.jsx', 'src/**/*.ts', 'src/**/*.tsx'],
-    references: [
-      { path: '../../../../libs/ui/tsconfig.lib.json' },
-      { path: '../../../../libs/shared/tsconfig.lib.json' },
-      { path: '../../../../libs/web-platform/tsconfig.lib.json' },
-    ],
+    references: [{ path: '../../../../libs/web-platform/tsconfig.lib.json' }],
   });
 
   writeJson(tree, joinPathFragments(webRoot, 'tsconfig.node.json'), {

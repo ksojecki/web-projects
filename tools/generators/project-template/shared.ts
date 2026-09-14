@@ -6,26 +6,51 @@ export interface ProjectTemplateSchema {
 
 export interface NormalizedOptions {
   apiPackageName: string;
+  apiPort: number;
+  chromeDebugPort: number;
   displayName: string;
+  frontendBaseUrl: string;
   name: string;
   projectConfigConstName: string;
   projectPropertyName: string;
   projectRoot: string;
   webPackageName: string;
+  webPort: number;
 }
+
+const DEFAULT_RUNTIME_OPTIONS = {
+  apiPort: 3000,
+  chromeDebugPort: 9222,
+  frontendBaseUrl: 'https://localhost:3000',
+  webPort: 4200,
+};
+
+const PROJECT_RUNTIME_OPTIONS: Record<string, typeof DEFAULT_RUNTIME_OPTIONS> = {
+  budget: {
+    apiPort: 3200,
+    chromeDebugPort: 9444,
+    frontendBaseUrl: 'https://localhost:3200',
+    webPort: 4400,
+  },
+};
 
 export function normalizeOptions(schema: ProjectTemplateSchema): NormalizedOptions {
   const parsedName = names(schema.name);
   const projectName = parsedName.fileName;
+  const runtimeOptions = PROJECT_RUNTIME_OPTIONS[projectName] ?? DEFAULT_RUNTIME_OPTIONS;
 
   return {
     apiPackageName: `@ksojecki/${projectName}-api`,
+    apiPort: runtimeOptions.apiPort,
+    chromeDebugPort: runtimeOptions.chromeDebugPort,
     displayName: toDisplayName(projectName),
+    frontendBaseUrl: runtimeOptions.frontendBaseUrl,
     name: projectName,
     projectConfigConstName: `${parsedName.propertyName}ProjectConfig`,
     projectPropertyName: parsedName.propertyName,
     projectRoot: joinPathFragments('projects', projectName),
     webPackageName: `@ksojecki/${projectName}-web`,
+    webPort: runtimeOptions.webPort,
   };
 }
 

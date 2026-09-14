@@ -235,6 +235,7 @@ export function AppLayout() {
         items={navigationItems}
         loginLabel={t('menuLogin')}
         loginPrompt={frontendProductConfig.loginPrompt}
+        loadingLabel={t('sessionLoading')}
         logoutLabel={t('menuLogout')}
         postLoginRedirectTo={frontendProductConfig.auth.postLoginRedirectTo}
         registerLabel={t('menuRegister')}

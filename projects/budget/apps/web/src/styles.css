@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+
+@plugin "daisyui" {
+  themes: emerald --default;
+}
+
+@source '../../../../../libs/ui/src/**/*.{ts,tsx}';
+@source '../../../../../libs/web-platform/src/**/*.{ts,tsx}';
+
+:root {
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  color-scheme: light;
+}
+body {
+  background: #f5f7f4;
+}
+button,
+a,
+select,
+input {
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 3px solid color-mix(in srgb, #0d7a63 45%, transparent);
+  outline-offset: 2px;
+}

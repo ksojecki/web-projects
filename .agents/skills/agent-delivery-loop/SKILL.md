@@ -9,8 +9,8 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
 
 ## Model Split
 
-- Always use `gpt-5.4-mini` for the implementer pass.
-- Always use `gpt-5.4-mini` for the tester pass.
+- Always use `gpt-5.6-luna` for the implementer pass.
+- Always use `gpt-5.6-luna` for the tester pass.
 - Keep planning and review in the current agent session by default.
 - Do not switch planning or review to a different model unless the user explicitly asks for it.
 
@@ -24,14 +24,14 @@ Use this skill when a task needs a controlled implementation cycle instead of a 
    - Do not start the delivery loop until the plan is accepted.
 2. Implementer.
    - After plan acceptance, spawn an implementer subagent for the current plan step only.
-   - Always use `gpt-5.4-mini` for that implementer.
+   - Always use `gpt-5.6-luna` for that implementer.
    - The implementer does not re-review, re-plan, or widen scope; it executes the accepted current step.
    - Keep edits scoped to that step's accepted objective.
    - Pass only the accepted current step, success criteria, exact files, and the minimum evidence needed to complete that step.
    - Do not resend the full plan, full repo overview, or prior-step history unless the current step cannot be completed without it.
 3. Tester.
    - Spawn a tester subagent for that same current step.
-   - Always use `gpt-5.4-mini` for that tester.
+   - Always use `gpt-5.6-luna` for that tester.
    - Run the narrowest relevant validation commands first.
    - Validate the current step before moving to the next one.
    - Capture failures as concrete evidence, not guesses.

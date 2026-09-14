@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import dotenv from 'dotenv';
 
-export type ProductId = 'recepturomat' | 'rod-manager';
+export type ProductId = 'budget' | 'recepturomat' | 'rod-manager';
 
 export interface ProductWorkspaceConfig {
   authDbPath: string;
@@ -10,11 +10,20 @@ export interface ProductWorkspaceConfig {
   chromeDebugPort: number;
   frontendBaseUrl: string;
   webPort: number;
+  budgetDbPath?: string;
 }
 
 type EnvMap = Record<string, string>;
 
 const PRODUCT_WORKSPACE_CONFIG: Record<ProductId, ProductWorkspaceConfig> = {
+  budget: {
+    authDbPath: 'tmp/budget/auth.sqlite',
+    budgetDbPath: 'tmp/budget/budget.sqlite',
+    apiPort: 3200,
+    chromeDebugPort: 9444,
+    frontendBaseUrl: 'https://localhost:3200',
+    webPort: 4400,
+  },
   'rod-manager': {
     authDbPath: 'tmp/rod-manager/auth.sqlite',
     apiPort: 3000,
@@ -90,6 +99,16 @@ export function getProductFrontendBaseUrl(productId: ProductId): string {
 
 export function getProductRecipeDbPath(): string {
   return process.env.RECIPE_DB_PATH ?? 'tmp/recepturomat/recipes.sqlite';
+}
+
+export function getProductBudgetDbPath(productId: ProductId): string {
+  const budgetDbPath = PRODUCT_WORKSPACE_CONFIG[productId].budgetDbPath;
+
+  if (budgetDbPath === undefined) {
+    throw new Error(`Budget database is not configured for product ${productId}.`);
+  }
+
+  return process.env.BUDGET_DB_PATH ?? budgetDbPath;
 }
 
 export function getProductSeedInitialUser(): boolean {

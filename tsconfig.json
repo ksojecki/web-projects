@@ -16,6 +16,12 @@
       "path": "./libs/web-platform"
     },
     {
+      "path": "./projects/budget/apps/api"
+    },
+    {
+      "path": "./projects/budget/apps/web"
+    },
+    {
       "path": "./projects/recepturomat/apps/api"
     },
     {
