@@ -106,6 +106,7 @@ function insertTransactions(server: FastifyInstance): void {
       bankReference: null,
       legacySource: null,
       legacyRow: null,
+      importId: id === 'tx-food-jan' ? 'internal-import-1' : null,
       sourceHash: null,
       transferId: null,
       legacyTransferId: null,

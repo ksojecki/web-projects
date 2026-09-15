@@ -20,7 +20,9 @@ export function mapCategoryRow(row: BudgetCategoryRow): BudgetCategory {
   };
 }
 
-export function mapTransactionRow(row: BankTransactionRow): BankTransaction {
+export function mapTransactionRow(
+  row: Omit<BankTransactionRow, 'import_id'> & { import_id?: string | null },
+): BankTransaction {
   return {
     id: row.id,
     accountId: row.account_id,

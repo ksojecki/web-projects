@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { SESSION_COOKIE_NAME } from '../plugins/session';
 import { createServer, loginAsInitialAdministrator } from './oauth.spec.helpers';
 
-describe('oauth routes', () => {
+describe.sequential('oauth routes', () => {
   beforeEach(() => {
     process.env.AUTH_INITIAL_USER_EMAIL = 'admin@rod-manager.local';
     process.env.AUTH_INITIAL_USER_PASSWORD = 'admin1234';
@@ -56,6 +56,56 @@ describe('oauth routes', () => {
         surname: 'OAuth User',
       },
     });
+
+    await server.close();
+  });
+
+  it('blocks unknown OAuth login but allows an existing account when auto-provisioning is disabled', async () => {
+    const server = await createServer({
+      allowRegistration: true,
+      allowOAuthAutoProvisioning: false,
+    });
+
+    const unknownAuthorizeResponse = await server.inject({
+      method: 'POST',
+      url: '/api/auth/oauth/authorize/google',
+    });
+    const unknownState = unknownAuthorizeResponse.json<{ state: string }>().state;
+
+    const unknownCallbackResponse = await server.inject({
+      method: 'POST',
+      url: '/api/auth/oauth/callback/google',
+      payload: { code: 'oauth-code-unknown', state: unknownState },
+    });
+
+    expect(unknownCallbackResponse.statusCode).toBe(500);
+    expect(unknownCallbackResponse.json()).toEqual({
+      message: 'OAuth callback failed: OAuth account provisioning is disabled.',
+    });
+    expect(server.authStore.findUserByEmail('oauth-google@rod-manager.local')).toBeUndefined();
+
+    const existingUser = server.authStore.createUser(
+      'oauth-google@rod-manager.local',
+      'Existing',
+      'Account',
+      'secret123',
+    );
+    const existingAuthorizeResponse = await server.inject({
+      method: 'POST',
+      url: '/api/auth/oauth/authorize/google',
+    });
+    const existingState = existingAuthorizeResponse.json<{ state: string }>().state;
+
+    const existingCallbackResponse = await server.inject({
+      method: 'POST',
+      url: '/api/auth/oauth/callback/google',
+      payload: { code: 'oauth-code-existing', state: existingState },
+    });
+
+    expect(existingCallbackResponse.statusCode).toBe(200);
+    expect(server.authStore.findUserByEmail('oauth-google@rod-manager.local')?.id).toBe(
+      existingUser.id,
+    );
 
     await server.close();
   });

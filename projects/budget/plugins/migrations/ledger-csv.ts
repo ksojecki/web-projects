@@ -90,14 +90,14 @@ function transferId(legacyTransferId: string): string {
   return `transfer-${createHash('sha256').update(legacyTransferId).digest('hex').slice(0, 24)}`;
 }
 
-function sourceRowId(sourceName: string, rowNumber: number): string {
-  return createHash('sha256').update(`${sourceName}\u0000${rowNumber}`).digest('hex').slice(0, 32);
+function stableRowId(importId: string, rowNumber: number): string {
+  return createHash('sha256').update(`${importId}\u0000${rowNumber}`).digest('hex').slice(0, 32);
 }
 
 function prepareRow(
   row: LedgerRow,
   rowNumber: number,
-  sourceName: string,
+  importId: string,
   categoryIds: ReadonlyMap<string, string>,
 ): PreparedRow | RejectedRow {
   if (row.length !== LEDGER_HEADERS.length) {
@@ -143,7 +143,7 @@ function prepareRow(
     row,
     rowNumber,
     sourceHash,
-    transactionId: explicitId || `legacy-${sourceRowId(sourceName, rowNumber)}`,
+    transactionId: explicitId || `legacy-${stableRowId(importId, rowNumber)}`,
     valueDate,
     bookedAt,
     amountCents: amount,
@@ -200,7 +200,7 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
 
     const findExisting = db.prepare<[string, number], { id: string }>(
       `SELECT id FROM bank_transactions
-       WHERE legacy_source = ? AND legacy_row = ? LIMIT 1`,
+       WHERE import_id = ? AND legacy_row = ? LIMIT 1`,
     );
     const insertAccount = db.prepare(
       `INSERT INTO accounts (id, name, institution, currency)
@@ -214,9 +214,9 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
       `INSERT INTO bank_transactions (
         id, account_id, booked_at, value_date, amount_cents, currency,
         native_amount_cents, native_currency, reporting_amount_cents, description,
-        counterparty_name, bank_reference, legacy_source, legacy_row, source_hash, transfer_id,
+        counterparty_name, bank_reference, legacy_source, legacy_row, import_id, source_hash, transfer_id,
         legacy_transfer_id, legacy_raw_payload
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     );
     const insertClassification = db.prepare(
       `INSERT INTO transaction_classifications (
@@ -230,7 +230,7 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
     let invalid = 0;
     let ambiguous = 0;
     for (const [index, row] of rows.slice(1).entries()) {
-      const prepared = prepareRow(row, index + 2, sourceName, categoryIds);
+      const prepared = prepareRow(row, index + 2, importId, categoryIds);
       if ('kind' in prepared) {
         if (prepared.kind === 'invalid') {
           invalid += 1;
@@ -239,7 +239,7 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
         }
         continue;
       }
-      const existing = findExisting.get(sourceName, prepared.rowNumber);
+      const existing = findExisting.get(importId, prepared.rowNumber);
       if (existing) {
         skipped += 1;
         continue;
@@ -266,13 +266,14 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
           prepared.bankReference,
           sourceName,
           prepared.rowNumber,
+          importId,
           prepared.sourceHash,
           transfer,
           prepared.legacyTransferId,
           JSON.stringify([...prepared.row]),
         );
         insertClassification.run(
-          `classification-${sourceRowId(sourceName, prepared.rowNumber)}`,
+          `classification-${stableRowId(importId, prepared.rowNumber)}`,
           prepared.transactionId,
           prepared.economicType,
           prepared.legacySubtype,

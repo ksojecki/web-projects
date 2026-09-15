@@ -4,7 +4,7 @@ import type Database from 'better-sqlite3';
 import { budgetCategorySeedData } from './seedData.ts';
 import type { BudgetDatabaseBootstrapOptions } from './types.ts';
 
-export const BUDGET_SCHEMA_VERSION = 4;
+export const BUDGET_SCHEMA_VERSION = 5;
 
 export function resolveBudgetDatabasePath(path: string): string {
   if (path === ':memory:') {
@@ -88,6 +88,7 @@ export function initializeBudgetSchema(db: Database.Database): void {
       bank_reference TEXT,
       legacy_source TEXT,
       legacy_row INTEGER,
+      import_id TEXT,
       source_hash TEXT,
       transfer_id TEXT,
       legacy_transfer_id TEXT,
@@ -193,6 +194,14 @@ export function initializeBudgetSchema(db: Database.Database): void {
       'ALTER TABLE bank_transactions ADD COLUMN reporting_amount_cents INTEGER NOT NULL DEFAULT 0',
     );
   }
+  if (!bankTransactionColumns.some((column) => column.name === 'import_id')) {
+    db.exec('ALTER TABLE bank_transactions ADD COLUMN import_id TEXT');
+  }
+  db.exec(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_bank_transactions_import_row
+      ON bank_transactions (import_id, legacy_row)
+      WHERE import_id IS NOT NULL AND legacy_row IS NOT NULL;
+  `);
   // Before schema v4 amount_cents/currency were the only amount fields. They
   // represented the source amount, and legacy rows have no separate PLN value.
   db.exec(`
@@ -225,6 +234,7 @@ export function initializeBudgetSchema(db: Database.Database): void {
         OR old.bank_reference IS NOT new.bank_reference
         OR old.legacy_source IS NOT new.legacy_source
         OR old.legacy_row IS NOT new.legacy_row
+        OR old.import_id IS NOT new.import_id
         OR old.source_hash IS NOT new.source_hash
         OR old.transfer_id IS NOT new.transfer_id
         OR old.legacy_transfer_id IS NOT new.legacy_transfer_id

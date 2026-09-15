@@ -68,6 +68,8 @@ export interface ClassificationInput {
 }
 
 export interface BankTransactionInsert extends BankTransaction {
+  /** Internal import provenance used for duplicate detection and audit storage. */
+  importId?: string | null;
   /** The exact parsed A:Y row, retained for audit and future replays. */
   legacyRawPayload?: string | null;
 }
@@ -176,7 +178,7 @@ export interface CategoryWithGroupRow {
   subcategory: string;
 }
 
-export interface TransactionQueryRow extends BankTransactionRow, AccountRow {
+export interface TransactionQueryRow extends Omit<BankTransactionRow, 'import_id'>, AccountRow {
   transaction_id_fact: string;
   classification_id: string | null;
   transaction_id: string | null;
@@ -210,6 +212,7 @@ export interface BankTransactionRow {
   bank_reference: string | null;
   legacy_source: string | null;
   legacy_row: number | null;
+  import_id: string | null;
   source_hash: string | null;
   transfer_id: string | null;
   legacy_transfer_id: string | null;

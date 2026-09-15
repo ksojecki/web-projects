@@ -4,6 +4,7 @@ Nx workspace for web projects and shared libraries.
 
 ## Projects
 
+- [Budget](projects/budget/README.md) - household finance ledger and budgeting app.
 - [Rod Manager](projects/rod-manager/README.md) - community portal for small groups that need public pages, member accounts, and simple content management.
 - [Recepturomat](projects/recepturomat/README.md) - recipe and yield calculation app for small bakeries, restaurants, and food enthusiasts.
 
@@ -26,6 +27,7 @@ Nx workspace for web projects and shared libraries.
 
 ```sh
 npm ci
+npm run dev:budget
 npm run dev:rod-manager
 npm run dev:recepturomat
 npm run generate:project -- <name>

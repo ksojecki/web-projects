@@ -168,8 +168,7 @@ export async function completeOAuthFlow(
 
   if (oauthState.intent === 'login') {
     if (
-      Object.prototype.hasOwnProperty.call(fastify, 'authPolicy') &&
-      !fastify.authPolicy.allowOAuthAutoProvisioning &&
+      !fastify.authPolicy?.allowOAuthAutoProvisioning &&
       fastify.authStore.findUserByOAuthProvider(provider, userInfo.id) === undefined &&
       fastify.authStore.findUserByEmail(userInfo.email) === undefined
     ) {

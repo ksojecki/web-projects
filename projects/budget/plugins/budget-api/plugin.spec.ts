@@ -107,6 +107,7 @@ describe('budget API', () => {
         classification: { economicType: 'expense', source: 'legacy' },
         category: { category: 'Życie', subcategory: 'Dziecko' },
       });
+      expect(response.json().items[0]).not.toHaveProperty('importId');
       expect(response.json().items[0]).not.toHaveProperty('legacyRawPayload');
     } finally {
       await server.close();
