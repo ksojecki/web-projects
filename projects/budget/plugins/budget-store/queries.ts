@@ -90,6 +90,18 @@ export function getReportSummary(db: Database.Database, period: ReportPeriod): B
       `${transactionSelect}${transactionFrom} WHERE ${where.join(' AND ')}`,
     )
     .all(...parameters);
+  const periodEnd =
+    period.month === null
+      ? `${String(period.year).padStart(4, '0')}-12-31`
+      : `${String(period.year).padStart(4, '0')}-${String(period.month).padStart(2, '0')}-${String(new Date(Date.UTC(period.year, period.month, 0)).getUTCDate()).padStart(2, '0')}`;
+  const balanceRows = db
+    .prepare<[string], { account_id: string; balance_cents: number }>(
+      `SELECT account_id, SUM(native_amount_cents) AS balance_cents
+       FROM bank_transactions
+       WHERE booked_at <= ?
+       GROUP BY account_id`,
+    )
+    .all(periodEnd);
   let incomeCents = 0;
   let expenseCents = 0;
   const breakdowns = new Map<string, BudgetReportSummary['categoryBreakdown'][number]>();
@@ -102,11 +114,13 @@ export function getReportSummary(db: Database.Database, period: ReportPeriod): B
     .map(mapAccountRow)) {
     accountBalances.set(account.id, { ...account, balanceCents: 0 });
   }
-  for (const row of rows) {
+  for (const row of balanceRows) {
     const account = accountBalances.get(row.account_id);
     if (account !== undefined) {
-      account.balanceCents += row.native_amount_cents;
+      account.balanceCents = row.balance_cents;
     }
+  }
+  for (const row of rows) {
     if (row.economic_type !== 'income' && row.economic_type !== 'expense') {
       continue;
     }

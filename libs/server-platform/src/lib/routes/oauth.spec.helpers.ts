@@ -66,14 +66,27 @@ function createOAuthService(): OAuthService {
   };
 }
 
-export async function createServer() {
+export async function createServer(authPolicy?: {
+  allowRegistration: boolean;
+  allowOAuthAutoProvisioning: boolean;
+}) {
   const server = Fastify();
   await server.register(sessionPlugin);
   await server.register(databasePlugin, { project: testProjectConfig });
   server.decorate('oauth', createOAuthService());
 
-  authRoutes(server);
-  oauthRoutes(server);
+  server.decorate(
+    'authPolicy',
+    authPolicy ?? {
+      allowRegistration: true,
+      allowOAuthAutoProvisioning: true,
+    },
+  );
+
+  await server.register(async (child) => {
+    authRoutes(child);
+    oauthRoutes(child);
+  });
 
   return server;
 }

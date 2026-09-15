@@ -14,7 +14,7 @@ const testProjectConfig: ServerPlatformProjectConfig = {
   },
 };
 
-describe('auth routes', () => {
+describe.sequential('auth routes', () => {
   beforeEach(() => {
     process.env.AUTH_INITIAL_USER_EMAIL = 'admin@rod-manager.local';
     process.env.AUTH_INITIAL_USER_PASSWORD = 'admin1234';
@@ -29,6 +29,7 @@ describe('auth routes', () => {
     const server = Fastify();
     await server.register(sessionPlugin);
     await server.register(databasePlugin, { project: testProjectConfig });
+    server.decorate('authPolicy', { allowRegistration: true, allowOAuthAutoProvisioning: true });
 
     authRoutes(server);
 
@@ -77,6 +78,7 @@ describe('auth routes', () => {
     const server = Fastify();
     await server.register(sessionPlugin);
     await server.register(databasePlugin, { project: testProjectConfig });
+    server.decorate('authPolicy', { allowRegistration: true, allowOAuthAutoProvisioning: true });
 
     authRoutes(server);
 
@@ -95,6 +97,7 @@ describe('auth routes', () => {
     const server = Fastify();
     await server.register(sessionPlugin);
     await server.register(databasePlugin, { project: testProjectConfig });
+    server.decorate('authPolicy', { allowRegistration: true, allowOAuthAutoProvisioning: true });
 
     authRoutes(server);
 
@@ -117,6 +120,7 @@ describe('auth routes', () => {
     const server = Fastify();
     await server.register(sessionPlugin);
     await server.register(databasePlugin, { project: testProjectConfig });
+    server.decorate('authPolicy', { allowRegistration: true, allowOAuthAutoProvisioning: true });
 
     authRoutes(server);
 
@@ -151,6 +155,7 @@ describe('auth routes', () => {
     const server = Fastify();
     await server.register(sessionPlugin);
     await server.register(databasePlugin, { project: testProjectConfig });
+    server.decorate('authPolicy', { allowRegistration: true, allowOAuthAutoProvisioning: true });
 
     authRoutes(server);
 
@@ -176,6 +181,7 @@ describe('auth routes', () => {
     const server = Fastify();
     await server.register(sessionPlugin);
     await server.register(databasePlugin, { project: testProjectConfig });
+    server.decorate('authPolicy', { allowRegistration: true, allowOAuthAutoProvisioning: true });
 
     authRoutes(server);
 
@@ -202,6 +208,7 @@ describe('auth routes', () => {
     const server = Fastify();
     await server.register(sessionPlugin);
     await server.register(databasePlugin, { project: testProjectConfig });
+    server.decorate('authPolicy', { allowRegistration: true, allowOAuthAutoProvisioning: true });
 
     authRoutes(server);
 
@@ -222,11 +229,14 @@ describe('auth routes', () => {
     const server = Fastify();
     await server.register(sessionPlugin);
     await server.register(databasePlugin, { project: testProjectConfig });
-    Object.defineProperty(server, 'authPolicy', {
-      value: { allowRegistration: false, allowOAuthAutoProvisioning: true },
+    server.decorate('authPolicy', {
+      allowRegistration: false,
+      allowOAuthAutoProvisioning: true,
     });
 
-    authRoutes(server);
+    await server.register(async (child) => {
+      authRoutes(child);
+    });
 
     const response = await server.inject({
       method: 'POST',

@@ -26,11 +26,15 @@ export function createBudgetStore(db: Database.Database): BudgetStore {
   const transactionColumns = `id, account_id, booked_at, value_date, amount_cents, currency,
     native_amount_cents, native_currency, reporting_amount_cents, description,
     counterparty_name, counterparty_account, bank_reference, legacy_source, legacy_row,
-    source_hash, transfer_id, legacy_transfer_id, legacy_raw_payload`;
+    import_id, source_hash, transfer_id, legacy_transfer_id, legacy_raw_payload`;
   const getTransactionStatement = db.prepare<[string], BankTransactionAuditRow>(
     `SELECT ${transactionColumns} FROM bank_transactions WHERE id = ?`,
   );
-  const findExistingTransactionStatement = db.prepare<
+  const findExistingByIdentityStatement = db.prepare<[string, number], BankTransactionAuditRow>(
+    `SELECT ${transactionColumns} FROM bank_transactions
+      WHERE import_id = ? AND legacy_row = ? LIMIT 1`,
+  );
+  const findExistingByLegacyStatement = db.prepare<
     [string | null, number | null],
     BankTransactionAuditRow
   >(
@@ -41,8 +45,8 @@ export function createBudgetStore(db: Database.Database): BudgetStore {
       id, account_id, booked_at, value_date, amount_cents, currency,
       native_amount_cents, native_currency, reporting_amount_cents, description,
       counterparty_name, counterparty_account, bank_reference, legacy_source, legacy_row,
-      source_hash, transfer_id, legacy_transfer_id, legacy_raw_payload
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING`);
+      import_id, source_hash, transfer_id, legacy_transfer_id, legacy_raw_payload
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING`);
   const getCurrentClassificationStatement = db.prepare<[string], TransactionClassificationRow>(
     `SELECT id, transaction_id, economic_type, legacy_subtype, category_id, source, confidence, notes, rule_id, is_current
       FROM transaction_classifications WHERE transaction_id = ? AND is_current = 1`,
@@ -67,10 +71,9 @@ export function createBudgetStore(db: Database.Database): BudgetStore {
     if (existingById !== undefined) {
       return { transaction: mapTransactionRow(existingById), inserted: false };
     }
-    const existing = findExistingTransactionStatement.get(
-      transaction.legacySource,
-      transaction.legacyRow,
-    );
+    const existing = transaction.importId
+      ? findExistingByIdentityStatement.get(transaction.importId, transaction.legacyRow!)
+      : findExistingByLegacyStatement.get(transaction.legacySource, transaction.legacyRow);
     if (existing !== undefined) {
       return { transaction: mapTransactionRow(existing), inserted: false };
     }
@@ -90,6 +93,7 @@ export function createBudgetStore(db: Database.Database): BudgetStore {
       transaction.bankReference,
       transaction.legacySource,
       transaction.legacyRow,
+      transaction.importId ?? null,
       transaction.sourceHash,
       transaction.transferId,
       transaction.legacyTransferId,

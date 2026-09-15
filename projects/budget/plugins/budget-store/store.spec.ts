@@ -20,6 +20,61 @@ afterEach(() => {
 });
 
 describe('budget store', () => {
+  it('keeps cash flow period-only while account balances include prior activity through period end', () => {
+    const { store } = createStore();
+    const insert = (id: string, bookedAt: string, amountCents: number) => {
+      store.insertBankTransaction({
+        id,
+        accountId: 'main',
+        bookedAt,
+        valueDate: bookedAt,
+        amountCents,
+        currency: 'PLN',
+        description: id,
+        counterpartyName: null,
+        counterpartyAccount: null,
+        bankReference: null,
+        legacySource: null,
+        legacyRow: null,
+        sourceHash: null,
+        transferId: null,
+        legacyTransferId: null,
+      });
+    };
+    insert('opening', '2025-12-31', 100_000);
+    insert('january-income', '2026-01-10', 50_000);
+    insert('january-expense', '2026-01-20', -10_000);
+    insert('february-income', '2026-02-10', 30_000);
+    store.classifyTransaction({
+      transactionId: 'january-income',
+      economicType: 'income',
+      source: 'manual',
+    });
+    store.classifyTransaction({
+      transactionId: 'january-expense',
+      economicType: 'expense',
+      source: 'manual',
+    });
+    store.classifyTransaction({
+      transactionId: 'february-income',
+      economicType: 'income',
+      source: 'manual',
+    });
+
+    expect(store.getReportSummary({ year: 2026, month: 1 })).toMatchObject({
+      incomeCents: 50_000,
+      expenseCents: 10_000,
+      balanceCents: 40_000,
+      accountBalances: [expect.objectContaining({ balanceCents: 140_000 })],
+    });
+    expect(store.getReportSummary({ year: 2026, month: null })).toMatchObject({
+      incomeCents: 80_000,
+      expenseCents: 10_000,
+      balanceCents: 70_000,
+      accountBalances: [expect.objectContaining({ balanceCents: 170_000 })],
+    });
+  });
+
   it('deduplicates an immutable source row', () => {
     const { store } = createStore();
     const transaction = {
