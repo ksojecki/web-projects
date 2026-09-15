@@ -4,9 +4,9 @@ import { getReportSummary, listTransactions } from './queries';
 import { mapAccountRow, mapCategoryRow, mapClassificationRow, mapTransactionRow } from './mappers';
 import type {
   AccountRow,
+  BankTransactionAuditRow,
   BankTransactionInsert,
   BankTransactionInsertResult,
-  BankTransactionRow,
   BudgetCategoryRow,
   BudgetStore,
   ClassificationInput,
@@ -23,24 +23,26 @@ export function createBudgetStore(db: Database.Database): BudgetStore {
   const getCategoryStatement = db.prepare<[string], BudgetCategoryRow>(
     'SELECT id, category_group, category, subcategory FROM categories WHERE id = ?',
   );
-  const transactionColumns = `id, account_id, booked_at, value_date, amount_cents, currency, description,
+  const transactionColumns = `id, account_id, booked_at, value_date, amount_cents, currency,
+    native_amount_cents, native_currency, reporting_amount_cents, description,
     counterparty_name, counterparty_account, bank_reference, legacy_source, legacy_row,
     source_hash, transfer_id, legacy_transfer_id, legacy_raw_payload`;
-  const getTransactionStatement = db.prepare<[string], BankTransactionRow>(
+  const getTransactionStatement = db.prepare<[string], BankTransactionAuditRow>(
     `SELECT ${transactionColumns} FROM bank_transactions WHERE id = ?`,
   );
   const findExistingTransactionStatement = db.prepare<
-    [string | null, number | null, string | null],
-    BankTransactionRow
+    [string | null, number | null],
+    BankTransactionAuditRow
   >(
-    `SELECT ${transactionColumns} FROM bank_transactions WHERE (legacy_source = ? AND legacy_row = ?)
-      OR (source_hash IS NOT NULL AND source_hash = ?) LIMIT 1`,
+    `SELECT ${transactionColumns} FROM bank_transactions
+      WHERE legacy_source = ? AND legacy_row = ? LIMIT 1`,
   );
   const insertTransactionStatement = db.prepare(`INSERT INTO bank_transactions (
-      id, account_id, booked_at, value_date, amount_cents, currency, description,
+      id, account_id, booked_at, value_date, amount_cents, currency,
+      native_amount_cents, native_currency, reporting_amount_cents, description,
       counterparty_name, counterparty_account, bank_reference, legacy_source, legacy_row,
       source_hash, transfer_id, legacy_transfer_id, legacy_raw_payload
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING`);
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING`);
   const getCurrentClassificationStatement = db.prepare<[string], TransactionClassificationRow>(
     `SELECT id, transaction_id, economic_type, legacy_subtype, category_id, source, confidence, notes, rule_id, is_current
       FROM transaction_classifications WHERE transaction_id = ? AND is_current = 1`,
@@ -68,7 +70,6 @@ export function createBudgetStore(db: Database.Database): BudgetStore {
     const existing = findExistingTransactionStatement.get(
       transaction.legacySource,
       transaction.legacyRow,
-      transaction.sourceHash,
     );
     if (existing !== undefined) {
       return { transaction: mapTransactionRow(existing), inserted: false };
@@ -80,6 +81,9 @@ export function createBudgetStore(db: Database.Database): BudgetStore {
       transaction.valueDate,
       transaction.amountCents,
       transaction.currency,
+      transaction.amountCents,
+      transaction.currency,
+      transaction.reportingAmountCents ?? transaction.amountCents,
       transaction.description,
       transaction.counterpartyName,
       transaction.counterpartyAccount,

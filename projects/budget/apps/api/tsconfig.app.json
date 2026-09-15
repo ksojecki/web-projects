@@ -3,12 +3,17 @@
   "compilerOptions": {
     "outDir": "../../../../dist/projects/budget/apps/api",
     "types": ["node"],
-    "rootDir": "src",
+    "rootDir": "../..",
     "allowImportingTsExtensions": true,
     "tsBuildInfoFile": "../../../../dist/projects/budget/apps/api/tsconfig.app.tsbuildinfo"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
+  "include": ["src/**/*.ts", "../../plugins/**/*.ts"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "../../plugins/**/*.spec.ts",
+    "../../plugins/**/*.test.ts"
+  ],
   "references": [
     {
       "path": "../../../../libs/shared/tsconfig.lib.json"

@@ -1,6 +1,6 @@
 import { startProductServer } from '@ksojecki/platform-server-platform';
-import { budgetStorePlugin } from './budget-store';
-import { budgetApiPlugin } from './budget-api';
+import { budgetApiPlugin } from '../../../plugins/budget-api';
+import { budgetStorePlugin } from '../../../plugins/budget-store';
 import { budgetProjectConfig } from './productConfig';
 
 startProductServer({
@@ -8,6 +8,6 @@ startProductServer({
   project: budgetProjectConfig,
   async registerFeaturePlugins(server) {
     await server.register(budgetStorePlugin, budgetProjectConfig.budgetStore);
-    await server.register(budgetApiPlugin);
+    await server.register(budgetApiPlugin, { ownerEmail: budgetProjectConfig.ownerEmail });
   },
 });

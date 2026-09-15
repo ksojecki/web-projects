@@ -30,6 +30,7 @@ export interface BankTransaction {
   valueDate: string | null;
   amountCents: number;
   currency: string;
+  reportingAmountCents?: number;
   description: string;
   counterpartyName: string | null;
   counterpartyAccount: string | null;
@@ -39,8 +40,6 @@ export interface BankTransaction {
   sourceHash: string | null;
   transferId: string | null;
   legacyTransferId: string | null;
-  /** The exact parsed A:Y row, retained for audit and future replays. */
-  legacyRawPayload?: string | null;
 }
 
 export interface TransactionClassification {
@@ -68,7 +67,10 @@ export interface ClassificationInput {
   ruleId?: string | null;
 }
 
-export type BankTransactionInsert = BankTransaction;
+export interface BankTransactionInsert extends BankTransaction {
+  /** The exact parsed A:Y row, retained for audit and future replays. */
+  legacyRawPayload?: string | null;
+}
 
 export interface BankTransactionInsertResult {
   transaction: BankTransaction;
@@ -189,6 +191,7 @@ export interface TransactionQueryRow extends BankTransactionRow, AccountRow {
   category_group: string | null;
   category_name: string | null;
   category_subcategory: string | null;
+  account_currency?: string;
 }
 
 export interface BankTransactionRow {
@@ -198,6 +201,9 @@ export interface BankTransactionRow {
   value_date: string | null;
   amount_cents: number;
   currency: string;
+  native_amount_cents: number;
+  native_currency: string;
+  reporting_amount_cents: number;
   description: string;
   counterparty_name: string | null;
   counterparty_account: string | null;
@@ -207,6 +213,9 @@ export interface BankTransactionRow {
   source_hash: string | null;
   transfer_id: string | null;
   legacy_transfer_id: string | null;
+}
+
+export interface BankTransactionAuditRow extends BankTransactionRow {
   legacy_raw_payload: string | null;
 }
 

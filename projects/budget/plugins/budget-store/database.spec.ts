@@ -94,4 +94,19 @@ describe('budget database bootstrap', () => {
         .run(),
     ).toThrow('FOREIGN KEY');
   });
+
+  it('rejects deletion of bank transaction source facts', () => {
+    const db = new Database(':memory:');
+    databases.push(db);
+    bootstrapBudgetDatabase(db);
+    db.prepare("INSERT INTO accounts (id, name) VALUES ('main', 'Main')").run();
+    db.prepare(
+      `INSERT INTO bank_transactions (id, account_id, booked_at, amount_cents, description)
+       VALUES ('tx-immutable', 'main', '2026-01-01', 100, 'test')`,
+    ).run();
+
+    expect(() =>
+      db.prepare("DELETE FROM bank_transactions WHERE id = 'tx-immutable'").run(),
+    ).toThrow('cannot be deleted');
+  });
 });

@@ -46,6 +46,40 @@ describe('budget store', () => {
     expect(duplicate.transaction.id).toBe('tx-1');
   });
 
+  it('persists audit payloads without exposing them through projections', () => {
+    const { db, store } = createStore();
+    store.insertBankTransaction({
+      id: 'tx-audit',
+      accountId: 'main',
+      bookedAt: '2026-01-01',
+      valueDate: null,
+      amountCents: -1250,
+      currency: 'PLN',
+      description: 'Groceries',
+      counterpartyName: null,
+      counterpartyAccount: null,
+      bankReference: null,
+      legacySource: 'ledger.csv',
+      legacyRow: 42,
+      sourceHash: 'hash-42',
+      transferId: null,
+      legacyTransferId: null,
+      legacyRawPayload: '{"raw":true}',
+    });
+
+    expect(
+      db
+        .prepare<{ id: string }, { legacy_raw_payload: string }>(
+          'SELECT legacy_raw_payload FROM bank_transactions WHERE id = @id',
+        )
+        .get({ id: 'tx-audit' })?.legacy_raw_payload,
+    ).toBe('{"raw":true}');
+    expect(store.listTransactions().items[0]).not.toHaveProperty('legacyRawPayload');
+    expect(store.getReportSummary({ year: 2026, month: null })).not.toHaveProperty(
+      'legacyRawPayload',
+    );
+  });
+
   it('prevents source fact updates and validates classification categories', () => {
     const { db, store } = createStore();
     store.insertBankTransaction({

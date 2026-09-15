@@ -8,6 +8,10 @@ export const SESSION_COOKIE_NAME = 'rod_manager_session';
 declare module 'fastify' {
   interface FastifyInstance {
     requireAuthenticatedSession: RequireAuthenticatedSessionHook;
+    authPolicy: {
+      allowRegistration: boolean;
+      allowOAuthAutoProvisioning: boolean;
+    };
   }
 
   interface FastifyReply {

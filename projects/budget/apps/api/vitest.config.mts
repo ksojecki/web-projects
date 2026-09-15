@@ -20,7 +20,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/**/*.{spec,test}.ts'],
+    include: ['src/**/*.{spec,test}.ts', '../../plugins/**/*.{spec,test}.ts'],
     passWithNoTests: true,
   },
 });

@@ -29,6 +29,10 @@ export async function createServerPlatform(
   await fastify.register(sensiblePlugin);
   await fastify.register(databasePlugin, { project: opts.project });
   await fastify.register(sessionPlugin);
+  fastify.decorate('authPolicy', {
+    allowRegistration: opts.project.auth?.allowRegistration ?? true,
+    allowOAuthAutoProvisioning: opts.project.auth?.allowOAuthAutoProvisioning ?? true,
+  });
   await fastify.register(oauthPlugin);
 
   // Core routes
