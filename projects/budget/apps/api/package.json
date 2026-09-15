@@ -102,7 +102,7 @@
       "lint": {
         "executor": "nx:run-commands",
         "options": {
-          "command": "node node_modules/oxlint/bin/oxlint projects/budget/apps/api --config .oxlintrc.json"
+          "command": "node node_modules/oxlint/bin/oxlint projects/budget/apps/api projects/budget/plugins --config .oxlintrc.json"
         }
       },
       "test": {

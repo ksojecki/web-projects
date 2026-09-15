@@ -18,9 +18,10 @@ const transactionFrom = `
 
 const transactionSelect = `
   SELECT t.id AS transaction_id_fact, t.account_id, t.booked_at, t.value_date, t.amount_cents, t.currency,
+    t.native_amount_cents, t.native_currency, t.reporting_amount_cents,
     t.description, t.counterparty_name, t.counterparty_account, t.bank_reference,
     t.legacy_source, t.legacy_row, t.source_hash, t.transfer_id, t.legacy_transfer_id,
-    t.legacy_raw_payload, a.name, a.institution, a.account_type, a.currency,
+    a.name, a.institution, a.account_type, a.currency AS account_currency,
     c.id AS classification_id, c.transaction_id, c.economic_type, c.legacy_subtype,
     c.category_id, c.source AS classification_source, c.confidence, c.notes, c.rule_id,
     c.is_current, cat.category_group, cat.category AS category_name,
@@ -104,12 +105,12 @@ export function getReportSummary(db: Database.Database, period: ReportPeriod): B
   for (const row of rows) {
     const account = accountBalances.get(row.account_id);
     if (account !== undefined) {
-      account.balanceCents += row.amount_cents;
+      account.balanceCents += row.native_amount_cents;
     }
     if (row.economic_type !== 'income' && row.economic_type !== 'expense') {
       continue;
     }
-    const amount = Math.abs(row.amount_cents);
+    const amount = Math.abs(row.reporting_amount_cents);
     if (row.economic_type === 'income') {
       incomeCents += amount;
     } else {

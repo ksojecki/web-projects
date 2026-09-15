@@ -6,20 +6,29 @@ import {
   getProductSeedInitialUser,
   loadProductEnv,
 } from '@ksojecki/platform-shared';
-import type { BudgetStoreConfig } from './budget-store';
+import type { BudgetStoreConfig } from '../../../plugins/budget-store';
 
 loadProductEnv('budget');
 
 export interface BudgetProjectConfig extends ServerPlatformProjectConfig {
+  ownerEmail: string;
   budgetStore: BudgetStoreConfig;
 }
 
 export const budgetProjectConfig: BudgetProjectConfig = {
   projectId: 'budget',
+  auth: {
+    allowRegistration: false,
+    allowOAuthAutoProvisioning: false,
+  },
   database: {
     path: getProductAuthDbPath('budget'),
     seedInitialUser: getProductSeedInitialUser(),
   },
+  ownerEmail:
+    process.env.BUDGET_OWNER_EMAIL ??
+    process.env.AUTH_INITIAL_USER_EMAIL ??
+    'admin@rod-manager.local',
   budgetStore: {
     path: getProductBudgetDbPath('budget'),
     seedCategories: true,

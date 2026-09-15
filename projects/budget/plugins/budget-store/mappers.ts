@@ -28,6 +28,7 @@ export function mapTransactionRow(row: BankTransactionRow): BankTransaction {
     valueDate: row.value_date,
     amountCents: row.amount_cents,
     currency: row.currency,
+    reportingAmountCents: row.reporting_amount_cents,
     description: row.description,
     counterpartyName: row.counterparty_name,
     counterpartyAccount: row.counterparty_account,
@@ -37,7 +38,6 @@ export function mapTransactionRow(row: BankTransactionRow): BankTransaction {
     sourceHash: row.source_hash,
     transferId: row.transfer_id,
     legacyTransferId: row.legacy_transfer_id,
-    legacyRawPayload: row.legacy_raw_payload,
   };
 }
 
@@ -74,6 +74,9 @@ export function mapTransactionQueryRow(row: TransactionQueryRow): BudgetTransact
     value_date: row.value_date,
     amount_cents: row.amount_cents,
     currency: row.currency,
+    native_amount_cents: row.native_amount_cents,
+    native_currency: row.native_currency,
+    reporting_amount_cents: row.reporting_amount_cents,
     description: row.description,
     counterparty_name: row.counterparty_name,
     counterparty_account: row.counterparty_account,
@@ -83,14 +86,13 @@ export function mapTransactionQueryRow(row: TransactionQueryRow): BudgetTransact
     source_hash: row.source_hash,
     transfer_id: row.transfer_id,
     legacy_transfer_id: row.legacy_transfer_id,
-    legacy_raw_payload: row.legacy_raw_payload,
   });
   const account = mapAccountRow({
     id: row.account_id,
     name: row.name,
     institution: row.institution,
     account_type: row.account_type,
-    currency: row.currency,
+    currency: row.account_currency ?? row.currency,
   });
   const classification =
     row.classification_id === null

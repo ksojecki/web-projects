@@ -37,6 +37,14 @@ export default function authRoutes(fastify: FastifyInstance) {
   });
 
   fastify.post<{ Body: RegisterRequestBody }>('/api/auth/register', async (request, reply) => {
+    if (
+      Object.prototype.hasOwnProperty.call(fastify, 'authPolicy') &&
+      !fastify.authPolicy.allowRegistration
+    ) {
+      await reply.status(403).send({ message: 'Registration is disabled.' });
+      return;
+    }
+
     const { email, name, surname, password } = request.body;
 
     if (!email || !name || !surname || !password) {

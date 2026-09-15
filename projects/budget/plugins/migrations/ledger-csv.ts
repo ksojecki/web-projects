@@ -60,6 +60,7 @@ interface PreparedRow {
   valueDate: string;
   bookedAt: string;
   amountCents: number;
+  reportingAmountCents: number;
   currency: string;
   accountName: string;
   institution: string;
@@ -89,9 +90,14 @@ function transferId(legacyTransferId: string): string {
   return `transfer-${createHash('sha256').update(legacyTransferId).digest('hex').slice(0, 24)}`;
 }
 
+function sourceRowId(sourceName: string, rowNumber: number): string {
+  return createHash('sha256').update(`${sourceName}\u0000${rowNumber}`).digest('hex').slice(0, 32);
+}
+
 function prepareRow(
   row: LedgerRow,
   rowNumber: number,
+  sourceName: string,
   categoryIds: ReadonlyMap<string, string>,
 ): PreparedRow | RejectedRow {
   if (row.length !== LEDGER_HEADERS.length) {
@@ -102,14 +108,16 @@ function prepareRow(
   const institution = text(row[2]);
   const accountName = text(row[3]);
   const currency = parseLedgerCurrency(row[7]);
-  const amount = parseLedgerAmount(row[8] || row[6]);
+  const amount = parseLedgerAmount(row[6]);
+  const reportingAmount = parseLedgerAmount(row[8] || row[6]);
   if (
     !valueDate ||
     !bookedAt ||
     !institution ||
     !accountName ||
     !currency ||
-    amount === undefined
+    amount === undefined ||
+    reportingAmount === undefined
   ) {
     return { kind: 'invalid' };
   }
@@ -135,10 +143,11 @@ function prepareRow(
     row,
     rowNumber,
     sourceHash,
-    transactionId: explicitId || `legacy-${sourceHash.slice(0, 32)}`,
+    transactionId: explicitId || `legacy-${sourceRowId(sourceName, rowNumber)}`,
     valueDate,
     bookedAt,
     amountCents: amount,
+    reportingAmountCents: reportingAmount,
     currency,
     accountName,
     institution,
@@ -189,9 +198,9 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
        ON CONFLICT(spreadsheet_id, file_checksum) DO NOTHING`,
     ).run(importId, spreadsheetId, fileChecksum, sourceName);
 
-    const findExisting = db.prepare<[string, number, string], { id: string }>(
+    const findExisting = db.prepare<[string, number], { id: string }>(
       `SELECT id FROM bank_transactions
-       WHERE (legacy_source = ? AND legacy_row = ?) OR source_hash = ? LIMIT 1`,
+       WHERE legacy_source = ? AND legacy_row = ? LIMIT 1`,
     );
     const insertAccount = db.prepare(
       `INSERT INTO accounts (id, name, institution, currency)
@@ -203,10 +212,11 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
     );
     const insertTransaction = db.prepare(
       `INSERT INTO bank_transactions (
-        id, account_id, booked_at, value_date, amount_cents, currency, description,
+        id, account_id, booked_at, value_date, amount_cents, currency,
+        native_amount_cents, native_currency, reporting_amount_cents, description,
         counterparty_name, bank_reference, legacy_source, legacy_row, source_hash, transfer_id,
         legacy_transfer_id, legacy_raw_payload
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     );
     const insertClassification = db.prepare(
       `INSERT INTO transaction_classifications (
@@ -220,7 +230,7 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
     let invalid = 0;
     let ambiguous = 0;
     for (const [index, row] of rows.slice(1).entries()) {
-      const prepared = prepareRow(row, index + 2, categoryIds);
+      const prepared = prepareRow(row, index + 2, sourceName, categoryIds);
       if ('kind' in prepared) {
         if (prepared.kind === 'invalid') {
           invalid += 1;
@@ -229,7 +239,7 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
         }
         continue;
       }
-      const existing = findExisting.get(sourceName, prepared.rowNumber, prepared.sourceHash);
+      const existing = findExisting.get(sourceName, prepared.rowNumber);
       if (existing) {
         skipped += 1;
         continue;
@@ -248,6 +258,9 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
           prepared.valueDate,
           prepared.amountCents,
           prepared.currency,
+          prepared.amountCents,
+          prepared.currency,
+          prepared.reportingAmountCents,
           prepared.description,
           prepared.counterpartyName,
           prepared.bankReference,
@@ -259,7 +272,7 @@ export function migrateLedgerCsv(options: LedgerMigrationOptions): LedgerMigrati
           JSON.stringify([...prepared.row]),
         );
         insertClassification.run(
-          `classification-${prepared.sourceHash.slice(0, 32)}`,
+          `classification-${sourceRowId(sourceName, prepared.rowNumber)}`,
           prepared.transactionId,
           prepared.economicType,
           prepared.legacySubtype,

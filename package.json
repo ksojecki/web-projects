@@ -20,7 +20,7 @@
     "postinstall": "node ./scripts/postinstall.mjs",
     "setup:certs": "node ./scripts/setup-dev-certs.mjs",
     "dev:budget": "node ./node_modules/nx/dist/bin/nx.js run @ksojecki/budget-api:dev --no-tui",
-    "budget:migrate-ledger": "node --experimental-strip-types ./projects/budget/apps/api/src/migrations/ledger-csv-cli.ts"
+    "budget:migrate-ledger": "node --experimental-strip-types ./projects/budget/plugins/migrations/ledger-csv-cli.ts"
   },
   "dependencies": {
     "@fastify/middie": "9.3.2",

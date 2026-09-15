@@ -4,7 +4,7 @@ import type Database from 'better-sqlite3';
 import { budgetCategorySeedData } from './seedData.ts';
 import type { BudgetDatabaseBootstrapOptions } from './types.ts';
 
-export const BUDGET_SCHEMA_VERSION = 2;
+export const BUDGET_SCHEMA_VERSION = 4;
 
 export function resolveBudgetDatabasePath(path: string): string {
   if (path === ':memory:') {
@@ -79,6 +79,9 @@ export function initializeBudgetSchema(db: Database.Database): void {
       value_date TEXT,
       amount_cents INTEGER NOT NULL,
       currency TEXT NOT NULL DEFAULT 'PLN',
+      native_amount_cents INTEGER NOT NULL DEFAULT 0,
+      native_currency TEXT NOT NULL DEFAULT 'PLN',
+      reporting_amount_cents INTEGER NOT NULL DEFAULT 0,
       description TEXT NOT NULL,
       counterparty_name TEXT,
       counterparty_account TEXT,
@@ -100,7 +103,7 @@ export function initializeBudgetSchema(db: Database.Database): void {
     CREATE UNIQUE INDEX IF NOT EXISTS idx_bank_transactions_source_row
       ON bank_transactions (legacy_source, legacy_row)
       WHERE legacy_source IS NOT NULL AND legacy_row IS NOT NULL;
-    CREATE UNIQUE INDEX IF NOT EXISTS idx_bank_transactions_source_hash
+    CREATE INDEX IF NOT EXISTS idx_bank_transactions_source_hash
       ON bank_transactions (source_hash)
       WHERE source_hash IS NOT NULL;
     CREATE INDEX IF NOT EXISTS idx_bank_transactions_account_date
@@ -150,6 +153,22 @@ export function initializeBudgetSchema(db: Database.Database): void {
       BEGIN
         SELECT RAISE(ABORT, 'bank transaction source facts are immutable');
       END;
+
+    CREATE TRIGGER IF NOT EXISTS trg_bank_transactions_no_delete
+      BEFORE DELETE ON bank_transactions
+      BEGIN
+        SELECT RAISE(ABORT, 'bank transaction source facts cannot be deleted');
+      END;
+  `);
+
+  // Raw payload hashes are audit metadata, not transaction identity. Older
+  // databases created a unique hash index; remove that constraint while
+  // retaining a non-unique lookup index for diagnostics.
+  db.exec(`
+    DROP INDEX IF EXISTS idx_bank_transactions_source_hash;
+    CREATE INDEX IF NOT EXISTS idx_bank_transactions_source_hash
+      ON bank_transactions (source_hash)
+      WHERE source_hash IS NOT NULL;
   `);
 
   // This is intentionally an additive migration. Existing local databases were
@@ -161,10 +180,35 @@ export function initializeBudgetSchema(db: Database.Database): void {
   if (!bankTransactionColumns.some((column) => column.name === 'legacy_raw_payload')) {
     db.exec('ALTER TABLE bank_transactions ADD COLUMN legacy_raw_payload TEXT');
   }
+  if (!bankTransactionColumns.some((column) => column.name === 'native_amount_cents')) {
+    db.exec(
+      'ALTER TABLE bank_transactions ADD COLUMN native_amount_cents INTEGER NOT NULL DEFAULT 0',
+    );
+  }
+  if (!bankTransactionColumns.some((column) => column.name === 'native_currency')) {
+    db.exec("ALTER TABLE bank_transactions ADD COLUMN native_currency TEXT NOT NULL DEFAULT 'PLN'");
+  }
+  if (!bankTransactionColumns.some((column) => column.name === 'reporting_amount_cents')) {
+    db.exec(
+      'ALTER TABLE bank_transactions ADD COLUMN reporting_amount_cents INTEGER NOT NULL DEFAULT 0',
+    );
+  }
+  // Before schema v4 amount_cents/currency were the only amount fields. They
+  // represented the source amount, and legacy rows have no separate PLN value.
+  db.exec(`
+    UPDATE bank_transactions
+    SET native_amount_cents = amount_cents,
+        native_currency = currency,
+        reporting_amount_cents = amount_cents
+    WHERE native_amount_cents = 0
+      AND native_currency = 'PLN'
+      AND (amount_cents != 0 OR currency != 'PLN');
+  `);
   // Recreate the trigger after the additive column exists so raw provenance is
   // immutable on both fresh and upgraded databases.
   db.exec(`
     DROP TRIGGER IF EXISTS trg_bank_transactions_immutable;
+    DROP TRIGGER IF EXISTS trg_bank_transactions_no_delete;
     CREATE TRIGGER trg_bank_transactions_immutable
       BEFORE UPDATE ON bank_transactions
       WHEN old.account_id IS NOT new.account_id
@@ -172,6 +216,9 @@ export function initializeBudgetSchema(db: Database.Database): void {
         OR old.value_date IS NOT new.value_date
         OR old.amount_cents IS NOT new.amount_cents
         OR old.currency IS NOT new.currency
+        OR old.native_amount_cents IS NOT new.native_amount_cents
+        OR old.native_currency IS NOT new.native_currency
+        OR old.reporting_amount_cents IS NOT new.reporting_amount_cents
         OR old.description IS NOT new.description
         OR old.counterparty_name IS NOT new.counterparty_name
         OR old.counterparty_account IS NOT new.counterparty_account
@@ -184,6 +231,11 @@ export function initializeBudgetSchema(db: Database.Database): void {
         OR old.legacy_raw_payload IS NOT new.legacy_raw_payload
       BEGIN
         SELECT RAISE(ABORT, 'bank transaction source facts are immutable');
+      END;
+    CREATE TRIGGER trg_bank_transactions_no_delete
+      BEFORE DELETE ON bank_transactions
+      BEGIN
+        SELECT RAISE(ABORT, 'bank transaction source facts cannot be deleted');
       END;
   `);
 

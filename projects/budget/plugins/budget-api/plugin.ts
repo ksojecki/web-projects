@@ -43,10 +43,32 @@ interface SummaryQuerystring {
   month?: unknown;
 }
 
-export const budgetApiPlugin: FastifyPluginAsync = async function budgetApiPlugin(fastify) {
+interface BudgetApiOptions {
+  ownerEmail?: string;
+}
+
+export const budgetApiPlugin: FastifyPluginAsync<BudgetApiOptions> = async function budgetApiPlugin(
+  fastify,
+  options,
+) {
+  const ownerEmail =
+    options.ownerEmail ?? process.env.AUTH_INITIAL_USER_EMAIL ?? 'admin@rod-manager.local';
+  const requireBudgetOwner = async (
+    request: Parameters<typeof fastify.requireAuthenticatedSession>[0],
+    reply: Parameters<typeof fastify.requireAuthenticatedSession>[1],
+  ) => {
+    await fastify.requireAuthenticatedSession(request, reply);
+    if (
+      request.authenticatedSession !== undefined &&
+      request.authenticatedSession.userEmail.toLowerCase() !== ownerEmail.toLowerCase()
+    ) {
+      await reply.status(403).send({ message: 'Budget access is restricted to the owner.' });
+    }
+  };
+
   fastify.get<{ Querystring: TransactionQuerystring }>(
     '/api/transactions',
-    { preHandler: fastify.requireAuthenticatedSession },
+    { preHandler: requireBudgetOwner },
     async (request, reply) => {
       const filters = parseTransactionFilters(request.query);
       if (filters === undefined) {
@@ -59,7 +81,7 @@ export const budgetApiPlugin: FastifyPluginAsync = async function budgetApiPlugi
 
   fastify.put<{ Params: TransactionParams; Body: ClassificationPayload }>(
     '/api/transactions/:id/classification',
-    { preHandler: fastify.requireAuthenticatedSession },
+    { preHandler: requireBudgetOwner },
     async (request, reply) => {
       const transaction = fastify.budgetStore.getBankTransaction(request.params.id);
       if (transaction === undefined) {
@@ -93,21 +115,17 @@ export const budgetApiPlugin: FastifyPluginAsync = async function budgetApiPlugi
     },
   );
 
-  fastify.get(
-    '/api/accounts',
-    { preHandler: fastify.requireAuthenticatedSession },
-    async (_request, reply) => reply.send(fastify.budgetStore.listAccounts()),
+  fastify.get('/api/accounts', { preHandler: requireBudgetOwner }, async (_request, reply) =>
+    reply.send(fastify.budgetStore.listAccounts()),
   );
 
-  fastify.get(
-    '/api/categories',
-    { preHandler: fastify.requireAuthenticatedSession },
-    async (_request, reply) => reply.send(fastify.budgetStore.listCategories()),
+  fastify.get('/api/categories', { preHandler: requireBudgetOwner }, async (_request, reply) =>
+    reply.send(fastify.budgetStore.listCategories()),
   );
 
   fastify.get<{ Querystring: SummaryQuerystring }>(
     '/api/reports/summary',
-    { preHandler: fastify.requireAuthenticatedSession },
+    { preHandler: requireBudgetOwner },
     async (request, reply) => {
       const period = parseReportPeriod(request.query);
       if (period === undefined) {

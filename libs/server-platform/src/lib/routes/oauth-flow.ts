@@ -167,6 +167,15 @@ export async function completeOAuthFlow(
   const accessTokenExpiresAt = Date.now() + expiresIn * 1000;
 
   if (oauthState.intent === 'login') {
+    if (
+      Object.prototype.hasOwnProperty.call(fastify, 'authPolicy') &&
+      !fastify.authPolicy.allowOAuthAutoProvisioning &&
+      fastify.authStore.findUserByOAuthProvider(provider, userInfo.id) === undefined &&
+      fastify.authStore.findUserByEmail(userInfo.email) === undefined
+    ) {
+      throw new Error('OAuth account provisioning is disabled.');
+    }
+
     const user = fastify.authStore.findOrCreateUserByOAuth(
       provider,
       userInfo.id,

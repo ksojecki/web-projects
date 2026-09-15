@@ -2,13 +2,13 @@
   "extends": "../../../../tsconfig.base.json",
   "compilerOptions": {
     "types": ["node", "vitest/globals"],
-    "rootDir": "src",
+    "rootDir": "../..",
     "module": "esnext",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "tsBuildInfoFile": "../../../../dist/projects/budget/apps/api/tsconfig.spec.tsbuildinfo"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "../../plugins/**/*.ts"],
   "references": [
     {
       "path": "../../../../libs/shared/tsconfig.lib.json"

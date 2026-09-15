@@ -217,4 +217,30 @@ describe('auth routes', () => {
 
     await server.close();
   });
+
+  it('blocks registration when the project auth policy disables it', async () => {
+    const server = Fastify();
+    await server.register(sessionPlugin);
+    await server.register(databasePlugin, { project: testProjectConfig });
+    Object.defineProperty(server, 'authPolicy', {
+      value: { allowRegistration: false, allowOAuthAutoProvisioning: true },
+    });
+
+    authRoutes(server);
+
+    const response = await server.inject({
+      method: 'POST',
+      url: '/api/auth/register',
+      payload: {
+        email: 'newuser@example.com',
+        name: 'New',
+        surname: 'User',
+        password: 'secret123',
+      },
+    });
+
+    expect(response.statusCode).toBe(403);
+    expect(response.json()).toEqual({ message: 'Registration is disabled.' });
+    await server.close();
+  });
 });
