@@ -70,7 +70,7 @@
     "typescript": "6.0.3",
     "verdaccio": "6.7.4",
     "vite": "8.3.0",
-    "vitest": "4.1.9"
+    "vitest": "4.1.11"
   },
   "nx": {
     "includedScripts": [],
