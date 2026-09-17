@@ -10,6 +10,23 @@ import type {
 
 const OAUTH_PROVIDERS: OAuthProviderType[] = ['google', 'apple', 'facebook'];
 
+function toAuthUser(
+  fastify: FastifyInstance,
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    surname: string;
+    displayName: string;
+    role: AuthUser['role'];
+  },
+): AuthUser {
+  return {
+    ...user,
+    preferredLanguage: fastify.userSettingsStore.getUserPreferredLanguage(user.id) ?? 'en',
+  };
+}
+
 export default function authRoutes(fastify: FastifyInstance) {
   fastify.post<{ Body: LoginRequestBody }>('/api/auth/login', async (request, reply) => {
     const { email, password } = request.body;
@@ -23,14 +40,7 @@ export default function authRoutes(fastify: FastifyInstance) {
     reply.startSession(user.id);
     const sessionResponse: SessionResponse = {
       authenticated: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        surname: user.surname,
-        displayName: user.displayName,
-        role: user.role,
-      },
+      user: toAuthUser(fastify, user),
     };
 
     await reply.send(sessionResponse);
@@ -58,14 +68,7 @@ export default function authRoutes(fastify: FastifyInstance) {
 
       const sessionResponse: SessionResponse = {
         authenticated: true,
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          surname: user.surname,
-          displayName: user.displayName,
-          role: user.role,
-        },
+        user: toAuthUser(fastify, user),
       };
 
       await reply.status(201).send(sessionResponse);
@@ -92,14 +95,14 @@ export default function authRoutes(fastify: FastifyInstance) {
         return;
       }
 
-      const user: AuthUser = {
+      const user = toAuthUser(fastify, {
         id: session.userId,
         email: session.userEmail,
         name: session.userName,
         surname: session.userSurname,
         displayName: session.userDisplayName,
         role: session.userRole,
-      };
+      });
 
       const sessionResponse: SessionResponse = {
         authenticated: true,

@@ -31,6 +31,7 @@ function session(authenticated: boolean) {
               surname: 'One',
               displayName: 'Owner One',
               role: 'user',
+              preferredLanguage: 'en',
             },
           }
         : { message: 'Not authenticated.' },

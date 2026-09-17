@@ -13,12 +13,14 @@ import { ReportPage } from './ReportPage';
 import { TransactionsPage } from './TransactionsPage';
 import { AppLayout } from './layout/AppLayout';
 import { buildLoginPromptHref, frontendProductConfig } from './productConfig';
+import { LanguageSynchronizer } from './LanguageSynchronizer';
 
 export function AppRoutes() {
   const { auth, registration, routes } = frontendProductConfig;
 
   return (
     <AuthProvider>
+      <LanguageSynchronizer />
       <Routes>
         <Route element={<AppLayout />}>
           <Route

@@ -179,6 +179,7 @@ describe('auth dto', () => {
         surname: '',
         displayName: 'Administrator',
         role: 'admin',
+        preferredLanguage: 'en',
       },
     };
 

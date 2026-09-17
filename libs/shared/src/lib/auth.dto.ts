@@ -1,3 +1,5 @@
+import type { UserLanguage } from './user-settings.dto.js';
+
 export type OAuthProviderType = 'google' | 'apple' | 'facebook';
 
 export type UserRole = 'admin' | 'user';
@@ -11,6 +13,7 @@ export interface AuthUser {
   surname: string;
   displayName: string;
   role: UserRole;
+  preferredLanguage: UserLanguage;
 }
 
 export interface LoginRequestBody {

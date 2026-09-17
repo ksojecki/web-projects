@@ -116,6 +116,7 @@ describe('AccountPage', () => {
         surname: 'User',
         displayName: 'Test User',
         role: 'user',
+        preferredLanguage: 'en',
       },
     });
     mockLinkOAuthProvider.mockResolvedValue({
