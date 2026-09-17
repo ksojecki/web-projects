@@ -50,6 +50,8 @@ describe.sequential('auth routes', () => {
 
     expect(sessionCookie).toBeDefined();
 
+    server.userSettingsStore.updateUserPreferredLanguage('initial-admin-user', 'pl');
+
     const sessionResponse = await server.inject({
       method: 'GET',
       url: '/api/auth/session',
@@ -68,6 +70,7 @@ describe.sequential('auth routes', () => {
         surname: '',
         displayName: 'Administrator',
         role: 'admin',
+        preferredLanguage: 'pl',
       },
     });
 
@@ -144,6 +147,7 @@ describe.sequential('auth routes', () => {
     expect(body.user.surname).toBe('Doe');
     expect(body.user.displayName).toBe('John Doe');
     expect(body.user.role).toBe('user');
+    expect(body.user.preferredLanguage).toBe('en');
 
     const sessionCookie = response.cookies.find((cookie) => cookie.name === SESSION_COOKIE_NAME);
     expect(sessionCookie).toBeDefined();

@@ -73,6 +73,7 @@ export function mockAuthenticatedAccountSession() {
             surname: 'User',
             displayName: 'Test User',
             role: 'user',
+            preferredLanguage: 'en',
           },
         }),
         {
@@ -127,6 +128,7 @@ export function mockAuthenticatedContentSession() {
             surname: 'User',
             displayName: 'Test User',
             role: 'user',
+            preferredLanguage: 'en',
           },
         }),
         {

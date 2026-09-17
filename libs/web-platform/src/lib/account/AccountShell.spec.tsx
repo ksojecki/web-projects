@@ -20,6 +20,7 @@ describe('AccountShell', () => {
           name: 'Administrator',
           role: 'admin',
           surname: '',
+          preferredLanguage: 'en',
         }}
         welcomeMessage="Welcome back"
       />,
