@@ -62,7 +62,7 @@
     "lint-staged": "17.0.8",
     "mkcert-cli": "1.5.0",
     "nx": "23.2.1",
-    "oxfmt": "0.58.0",
+    "oxfmt": "0.68.0",
     "oxlint": "1.70.0",
     "oxlint-tsgolint": "0.24.0",
     "puppeteer-core": "25.3.0",
