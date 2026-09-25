@@ -31,7 +31,7 @@ export function AuthenticationMethodsPanel({
           (method): method is Extract<AuthenticationMethodStatus, { type: 'oauth' }> =>
             method.type === 'oauth',
         )
-        .sort((left, right) =>
+        .toSorted((left, right) =>
           OAUTH_PROVIDER_LABELS[left.provider].localeCompare(OAUTH_PROVIDER_LABELS[right.provider]),
         ),
     [methods],

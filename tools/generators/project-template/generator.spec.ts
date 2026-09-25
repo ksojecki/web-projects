@@ -1,7 +1,7 @@
 import { readJson, type Tree } from '@nx/devkit';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
-import projectTemplateGenerator from './generator.ts';
+import { projectTemplateGenerator } from './generator.ts';
 
 type PackageJsonWithDependencies = {
   dependencies: Record<string, string>;

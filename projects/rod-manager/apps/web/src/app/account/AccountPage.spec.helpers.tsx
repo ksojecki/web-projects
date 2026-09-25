@@ -36,6 +36,12 @@ export function createMockPlatformModule<TActual extends object>(
   actual: TActual,
   mocks: PlatformMocks,
 ) {
+  async function handleConnectProvider(provider: OAuthProviderType): Promise<void> {
+    const { authorizationUrl, codeVerifier, state } = await mocks.mockLinkOAuthProvider(provider);
+    mocks.mockStoreOAuthState(state, codeVerifier);
+    window.location.href = authorizationUrl;
+  }
+
   function useDefaultAccountSections(
     extraSections: AccountSectionLike[] = [],
   ): AccountSectionLike[] {
@@ -53,12 +59,6 @@ export function createMockPlatformModule<TActual extends object>(
     useEffect(() => {
       void refreshAuthenticationMethods();
     }, [refreshAuthenticationMethods]);
-
-    async function handleConnectProvider(provider: OAuthProviderType): Promise<void> {
-      const { authorizationUrl, codeVerifier, state } = await mocks.mockLinkOAuthProvider(provider);
-      mocks.mockStoreOAuthState(state, codeVerifier);
-      window.location.href = authorizationUrl;
-    }
 
     async function handleDisconnectProvider(provider: OAuthProviderType): Promise<void> {
       await mocks.mockUnlinkOAuthProvider(provider);
