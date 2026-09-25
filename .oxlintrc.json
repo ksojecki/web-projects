@@ -111,9 +111,6 @@
     "react/exhaustive-deps": "error",
     "react/rules-of-hooks": "error",
     "react/self-closing-comp": "error",
-    "react-hooks/immutability": "off",
-    "react-hooks/set-state-in-effect": "off",
-    "react-hooks/use-memo": "off",
     "jsx_a11y/alt-text": "error",
     "jsx_a11y/anchor-is-valid": "error",
     "jsx_a11y/no-noninteractive-tabindex": "off"
@@ -139,6 +136,46 @@
       "files": ["**/*.{spec,test}.{ts,tsx,mts,cts}"],
       "env": {
         "vitest": true
+      }
+    },
+    {
+      "files": ["libs/web-platform/src/lib/account/AuthenticationMethodsPanel.tsx"],
+      "rules": {
+        "unicorn/no-array-sort": "off"
+      }
+    },
+    {
+      "files": [
+        "libs/ui/src/lib/ModalWindow/ModalWindow.tsx",
+        "libs/web-platform/src/lib/auth/OAuthButtons.tsx",
+        "projects/rod-manager/apps/web/src/app/account/AccountPage.spec.helpers.tsx"
+      ],
+      "rules": {
+        "react-hooks/immutability": "off"
+      }
+    },
+    {
+      "files": [
+        "libs/web-platform/src/lib/auth/AuthProvider.tsx",
+        "libs/web-platform/src/lib/account/useAuthenticationMethods.ts",
+        "projects/recepturomat/apps/web/src/app/recipes/useRecalculatedRecipe.ts",
+        "projects/recepturomat/apps/web/src/app/recipes/useRecipesList.ts",
+        "projects/recepturomat/apps/web/src/app/recipes/useRecipe.ts",
+        "projects/budget/apps/web/src/app/HomePage.tsx",
+        "projects/budget/apps/web/src/app/CategoriesPage.tsx",
+        "projects/budget/apps/web/src/app/AccountsPage.tsx",
+        "projects/budget/apps/web/src/app/ReportPage.tsx",
+        "projects/budget/apps/web/src/app/TransactionsPage.tsx",
+        "projects/rod-manager/apps/web/src/app/account/AccountPage.spec.helpers.tsx"
+      ],
+      "rules": {
+        "react-hooks/set-state-in-effect": "off"
+      }
+    },
+    {
+      "files": ["libs/web-platform/src/lib/account/useAuthenticationMethods.ts"],
+      "rules": {
+        "react/memo-dependencies": "off"
       }
     }
   ]
