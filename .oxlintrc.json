@@ -111,6 +111,9 @@
     "react/exhaustive-deps": "error",
     "react/rules-of-hooks": "error",
     "react/self-closing-comp": "error",
+    "react-hooks/immutability": "off",
+    "react-hooks/set-state-in-effect": "off",
+    "react-hooks/use-memo": "off",
     "jsx_a11y/alt-text": "error",
     "jsx_a11y/anchor-is-valid": "error",
     "jsx_a11y/no-noninteractive-tabindex": "off"
